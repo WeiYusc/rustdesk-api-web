@@ -1,0 +1,70 @@
+{
+  "app": {
+    "title": "RustDesk API 관리자"
+  },
+  "common": {
+    "welcome": "환영합니다",
+    "loading": "로딩 중...",
+    "save": "저장",
+    "cancel": "취소",
+    "delete": "삭제",
+    "edit": "편집",
+    "create": "생성",
+    "search": "검색",
+    "actions": "작업",
+    "confirm": "확인",
+    "back": "뒤로",
+    "backHome": "홈으로",
+    "notFound": "페이지를 찾을 수 없습니다",
+    "success": "성공",
+    "failed": "실패",
+    "noData": "데이터 없음",
+    "logout": "로그아웃"
+  },
+  "login": {
+    "username": "사용자 이름",
+    "password": "비밀번호",
+    "login": "로그인",
+    "captcha": "Captcha",
+    "register": "등록",
+    "oidcLogin": "OIDC 로그인",
+    "loginOptions": "또는 다음으로 로그인",
+    "noAccess": "접근할 수 없습니다.",
+    "needLogin": "먼저 로그인해주세요.",
+    "userDisabled": "사용자가 비활성화되었습니다.",
+    "pwdLoginDisabled": "비밀번호 로그인이 비활성화되었습니다.",
+    "captchaError": "Captcha 오류.",
+    "usernameOrPasswordError": "사용자 이름이나 비밀번호가 올바르지 않습니다.",
+    "paramsError": "매개변수 검증에 실패했습니다.",
+    "loginBanned": "로그인이 금지되었습니다."
+  },
+  "menu": {
+    "My": "내",
+    "System": "시스템",
+    "Userinfo": "사용자 정보",
+    "MyPeer": "내 피어",
+    "AddressBookCollection": "주소록 모음",
+    "AddressBooks": "주소록",
+    "Tags": "태그",
+    "ShareRecord": "공유 기록",
+    "LoginLog": "로그인 로그",
+    "PeerManage": "장치 관리",
+    "GroupManage": "그룹 관리",
+    "DeviceGroupManage": "장치 그룹 관리",
+    "UserManage": "사용자 관리",
+    "UserAdd": "사용자 추가",
+    "UserEdit": "사용자 편집",
+    "AddressBookCollectionManage": "주소록 이름 관리",
+    "AddressBookManage": "주소록 관리",
+    "TagsManage": "태그 관리",
+    "OauthManage": "Oauth 관리",
+    "UserToken": "사용자 토큰",
+    "ServerCmd": "서버 명령",
+    "AuditConnLog": "연결 로그",
+    "AuditFileLog": "파일 로그"
+  },
+  "home": {
+    "title": "홈",
+    "skeleton": "프로젝트 스켈레톤 초기화 완료. 0단계 완료."
+  }
+}

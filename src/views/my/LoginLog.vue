@@ -1,0 +1,10 @@
+<script setup lang="ts">
+import { NCard, NH2, NText } from 'naive-ui'
+</script>
+
+<template>
+  <NCard>
+    <NH2>{{ $t('menu.MyLoginLog') }}</NH2>
+    <NText depth="3">{{ $t('common.loading') }}</NText>
+  </NCard>
+</template>

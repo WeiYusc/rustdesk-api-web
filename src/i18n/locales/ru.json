@@ -1,0 +1,70 @@
+{
+  "app": {
+    "title": "RustDesk API Админ"
+  },
+  "common": {
+    "welcome": "Добро пожаловать",
+    "loading": "Загрузка...",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "create": "Создать",
+    "search": "Поиск",
+    "actions": "Действия",
+    "confirm": "Подтвердить",
+    "back": "Назад",
+    "backHome": "На главную",
+    "notFound": "Страница не найдена",
+    "success": "Успех",
+    "failed": "Ошибка",
+    "noData": "Нет данных",
+    "logout": "Выход"
+  },
+  "login": {
+    "username": "Имя пользователя",
+    "password": "Пароль",
+    "login": "Вход",
+    "captcha": "Captcha",
+    "register": "Регистрация",
+    "oidcLogin": "Вход OIDC",
+    "loginOptions": "или войдите с помощью",
+    "noAccess": "Нет доступа.",
+    "needLogin": "Пожалуйста, войдите в систему.",
+    "userDisabled": "Пользователь отключен.",
+    "pwdLoginDisabled": "Вход по паролю отключен.",
+    "captchaError": "Ошибка капчи.",
+    "usernameOrPasswordError": "Неправильное имя пользователя или пароль.",
+    "paramsError": "Ошибка параметра.",
+    "loginBanned": "Вход заблокирован."
+  },
+  "menu": {
+    "My": "Мой",
+    "System": "Система",
+    "Userinfo": "Данные пользователя",
+    "MyPeer": "Мои партнеры",
+    "AddressBookCollection": "Коллекция адресных книг",
+    "AddressBooks": "Адресные книги",
+    "Tags": "Теги",
+    "ShareRecord": "Запись обмена",
+    "LoginLog": "Журнал входов",
+    "PeerManage": "Пиры",
+    "GroupManage": "Группы",
+    "DeviceGroupManage": "Группы устройств",
+    "UserManage": "Пользователи",
+    "UserAdd": "Добавить пользователя",
+    "UserEdit": "Редактировать пользователя",
+    "AddressBookCollectionManage": "Имена адресных книг",
+    "AddressBookManage": "Адресные книги",
+    "TagsManage": "Теги",
+    "OauthManage": "Oauth",
+    "UserToken": "Токен пользователя",
+    "ServerCmd": "Команда сервера",
+    "AuditConnLog": "Журнал соединений",
+    "AuditFileLog": "Журнал файлов"
+  },
+  "home": {
+    "title": "Главная",
+    "skeleton": "Каркас проекта успешно инициализирован. Этап 0 завершен."
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "app": {
+    "title": "RustDesk API 管理後台"
+  },
+  "common": {
+    "welcome": "歡迎",
+    "loading": "載入中...",
+    "save": "儲存",
+    "cancel": "取消",
+    "delete": "刪除",
+    "edit": "編輯",
+    "create": "建立",
+    "search": "搜尋",
+    "actions": "操作",
+    "confirm": "確認",
+    "back": "返回",
+    "backHome": "返回首頁",
+    "notFound": "頁面找不到",
+    "success": "成功",
+    "failed": "失敗",
+    "noData": "暫無資料",
+    "logout": "退出登入"
+  },
+  "login": {
+    "username": "使用者名稱",
+    "password": "密碼",
+    "login": "登入",
+    "captcha": "驗證碼",
+    "register": "註冊",
+    "oidcLogin": "OIDC 登入",
+    "loginOptions": "或使用以下方式登入",
+    "noAccess": "無權限存取。",
+    "needLogin": "請先登入。",
+    "userDisabled": "使用者已停用。",
+    "pwdLoginDisabled": "密碼登入已停用。",
+    "captchaError": "驗證碼錯誤。",
+    "usernameOrPasswordError": "使用者名稱或密碼錯誤。",
+    "paramsError": "參數驗證失敗。",
+    "loginBanned": "登入已被封禁。"
+  },
+  "menu": {
+    "My": "我的",
+    "System": "系統",
+    "Userinfo": "使用者資訊",
+    "MyPeer": "我的裝置",
+    "AddressBookCollection": "地址簿集",
+    "AddressBooks": "地址簿",
+    "Tags": "標籤",
+    "ShareRecord": "分享記錄",
+    "LoginLog": "登入日誌",
+    "PeerManage": "裝置管理",
+    "GroupManage": "群組管理",
+    "DeviceGroupManage": "設備組管理",
+    "UserManage": "使用者管理",
+    "UserAdd": "使用者新增",
+    "UserEdit": "使用者編輯",
+    "AddressBookCollectionManage": "地址簿名稱",
+    "AddressBookManage": "地址簿管理",
+    "TagsManage": "標籤管理",
+    "OauthManage": "Oauth 管理",
+    "UserToken": "使用者 Token",
+    "ServerCmd": "服務端命令",
+    "AuditConnLog": "連線日誌",
+    "AuditFileLog": "檔案日誌"
+  },
+  "home": {
+    "title": "首頁",
+    "skeleton": "工程骨架初始化完成，階段0已完成。"
+  }
+}

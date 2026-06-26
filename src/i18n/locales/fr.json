@@ -1,0 +1,70 @@
+{
+  "app": {
+    "title": "RustDesk API Admin"
+  },
+  "common": {
+    "welcome": "Bienvenue",
+    "loading": "Chargement...",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "create": "Créer",
+    "search": "Rechercher",
+    "actions": "Actions",
+    "confirm": "Confirmer",
+    "back": "Retour",
+    "backHome": "Retour à l'accueil",
+    "notFound": "Page introuvable",
+    "success": "Succès",
+    "failed": "Échec",
+    "noData": "Aucune donnée",
+    "logout": "Déconnexion"
+  },
+  "login": {
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "login": "Connexion",
+    "captcha": "Captcha",
+    "register": "S'inscrire",
+    "oidcLogin": "Connexion OIDC",
+    "loginOptions": "ou connectez-vous avec",
+    "noAccess": "Aucun d'access.",
+    "needLogin": "Veuillez d'abord vous connecter.",
+    "userDisabled": "Utilisateur désactivé.",
+    "pwdLoginDisabled": "Connexion par mot de passe désactivée.",
+    "captchaError": "Erreur de captcha.",
+    "usernameOrPasswordError": "Nom d'utilisateur ou de mot de passe incorrect.",
+    "paramsError": "La validation des paramètres a échoué.",
+    "loginBanned": "Connexion bannie."
+  },
+  "menu": {
+    "My": "Moi",
+    "System": "Système",
+    "Userinfo": "Informations utilisateur",
+    "MyPeer": "Mon appareil",
+    "AddressBookCollection": "Collection de carnets d'adresses",
+    "AddressBooks": "Carnets d'adresses",
+    "Tags": "Etiquettes",
+    "ShareRecord": "Enregistrement des partages",
+    "LoginLog": "Journal de connexion",
+    "PeerManage": "Appareils",
+    "GroupManage": "Groupes",
+    "DeviceGroupManage": "Gestion des groupes d'appareils",
+    "UserManage": "Utilisateurs",
+    "UserAdd": "Ajout d'utilisateur",
+    "UserEdit": "Utilisateur Modifier",
+    "AddressBookCollectionManage": "Noms du carnet d'adresses",
+    "AddressBookManage": "Carnets d'adresses",
+    "TagsManage": "Etiquettes",
+    "OauthManage": "Oauth",
+    "UserToken": "Jeton Utilisateur",
+    "ServerCmd": "Commande serveur",
+    "AuditConnLog": "Journal de connexion",
+    "AuditFileLog": "Fichier Journal"
+  },
+  "home": {
+    "title": "Accueil",
+    "skeleton": "Le squelette du projet a été initialisé avec succès. Étape 0 terminée."
+  }
+}

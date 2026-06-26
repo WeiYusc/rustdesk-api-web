@@ -1,6 +1,11 @@
 import { createI18n, type I18nOptions } from 'vue-i18n'
 import en from './locales/en.json'
 import zhCN from './locales/zh-CN.json'
+import zhTW from './locales/zh-TW.json'
+import fr from './locales/fr.json'
+import ko from './locales/ko.json'
+import ru from './locales/ru.json'
+import es from './locales/es.json'
 
 export type AppLocale = 'en' | 'zh-CN' | 'zh-TW' | 'fr' | 'ko' | 'ru' | 'es'
 
@@ -17,6 +22,11 @@ export const SUPPORTED_LOCALES: { value: AppLocale; label: string }[] = [
 const messages: I18nOptions['messages'] = {
   en,
   'zh-CN': zhCN,
+  'zh-TW': zhTW,
+  fr,
+  ko,
+  ru,
+  es,
 }
 
 export const i18n = createI18n({

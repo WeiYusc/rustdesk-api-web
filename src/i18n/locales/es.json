@@ -1,0 +1,70 @@
+{
+  "app": {
+    "title": "RustDesk API Admin"
+  },
+  "common": {
+    "welcome": "Bienvenido",
+    "loading": "Cargando...",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "search": "Buscar",
+    "actions": "Acciones",
+    "confirm": "Confirmar",
+    "back": "Atrás",
+    "backHome": "Volver al inicio",
+    "notFound": "Página no encontrada",
+    "success": "Éxito",
+    "failed": "Fallido",
+    "noData": "Sin datos",
+    "logout": "Cerrar sesión"
+  },
+  "login": {
+    "username": "Nombre de usuario",
+    "password": "Contraseña",
+    "login": "Iniciar sesión",
+    "captcha": "Captcha",
+    "register": "Registrar",
+    "oidcLogin": "Inicio de sesión OIDC",
+    "loginOptions": "o inicie sesión con",
+    "noAccess": "Sin acceso.",
+    "needLogin": "Por favor inicie sesión primero.",
+    "userDisabled": "Usuario deshabilitado.",
+    "pwdLoginDisabled": "Inicio de sesión con contraseña deshabilitado.",
+    "captchaError": "Error de captcha.",
+    "usernameOrPasswordError": "Error de usuario o contraseña.",
+    "paramsError": "La validación de los parámetros falló.",
+    "loginBanned": "Inicio de sesión prohibido."
+  },
+  "menu": {
+    "My": "Mi",
+    "System": "Sistema",
+    "Userinfo": "Información del usuario",
+    "MyPeer": "Mis pares",
+    "AddressBookCollection": "Colección de libretas de direcciones",
+    "AddressBooks": "Libretas de direcciones",
+    "Tags": "Etiquetas",
+    "ShareRecord": "Registro de compartición",
+    "LoginLog": "Registro de inicio de sesión",
+    "PeerManage": "Pares",
+    "GroupManage": "Grupos",
+    "DeviceGroupManage": "Gestión de grupos de dispositivos",
+    "UserManage": "Usuarios",
+    "UserAdd": "Agregar usuario",
+    "UserEdit": "Editar usuario",
+    "AddressBookCollectionManage": "Nombre de la libreta",
+    "AddressBookManage": "Libretas de direcciones",
+    "TagsManage": "Etiquetas",
+    "OauthManage": "OAuth",
+    "UserToken": "Token del usuario",
+    "ServerCmd": "Comando del servidor",
+    "AuditConnLog": "Registro de conexiones",
+    "AuditFileLog": "Registro de archivos"
+  },
+  "home": {
+    "title": "Inicio",
+    "skeleton": "Esqueleto del proyecto inicializado con éxito. Etapa 0 completada."
+  }
+}
