@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, h, ref, watch, type VNodeChild } from 'vue'
+import { computed, h, onUnmounted, ref, watch, type VNodeChild } from 'vue'
 import { useRoute, useRouter, type RouteRecordRaw } from 'vue-router'
 import {
   NLayout,
@@ -42,6 +42,10 @@ function checkMobile(): void {
   }
 }
 window.addEventListener('resize', checkMobile)
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile)
+})
 
 const siderWidth = computed(() => {
   if (appStore.locale === 'fr') return 240

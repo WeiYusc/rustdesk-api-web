@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import {
   NCard,
@@ -121,9 +121,15 @@ function goToRegister(): void {
   router.push('/register')
 }
 
-window.addEventListener('need-captcha', async () => {
+async function handleNeedCaptcha(): Promise<void> {
   needCaptcha.value = true
   await loadCaptcha()
+}
+
+window.addEventListener('need-captcha', handleNeedCaptcha)
+
+onUnmounted(() => {
+  window.removeEventListener('need-captcha', handleNeedCaptcha)
 })
 
 onMounted(() => {

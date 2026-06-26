@@ -32,6 +32,8 @@ router.beforeEach(async (to, _from, next) => {
       next('/login')
       return
     }
+    next({ ...to, replace: true })
+    return
   }
 
   if (!routeStore.loaded && userStore.routeNames.length === 0) {

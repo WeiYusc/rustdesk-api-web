@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import adminRequest from '@/utils/request'
 import type { ApiResponse, ServerConfig, AdminConfig, AppConfig } from '@/types'
 
 export function adminConfig(): Promise<ApiResponse<AdminConfig>> {
@@ -13,5 +12,3 @@ export function serverConfig(): Promise<ApiResponse<ServerConfig>> {
 export function appConfig(): Promise<ApiResponse<AppConfig>> {
   return request.get('/config/app')
 }
-
-export { adminRequest }

@@ -11,7 +11,6 @@ import type { ApiResponse } from '@/types'
 
 interface ExtendedRequestConfig extends AxiosRequestConfig {
   _adminOnly?: boolean
-  _skipAuth?: boolean
 }
 
 const service: AxiosInstance = axios.create({
@@ -37,18 +36,15 @@ function needCaptchaCallback(code: number): void {
 
 service.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const ext = config as InternalAxiosRequestConfig & ExtendedRequestConfig
-    if (!ext._skipAuth) {
-      let token: string | null
-      try {
-        const userStore = useUserStore()
-        token = userStore.token || getToken()
-      } catch {
-        token = getToken()
-      }
-      if (token) {
-        config.headers['api-token'] = token
-      }
+    let token: string | null
+    try {
+      const userStore = useUserStore()
+      token = userStore.token || getToken()
+    } catch {
+      token = getToken()
+    }
+    if (token) {
+      config.headers['api-token'] = token
     }
     config.headers['Accept-Language'] = getLang()
     return config
@@ -67,6 +63,7 @@ service.interceptors.response.use(
 
     if (res.code === 403) {
       if (ext._adminOnly) {
+        showError(res.message)
         return Promise.reject(res)
       }
       removeToken()
@@ -161,6 +158,7 @@ export function createAdminRequest(): AxiosInstance {
         return res as unknown as typeof response
       }
       if (res.code === 403) {
+        showError(res.message)
         return Promise.reject(res)
       }
       if (res.code === 110) {

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+defineOptions({ name: 'AuditConn' })
 import { NCard, NH2, NText } from 'naive-ui'
 </script>
 
