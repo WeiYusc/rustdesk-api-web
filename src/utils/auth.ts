@@ -14,6 +14,7 @@ export function setToken(token: string): void {
 
 export function removeToken(): void {
   localStorage.removeItem(TOKEN_KEY)
+  localStorage.removeItem(`${WC_PREFIX}option:local:access_token`)
 }
 
 export function setCode(code: string): void {
