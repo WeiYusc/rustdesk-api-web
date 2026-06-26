@@ -114,7 +114,10 @@
     "deleteSuccess": "删除成功",
     "batchUpdateSuccess": "标签更新成功",
     "selectTags": "选择标签",
-    "required": "此项为必填"
+    "required": "此项为必填",
+    "importFromPeers": "从Peer导入",
+    "importFromPeersSuccess": "从Peer导入成功",
+    "noPeerSelection": "请至少选择一个Peer"
   },
   "myTag": {
     "title": "我的标签",
@@ -136,7 +139,27 @@
     "createCollection": "新建集合",
     "editCollection": "编辑集合",
     "nameRequired": "请输入名称",
-    "deleteConfirm": "确定要删除此集合吗？"
+    "deleteConfirm": "确定要删除此集合吗？",
+    "rules": "规则",
+    "ruleManagement": "规则管理",
+    "ruleType": "规则类型",
+    "permission": "权限",
+    "targetId": "目标ID",
+    "targetIdHint": "个人类型为用户ID，群组类型为群组ID",
+    "createRule": "新建规则",
+    "editRule": "编辑规则",
+    "ruleTypePersonal": "个人",
+    "ruleTypeGroup": "群组",
+    "rulePermRead": "读",
+    "rulePermReadWrite": "读写",
+    "rulePermFullControl": "完全控制",
+    "ruleTypeRequired": "请选择规则类型",
+    "permissionRequired": "请选择权限",
+    "targetIdRequired": "请输入目标ID",
+    "confirmDeleteRule": "确定要删除此规则吗？",
+    "ruleCreateSuccess": "规则创建成功",
+    "ruleUpdateSuccess": "规则更新成功",
+    "ruleDeleteSuccess": "规则删除成功"
   },
   "myLoginLog": {
     "title": "登录日志",

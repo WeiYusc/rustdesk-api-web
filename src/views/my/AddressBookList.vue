@@ -25,9 +25,11 @@ import {
   update,
   deleteAddressBook,
   batchUpdateTags,
+  batchCreateFromPeers,
 } from '@/api/my/addressBook'
 import { list as listTags } from '@/api/my/tag'
-import type { AddressBook } from '@/types'
+import { list as listPeers } from '@/api/my/peer'
+import type { AddressBook, Peer } from '@/types'
 
 interface AddressBookFormData {
   row_id?: number
@@ -99,6 +101,32 @@ const batchTagModalVisible = ref(false)
 const batchTags = ref<string[]>([])
 const batchSaving = ref(false)
 
+const peerModalVisible = ref(false)
+const peerLoading = ref(false)
+const peerList = ref<Peer[]>([])
+const peerCheckedRowKeys = ref<Array<string | number>>([])
+const peerImportTags = ref<string[]>([])
+const peerImportSaving = ref(false)
+const peerSearchId = ref('')
+const peerSearchHostname = ref('')
+const peerSearchAlias = ref('')
+const peerPagination = reactive({
+  page: 1,
+  pageSize: 10,
+  itemCount: 0,
+  showSizePicker: true,
+  pageSizes: [10, 20, 50],
+  onUpdatePage: (p: number) => {
+    peerPagination.page = p
+    loadPeers()
+  },
+  onUpdatePageSize: (ps: number) => {
+    peerPagination.pageSize = ps
+    peerPagination.page = 1
+    loadPeers()
+  },
+})
+
 const formRules: FormRules = {
   id: {
     required: true,
@@ -162,6 +190,19 @@ const columns = computed<DataTableColumns<AddressBook>>(() => [
 ])
 
 function rowKey(row: AddressBook): number {
+  return row.row_id
+}
+
+const peerColumns = computed<DataTableColumns<Peer>>(() => [
+  { type: 'selection' },
+  { title: appStore.t('myPeer.id'), key: 'id', width: 180 },
+  { title: appStore.t('myPeer.hostname'), key: 'hostname' },
+  { title: appStore.t('myPeer.alias'), key: 'alias' },
+  { title: appStore.t('myPeer.os'), key: 'os' },
+  { title: appStore.t('myPeer.username'), key: 'username' },
+])
+
+function peerRowKey(row: Peer): number {
   return row.row_id
 }
 
@@ -348,6 +389,74 @@ async function handleBatchUpdateTags(): Promise<void> {
   }
 }
 
+async function loadPeers(): Promise<void> {
+  peerLoading.value = true
+  try {
+    const res = await listPeers({
+      page: peerPagination.page,
+      page_size: peerPagination.pageSize,
+      id: peerSearchId.value || undefined,
+      hostname: peerSearchHostname.value || undefined,
+      alias: peerSearchAlias.value || undefined,
+    })
+    peerList.value = res.data.list || []
+    peerPagination.itemCount = res.data.total || 0
+  } catch {
+    // ignore
+  } finally {
+    peerLoading.value = false
+  }
+}
+
+function openPeerImport(): void {
+  peerSearchId.value = ''
+  peerSearchHostname.value = ''
+  peerSearchAlias.value = ''
+  peerCheckedRowKeys.value = []
+  peerImportTags.value = []
+  peerPagination.page = 1
+  peerModalVisible.value = true
+  loadPeers()
+}
+
+function handlePeerCheck(keys: Array<string | number>): void {
+  peerCheckedRowKeys.value = keys
+}
+
+function handlePeerSearch(): void {
+  peerPagination.page = 1
+  loadPeers()
+}
+
+function handlePeerReset(): void {
+  peerSearchId.value = ''
+  peerSearchHostname.value = ''
+  peerSearchAlias.value = ''
+  peerPagination.page = 1
+  loadPeers()
+}
+
+async function handleImportFromPeers(): Promise<void> {
+  if (peerCheckedRowKeys.value.length === 0) {
+    message.warning(appStore.t('myAddressBook.noPeerSelection'))
+    return
+  }
+  peerImportSaving.value = true
+  try {
+    await batchCreateFromPeers({
+      peer_ids: peerCheckedRowKeys.value as number[],
+      tags: peerImportTags.value,
+    })
+    message.success(appStore.t('myAddressBook.importFromPeersSuccess'))
+    peerModalVisible.value = false
+    loadData()
+  } catch {
+    // ignore
+  } finally {
+    peerImportSaving.value = false
+  }
+}
+
 onMounted(() => {
   loadData()
   loadTags()
@@ -360,6 +469,9 @@ onMounted(() => {
       <NSpace>
         <NButton type="primary" @click="openCreate">
           {{ $t('myAddressBook.create') }}
+        </NButton>
+        <NButton @click="openPeerImport">
+          {{ $t('myAddressBook.importFromPeers') }}
         </NButton>
         <NButton
           :disabled="checkedRowKeys.length === 0"
@@ -489,6 +601,67 @@ onMounted(() => {
       <NSpace justify="end">
         <NButton @click="batchTagModalVisible = false">{{ $t('common.cancel') }}</NButton>
         <NButton type="primary" :loading="batchSaving" @click="handleBatchUpdateTags">
+          {{ $t('common.confirm') }}
+        </NButton>
+      </NSpace>
+    </template>
+  </NModal>
+
+  <NModal
+    v-model:show="peerModalVisible"
+    preset="card"
+    :title="$t('myAddressBook.importFromPeers')"
+    style="width: 800px"
+  >
+    <NSpace align="center" style="margin-bottom: 16px">
+      <NInput
+        v-model:value="peerSearchId"
+        :placeholder="$t('myPeer.searchId')"
+        clearable
+        style="width: 160px"
+        @keyup.enter="handlePeerSearch"
+      />
+      <NInput
+        v-model:value="peerSearchHostname"
+        :placeholder="$t('myPeer.searchHostname')"
+        clearable
+        style="width: 160px"
+        @keyup.enter="handlePeerSearch"
+      />
+      <NInput
+        v-model:value="peerSearchAlias"
+        :placeholder="$t('myPeer.searchAlias')"
+        clearable
+        style="width: 160px"
+        @keyup.enter="handlePeerSearch"
+      />
+      <NButton type="primary" @click="handlePeerSearch">{{ $t('common.search') }}</NButton>
+      <NButton @click="handlePeerReset">{{ $t('myAddressBook.reset') }}</NButton>
+    </NSpace>
+    <NDataTable
+      remote
+      :columns="peerColumns"
+      :data="peerList"
+      :loading="peerLoading"
+      :pagination="peerPagination"
+      :row-key="peerRowKey"
+      :checked-row-keys="peerCheckedRowKeys"
+      @update:checked-row-keys="handlePeerCheck"
+    />
+    <NForm label-placement="top" style="margin-top: 16px">
+      <NFormItem :label="$t('myAddressBook.tags')">
+        <NSelect
+          v-model:value="peerImportTags"
+          multiple
+          tag
+          :options="tagOptions"
+        />
+      </NFormItem>
+    </NForm>
+    <template #footer>
+      <NSpace justify="end">
+        <NButton @click="peerModalVisible = false">{{ $t('common.cancel') }}</NButton>
+        <NButton type="primary" :loading="peerImportSaving" @click="handleImportFromPeers">
           {{ $t('common.confirm') }}
         </NButton>
       </NSpace>
