@@ -39,12 +39,12 @@ const pagination = reactive({
 })
 
 const typeOptions = computed<SelectOption[]>(() => [
-  { label: t('adminGroup.typeNormal'), value: 0 },
-  { label: t('adminGroup.typeShared'), value: 1 },
+  { label: t('adminGroup.typeNormal'), value: 1 },
+  { label: t('adminGroup.typeShared'), value: 2 },
 ])
 
 function typeName(type: number): string {
-  return type === 1 ? t('adminGroup.typeShared') : t('adminGroup.typeNormal')
+  return type === 2 ? t('adminGroup.typeShared') : t('adminGroup.typeNormal')
 }
 
 const columns = computed<DataTableColumns<Group>>(() => [
@@ -92,7 +92,7 @@ const modalMode = ref<'create' | 'edit'>('create')
 const formModel = reactive<{ id: number | undefined; name: string; type: number }>({
   id: undefined,
   name: '',
-  type: 0,
+  type: 1,
 })
 
 const rules = computed<FormRules>(() => ({
@@ -128,7 +128,7 @@ function handlePageSizeChange(pageSize: number): void {
 function resetForm(): void {
   formModel.id = undefined
   formModel.name = ''
-  formModel.type = 0
+  formModel.type = 1
 }
 
 function openCreate(): void {
