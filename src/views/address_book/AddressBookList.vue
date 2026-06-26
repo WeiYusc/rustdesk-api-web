@@ -691,6 +691,7 @@ onMounted(() => {
 
     <NDataTable
       remote
+      :scroll-x="1200"
       :columns="columns"
       :data="dataList"
       :loading="loading"

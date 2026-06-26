@@ -366,6 +366,7 @@ onMounted(() => {
     </template>
     <NDataTable
       remote
+      :scroll-x="1000"
       :bordered="false"
       :columns="columns"
       :data="dataList"

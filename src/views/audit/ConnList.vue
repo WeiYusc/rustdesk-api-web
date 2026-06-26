@@ -197,6 +197,7 @@ onMounted(loadData)
     <NDataTable
       v-model:checked-row-keys="checkedRowKeys"
       remote
+      :scroll-x="1400"
       :bordered="false"
       :columns="columns"
       :data="dataList"

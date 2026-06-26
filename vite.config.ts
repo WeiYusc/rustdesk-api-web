@@ -47,14 +47,23 @@ export default defineConfig(({ mode }) => {
                 case 'vue-router':
                 case 'pinia':
                 case 'vue-i18n':
+                case '@vue':
                   return '_vue'
                 case 'naive-ui':
+                case 'vueuc':
+                case 'vooks':
+                case '@css-render':
+                case 'css-render':
+                case 'treemate':
+                case 'async-validator':
                   return '_naive-ui'
                 case 'axios':
                 case 'marked':
                 case 'nprogress':
                 case 'clipboard':
                   return '_vendor'
+                case '@intlify':
+                  return '_i18n'
                 default:
                   return '__vendor'
               }
@@ -65,6 +74,7 @@ export default defineConfig(({ mode }) => {
           assetFileNames: 'static/[ext]/[name]-[hash].[ext]',
         },
       },
+      chunkSizeWarningLimit: 1000,
     },
     plugins: [
       vue(),

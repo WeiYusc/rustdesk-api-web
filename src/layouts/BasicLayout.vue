@@ -106,11 +106,15 @@ const breadcrumbItems = computed(() => {
 })
 
 const userMenuOptions = [
+  { label: appStore.t('menu.MyInfo'), key: 'info' },
+  { type: 'divider', key: 'd1' },
   { label: appStore.t('common.logout'), key: 'logout' },
 ]
 
 function handleUserMenu(key: string): void {
-  if (key === 'logout') {
+  if (key === 'info') {
+    router.push('/')
+  } else if (key === 'logout') {
     userStore.logout()
     router.push('/login')
   }
