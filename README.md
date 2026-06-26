@@ -1,27 +1,46 @@
 # RustDesk API Web
-# 基于 Vue3 + Element Plus 的后台, 适用于 [RustDesk API](https://github.com/lejianwen/rustdesk-api)
 
-<a href="https://github.com/vuejs/vue-next">
-    <img src="https://img.shields.io/badge/vue-^3.2.16-brightgreen.svg" alt="vue3">
-  </a>
-  <a href="https://github.com/element-plus/element-plus">
-    <img src="https://img.shields.io/badge/element--plus-^2.8.2-brightgreen.svg" alt="element-plus">
-  </a>
-  <a href="https://github.com/lejianwen/Gwen-admin/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/mashape/apistatus.svg" alt="license">
-  </a>
+Modern admin frontend for [RustDesk API](https://github.com/WeiYusc/rustdesk-api).
 
-# 安装步骤
+## Tech Stack
 
-```shell
-git clone https://github.com/lejianwen/rustdesk-api-web
-cd rustdesk-api-web   
-npm install
+- Vue 3.5 + TypeScript 5 (strict)
+- Naive UI 2.x
+- UnoCSS
+- Vite 6
+- Pinia 2
+- Vue Router 4 (hash mode)
+- Vue I18n 9 (7 languages)
+- axios
 
-// 本地开发
-npm run dev
+## Prerequisites
 
-// 打包
-npm run build
+- Node.js >= 20
+- pnpm (enable via `corepack enable pnpm`)
+
+## Development
+
+```bash
+pnpm install
+pnpm dev
+```
+
+The dev server proxies `/api` to `http://127.0.0.1:21114` by default.
+Override via a local `.env` file:
 
 ```
+VITE_PROXY_TARGET=http://your-backend:21114
+```
+
+## Build
+
+```bash
+pnpm build
+```
+
+Output is in `dist/`. Copy `dist/` contents to the backend's `resources/admin/`
+directory to serve via `/_admin/`.
+
+## License
+
+[MIT](./LICENSE)

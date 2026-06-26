@@ -6,7 +6,6 @@ yarn-debug.log*
 yarn-error.log*
 **/*.log
 
-
 # Editor directories and files
 .idea
 .vscode
@@ -16,4 +15,13 @@ yarn-error.log*
 *.sln
 *.local
 
+yarn.lock
+
+# Local env files (may contain secrets/credentials)
+.env
+.env.local
+.env.*.local
+
+# Lock files - use pnpm
+package-lock.json
 yarn.lock

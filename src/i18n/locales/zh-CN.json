@@ -1,0 +1,19 @@
+{
+  "common": {
+    "welcome": "欢迎",
+    "confirm": "确认",
+    "cancel": "取消",
+    "save": "保存",
+    "delete": "删除",
+    "edit": "编辑",
+    "create": "新建",
+    "search": "搜索",
+    "actions": "操作",
+    "loading": "加载中...",
+    "success": "成功",
+    "failed": "失败",
+    "noData": "暂无数据",
+    "logout": "退出登录",
+    "back": "返回"
+  }
+}

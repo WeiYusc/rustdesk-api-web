@@ -1,32 +1,51 @@
 {
-  "name": "hello-vue3",
-  "version": "0.0.0",
+  "name": "rustdesk-api-web",
+  "version": "1.0.0",
+  "description": "Modern admin frontend for RustDesk API (Vue3 + TypeScript + Naive UI)",
+  "type": "module",
   "scripts": {
-    "dev": "vite --host",
-    "build": "vite build",
-    "serve": "vite preview"
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "build:only": "vite build",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc --noEmit",
+    "lint": "eslint . --ext .ts,.tsx,.vue --fix",
+    "lint:check": "eslint . --ext .ts,.tsx,.vue",
+    "format": "prettier --write \"src/**/*.{ts,tsx,vue,css,scss,json}\""
   },
   "dependencies": {
-    "axios": "1.8.2",
-    "clipboard": "2.0.4",
-    "element-plus": "^2.8.2",
-    "fast-sha256": "^1.3.0",
-    "js-cookie": "^3.0.1",
-    "marked": "^15.0.4",
-    "normalize.css": "^8.0.1",
+    "axios": "^1.7.9",
+    "clipboard": "^2.0.11",
+    "marked": "^15.0.0",
     "nprogress": "^0.2.0",
-    "pinia": "2.2.8",
-    "vue": "3.5.13",
-    "vue-router": "^4.0.12"
+    "pinia": "^2.3.0",
+    "vue": "^3.5.13",
+    "vue-i18n": "^11.1.0",
+    "vue-router": "^4.5.0"
   },
   "devDependencies": {
-    "@element-plus/icons": "0.0.11",
-    "@vitejs/plugin-vue": "5.2.1",
-    "dotenv": "^10.0.0",
-    "qs": "^6.10.2",
-    "sass": "^1.43.4",
-    "sass-loader": "^12.3.0",
-    "ts-proto": "^1.141.1",
-    "vite": "6.3.4"
+    "@types/node": "^22.10.0",
+    "@types/nprogress": "^0.2.3",
+    "@typescript-eslint/eslint-plugin": "^8.18.0",
+    "@typescript-eslint/parser": "^8.18.0",
+    "@unocss/preset-icons": "^0.65.2",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/tsconfig": "^0.7.0",
+    "eslint": "^9.17.0",
+    "eslint-plugin-vue": "^9.32.0",
+    "naive-ui": "^2.40.4",
+    "prettier": "^3.4.2",
+    "sass": "^1.83.0",
+    "typescript": "~5.7.2",
+    "unocss": "^0.65.2",
+    "unplugin-auto-import": "^0.19.0",
+    "unplugin-vue-components": "^0.28.0",
+    "vfonts": "^0.0.3",
+    "vite": "^6.0.7",
+    "vue-tsc": "^2.2.0"
+  },
+  "packageManager": "pnpm@11.9.0",
+  "engines": {
+    "node": ">=20"
   }
 }
