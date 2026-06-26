@@ -10,8 +10,20 @@ Modern admin frontend for [RustDesk API](https://github.com/WeiYusc/rustdesk-api
 - Vite 6
 - Pinia 2
 - Vue Router 4 (hash mode)
-- Vue I18n 9 (7 languages)
+- Vue I18n 11 (7 languages: en/zh-CN/zh-TW/fr/ko/ru/es)
 - axios
+
+## Features
+
+- **Modern UI**: Clean, elegant design with Naive UI, dark mode support
+- **Role-based access**: Admin and regular user menus automatically filtered
+- **i18n**: 7 languages with full translation
+- **Responsive**: Desktop sidebar, mobile drawer, 4 breakpoints
+- **Security**: CSP enabled, no v-html, marked output sanitized
+- **Pages**:
+  - Auth: Login (password + captcha + OIDC), Register, OAuth bind
+  - My: Personal info, Peer, Address book collection + rules, Address book, Tags, Share records, Login log
+  - Admin: User management + tokens, Groups, Device groups, Tags, Address book collections + rules, Address books (with shareByWebClient), Peers, OAuth, Login log, Connection/File audit, Share records, Server commands (simple/advanced)
 
 ## Prerequisites
 
@@ -38,8 +50,19 @@ VITE_PROXY_TARGET=http://your-backend:21114
 pnpm build
 ```
 
-Output is in `dist/`. Copy `dist/` contents to the backend's `resources/admin/`
-directory to serve via `/_admin/`.
+Output is in `dist/`.
+
+### Deploy to backend
+
+```bash
+# Option 1: Use sync script
+bash scripts/sync-admin.sh
+
+# Option 2: Manual copy
+cp -r dist/* ../rustdesk-api/resources/admin/
+```
+
+The backend serves the frontend at `/_admin/` via Gin's `StaticFS`.
 
 ## License
 
