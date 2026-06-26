@@ -1,9 +1,9 @@
 {
   "app": {
-    "title": "RustDesk API Admin",
-    "welcome": "Welcome"
+    "title": "RustDesk API Admin"
   },
   "common": {
+    "welcome": "Welcome",
     "loading": "Loading...",
     "save": "Save",
     "cancel": "Cancel",
@@ -13,14 +13,16 @@
     "search": "Search",
     "actions": "Actions",
     "confirm": "Confirm",
-    "back": "Back"
+    "back": "Back",
+    "backHome": "Back to Home",
+    "notFound": "Page Not Found",
+    "success": "Success",
+    "failed": "Failed",
+    "noData": "No Data",
+    "logout": "Logout"
   },
   "home": {
     "title": "Home",
     "skeleton": "Project skeleton initialized successfully. Stage 0 complete."
-  },
-  "notFound": {
-    "title": "Page Not Found",
-    "back": "Back to Home"
   }
 }

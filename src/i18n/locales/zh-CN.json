@@ -1,19 +1,28 @@
 {
+  "app": {
+    "title": "RustDesk API 管理后台"
+  },
   "common": {
     "welcome": "欢迎",
-    "confirm": "确认",
-    "cancel": "取消",
+    "loading": "加载中...",
     "save": "保存",
+    "cancel": "取消",
     "delete": "删除",
     "edit": "编辑",
     "create": "新建",
     "search": "搜索",
     "actions": "操作",
-    "loading": "加载中...",
+    "confirm": "确认",
+    "back": "返回",
+    "backHome": "返回首页",
+    "notFound": "页面未找到",
     "success": "成功",
     "failed": "失败",
     "noData": "暂无数据",
-    "logout": "退出登录",
-    "back": "返回"
+    "logout": "退出登录"
+  },
+  "home": {
+    "title": "首页",
+    "skeleton": "工程骨架初始化完成，阶段0已完成。"
   }
 }
