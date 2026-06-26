@@ -43,6 +43,13 @@ const pkceMethodOptions: SelectOption[] = [
 const loading = ref(false)
 const saving = ref(false)
 const dataList = ref<Oauth[]>([])
+
+function formatTime(ts: number | string): string {
+  if (!ts) return ''
+  const num = typeof ts === 'string' ? parseInt(ts, 10) : ts
+  if (isNaN(num)) return String(ts)
+  return new Date(num).toLocaleString()
+}
 const pagination = reactive({
   page: 1,
   pageSize: 10,
@@ -75,7 +82,7 @@ const columns = computed<DataTableColumns<Oauth>>(() => [
         () => (row.pkce_enable ? t('adminOauth.yes') : t('adminOauth.no')),
       ),
   },
-  { title: t('adminOauth.createdAt'), key: 'created_at' },
+  { title: t('adminOauth.createdAt'), key: 'created_at', render: (row) => formatTime(row.created_at) },
   {
     title: t('common.actions'),
     key: 'actions',
