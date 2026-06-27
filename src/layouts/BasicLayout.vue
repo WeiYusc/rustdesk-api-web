@@ -134,6 +134,17 @@ function handleLocale(key: string): void {
   appStore.changeLocale(key as AppLocale)
 }
 
+function handleCloseTag(path: string, index: number): void {
+  if (path === activeKey.value) {
+    const nextTag = tagsStore.tags[index + 1] || tagsStore.tags[index - 1]
+    tagsStore.removeTag(path)
+    if (nextTag) router.push(nextTag.path)
+    else router.push(routeStore.firstAvailablePath())
+  } else {
+    tagsStore.removeTag(path)
+  }
+}
+
 const includeRoutes = computed(() => tagsStore.cachedViews)
 
 const title = computed(() => appStore.adminConfig.title || 'RustDesk API Admin')
@@ -146,6 +157,7 @@ watch(
         name: route.name as string,
         path: route.path,
         title: (route.meta?.title as string) || (route.name as string),
+        cacheable: !!route.meta?.keepAlive,
       })
     }
   },
@@ -219,7 +231,7 @@ watch(
             <NDropdown :options="userMenuOptions" trigger="click" @select="handleUserMenu">
               <NSpace align="center" style="cursor: pointer">
                 <NAvatar v-if="userStore.avatar" :src="userStore.avatar" round size="small" />
-                <NAvatar v-else round size="small">{{ userStore.username.charAt(0).toUpperCase() }}</NAvatar>
+                <NAvatar v-else round size="small">{{ (userStore.username || '?').charAt(0).toUpperCase() || '?' }}</NAvatar>
                 <NText>{{ userStore.nickname || userStore.username }}</NText>
               </NSpace>
             </NDropdown>
@@ -229,17 +241,17 @@ watch(
 
       <div class="tags-bar">
         <NSpace :size="4">
-          <NButton
-            v-for="tag in tagsStore.tags"
-            :key="tag.path"
-            :type="tag.path === activeKey ? 'primary' : 'default'"
-            size="tiny"
-            round
-            @click="router.push(tag.path)"
-          >
-            {{ appStore.t(`menu.${tag.title}`) || tag.title }}
-            <span v-if="tagsStore.tags.length > 1" class="tag-close" @click.stop="tagsStore.removeTag(tag.path)">×</span>
-          </NButton>
+            <NButton
+              v-for="(tag, index) in tagsStore.tags"
+              :key="tag.path"
+              :type="tag.path === activeKey ? 'primary' : 'default'"
+              size="tiny"
+              round
+              @click="router.push(tag.path)"
+            >
+              {{ appStore.t(`menu.${tag.title}`) || tag.title }}
+              <span v-if="tagsStore.tags.length > 1" class="tag-close" @click.stop="handleCloseTag(tag.path, index)">×</span>
+            </NButton>
         </NSpace>
       </div>
 

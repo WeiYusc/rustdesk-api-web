@@ -5,6 +5,7 @@ interface TagItem {
   name: string
   path: string
   title: string
+  cacheable?: boolean
 }
 
 export const useTagsStore = defineStore('tags', () => {
@@ -14,7 +15,7 @@ export const useTagsStore = defineStore('tags', () => {
   function addTag(tag: TagItem): void {
     if (tags.value.some((t) => t.path === tag.path)) return
     tags.value.push(tag)
-    if (!cachedViews.value.includes(tag.name)) {
+    if (tag.cacheable && !cachedViews.value.includes(tag.name)) {
       cachedViews.value.push(tag.name)
     }
   }

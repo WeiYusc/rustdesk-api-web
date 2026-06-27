@@ -49,7 +49,7 @@ function typeName(type: number): string {
 }
 
 const columns = computed<DataTableColumns<Group>>(() => [
-  { title: t('adminGroup.name'), key: 'name' },
+  { title: t('adminGroup.name'), key: 'name', ellipsis: { tooltip: true } },
   {
     title: t('adminGroup.type'),
     key: 'type',

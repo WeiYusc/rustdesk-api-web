@@ -5,6 +5,7 @@ import type { DataTableColumns, PaginationProps } from 'naive-ui'
 import { list } from '@/api/my/peer'
 import { useAppStore } from '@/stores/app'
 import type { Peer } from '@/types'
+import { formatTime } from '@/utils/format'
 
 const appStore = useAppStore()
 
@@ -50,18 +51,12 @@ async function fetchData(): Promise<void> {
   }
 }
 
-function formatTime(t: number): string {
-  if (!t) return ''
-  const ms = t < 1e12 ? t * 1000 : t
-  return new Date(ms).toLocaleString()
-}
-
 const columns = computed<DataTableColumns<Peer>>(() => [
-  { title: appStore.t('myPeer.id'), key: 'id' },
-  { title: appStore.t('myPeer.hostname'), key: 'hostname' },
+  { title: appStore.t('myPeer.id'), key: 'id', ellipsis: { tooltip: true } },
+  { title: appStore.t('myPeer.hostname'), key: 'hostname', ellipsis: { tooltip: true } },
   { title: appStore.t('myPeer.alias'), key: 'alias' },
-  { title: appStore.t('myPeer.os'), key: 'os' },
-  { title: appStore.t('myPeer.username'), key: 'username' },
+  { title: appStore.t('myPeer.os'), key: 'os', ellipsis: { tooltip: true } },
+  { title: appStore.t('myPeer.username'), key: 'username', ellipsis: { tooltip: true } },
   { title: appStore.t('myPeer.lastOnlineIp'), key: 'last_online_ip' },
   {
     title: appStore.t('myPeer.lastOnlineTime'),
@@ -88,7 +83,7 @@ onMounted(() => {
   <NCard>
     <NH2>{{ $t('myPeer.title') }}</NH2>
     <NSpace vertical>
-      <NSpace>
+      <NSpace wrap>
         <NInput
           v-model:value="searchId"
           :placeholder="$t('myPeer.searchId')"

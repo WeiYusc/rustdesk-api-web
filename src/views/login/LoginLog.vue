@@ -14,6 +14,7 @@ import {
 } from 'naive-ui'
 import { list, deleteLoginLog, batchDelete } from '@/api/loginLog'
 import type { LoginLog } from '@/types'
+import { formatTime } from '@/utils/format'
 
 const { t } = useI18n()
 const message = useMessage()
@@ -32,14 +33,6 @@ const pagination = reactive({
   pageSizes: [10, 20, 50],
 })
 
-function formatTime(ts: number | string): string {
-  if (!ts) return ''
-  const num =
-    typeof ts === 'number' ? (ts < 1e12 ? ts * 1000 : ts) : Date.parse(ts)
-  if (!num) return ''
-  return new Date(num).toLocaleString()
-}
-
 const columns = computed<DataTableColumns<LoginLog>>(() => [
   { type: 'selection' },
   { title: t('adminLoginLog.userId'), key: 'user_id' },
@@ -51,7 +44,7 @@ const columns = computed<DataTableColumns<LoginLog>>(() => [
     title: t('adminLoginLog.type'),
     key: 'type',
     render: (row) =>
-      row.type === '1' ? 'Web Admin' : row.type === '2' ? 'Client' : String(row.type),
+      row.type === '1' ? t('adminLoginLog.typeWebAdmin') : row.type === '2' ? t('adminLoginLog.typeClient') : String(row.type),
   },
   { title: t('adminLoginLog.platform'), key: 'platform' },
   {
@@ -168,7 +161,7 @@ onMounted(loadData)
   <NCard>
     <template #header>{{ $t('adminLoginLog.title') }}</template>
     <template #header-extra>
-      <NSpace align="center">
+      <NSpace align="center" wrap>
         <NInput
           v-model:value="filterUserId"
           :placeholder="$t('adminLoginLog.filterUserId')"
@@ -191,6 +184,7 @@ onMounted(loadData)
     <NDataTable
       v-model:checked-row-keys="checkedRowKeys"
       remote
+      :scroll-x="1200"
       :bordered="false"
       :columns="columns"
       :data="dataList"

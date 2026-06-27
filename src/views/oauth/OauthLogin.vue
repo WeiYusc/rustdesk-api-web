@@ -30,7 +30,12 @@ async function handleOidcCallback(): Promise<void> {
   }
 
   try {
+    const timeout = setTimeout(() => {
+      status.value = 'error'
+      errorMsg.value = appStore.t('common.timeout')
+    }, 15000)
     const result = await userStore.queryOidc(code)
+    clearTimeout(timeout)
     if (result) {
       status.value = 'success'
       router.push(useRouteStore().firstAvailablePath())
@@ -80,6 +85,7 @@ onMounted(() => {
 }
 .oauth-card {
   width: 360px;
+  max-width: 90vw;
   z-index: 1;
 }
 .oauth-content {

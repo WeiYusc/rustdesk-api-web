@@ -23,6 +23,7 @@ import {
 } from 'naive-ui'
 import { create, deleteOauth, list, update, type OauthForm } from '@/api/oauth'
 import type { Oauth } from '@/types'
+import { formatTime } from '@/utils/format'
 
 const { t } = useI18n()
 const message = useMessage()
@@ -44,12 +45,6 @@ const loading = ref(false)
 const saving = ref(false)
 const dataList = ref<Oauth[]>([])
 
-function formatTime(ts: number | string): string {
-  if (!ts) return ''
-  const num = typeof ts === 'string' ? parseInt(ts, 10) : ts
-  if (isNaN(num)) return String(ts)
-  return new Date(num).toLocaleString()
-}
 const pagination = reactive({
   page: 1,
   pageSize: 10,
@@ -59,9 +54,9 @@ const pagination = reactive({
 })
 
 const columns = computed<DataTableColumns<Oauth>>(() => [
-  { title: t('adminOauth.op'), key: 'op' },
-  { title: t('adminOauth.oauthType'), key: 'oauth_type' },
-  { title: t('adminOauth.clientId'), key: 'client_id' },
+  { title: t('adminOauth.op'), key: 'op', ellipsis: { tooltip: true } },
+  { title: t('adminOauth.oauthType'), key: 'oauth_type', ellipsis: { tooltip: true } },
+  { title: t('adminOauth.clientId'), key: 'client_id', ellipsis: { tooltip: true } },
   {
     title: t('adminOauth.autoRegister'),
     key: 'auto_register',
@@ -291,6 +286,7 @@ onMounted(loadData)
     </template>
     <NDataTable
       remote
+      :scroll-x="1100"
       :bordered="false"
       :columns="columns"
       :data="dataList"

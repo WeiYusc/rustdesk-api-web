@@ -14,6 +14,7 @@ import {
 } from 'naive-ui'
 import { connList, connDelete, connBatchDelete } from '@/api/audit'
 import type { AuditConn } from '@/types'
+import { formatTime } from '@/utils/format'
 
 const { t } = useI18n()
 const message = useMessage()
@@ -33,14 +34,6 @@ const pagination = reactive({
   pageSizes: [10, 20, 50],
 })
 
-function formatTime(ts: number | string): string {
-  if (!ts) return ''
-  const num =
-    typeof ts === 'number' ? (ts < 1e12 ? ts * 1000 : ts) : Date.parse(ts)
-  if (!num) return ''
-  return new Date(num).toLocaleString()
-}
-
 const columns = computed<DataTableColumns<AuditConn>>(() => [
   { type: 'selection' },
   {
@@ -48,17 +41,17 @@ const columns = computed<DataTableColumns<AuditConn>>(() => [
     key: 'action',
     render: (row) => {
       const map: Record<string, string> = {
-        connect: 'Connect',
-        close: 'Close',
+        connect: t('adminAuditConn.actionConnect'),
+        close: t('adminAuditConn.actionClose'),
       }
       return map[row.action] || String(row.action)
     },
   },
-  { title: t('adminAuditConn.connId'), key: 'conn_id' },
-  { title: t('adminAuditConn.peerId'), key: 'peer_id' },
-  { title: t('adminAuditConn.fromPeer'), key: 'from_peer' },
-  { title: t('adminAuditConn.fromName'), key: 'from_name' },
-  { title: t('adminAuditConn.ip'), key: 'ip' },
+  { title: t('adminAuditConn.connId'), key: 'conn_id', ellipsis: { tooltip: true } },
+  { title: t('adminAuditConn.peerId'), key: 'peer_id', ellipsis: { tooltip: true } },
+  { title: t('adminAuditConn.fromPeer'), key: 'from_peer', ellipsis: { tooltip: true } },
+  { title: t('adminAuditConn.fromName'), key: 'from_name', ellipsis: { tooltip: true } },
+  { title: t('adminAuditConn.ip'), key: 'ip', ellipsis: { tooltip: true } },
   {
     title: t('adminAuditConn.sessionId'),
     key: 'session_id',
@@ -68,7 +61,10 @@ const columns = computed<DataTableColumns<AuditConn>>(() => [
     title: t('adminAuditConn.type'),
     key: 'type',
     render: (row) => {
-      const map: Record<number, string> = { 1: 'Connect', 2: 'Disconnect' }
+      const map: Record<number, string> = {
+        1: t('adminAuditConn.typeConnect'),
+        2: t('adminAuditConn.typeDisconnect'),
+      }
       return map[row.type] || String(row.type)
     },
   },
@@ -185,7 +181,7 @@ onMounted(loadData)
   <NCard>
     <template #header>{{ $t('adminAuditConn.title') }}</template>
     <template #header-extra>
-      <NSpace align="center">
+      <NSpace align="center" wrap>
         <NInput
           v-model:value="filterPeerId"
           :placeholder="$t('adminAuditConn.filterPeerId')"

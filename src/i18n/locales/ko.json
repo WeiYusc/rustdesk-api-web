@@ -20,7 +20,8 @@
     "failed": "실패",
     "noData": "데이터 없음",
     "logout": "로그아웃",
-    "pleaseSelect": "먼저 선택하세요"
+    "pleaseSelect": "먼저 선택하세요",
+    "timeout": "요청 시간 초과"
   },
   "login": {
     "username": "사용자 이름",
@@ -175,7 +176,9 @@
     "batchDelete": "일괄 삭제",
     "deleteConfirm": "이 로그인 로그를 삭제하시겠습니까?",
     "batchDeleteConfirm": "선택한 로그인 로그를 삭제하시겠습니까?",
-    "deleteSuccess": "삭제되었습니다"
+    "deleteSuccess": "삭제되었습니다",
+    "typeWebAdmin": "웹 관리자",
+    "typeClient": "클라이언트"
   },
   "myShareRecord": {
     "title": "공유 기록",
@@ -404,7 +407,9 @@
     "deleteConfirm": "이 로그인 로그를 삭제하시겠습니까?",
     "batchDeleteConfirm": "선택한 로그인 로그를 삭제하시겠습니까?",
     "deleteSuccess": "삭제되었습니다",
-    "reset": "재설정"
+    "reset": "재설정",
+    "typeWebAdmin": "웹 관리자",
+    "typeClient": "클라이언트"
   },
   "adminAuditConn": {
     "title": "연결 감사",
@@ -423,7 +428,11 @@
     "deleteConfirm": "이 연결 로그를 삭제하시겠습니까?",
     "batchDeleteConfirm": "선택한 연결 로그를 삭제하시겠습니까?",
     "deleteSuccess": "삭제되었습니다",
-    "reset": "재설정"
+    "reset": "재설정",
+    "actionConnect": "연결",
+    "actionClose": "닫기",
+    "typeConnect": "연결",
+    "typeDisconnect": "연결 해제"
   },
   "adminAuditFile": {
     "title": "파일 감사",
@@ -445,7 +454,9 @@
     "deleteSuccess": "삭제되었습니다",
     "reset": "재설정",
     "yes": "예",
-    "no": "아니오"
+    "no": "아니오",
+    "typeUpload": "업로드",
+    "typeDownload": "다운로드"
   },
   "adminShareRecord": {
     "title": "공유 기록",
@@ -462,7 +473,9 @@
     "batchDeleteConfirm": "선택한 공유 기록을 삭제하시겠습니까?",
     "deleteSuccess": "삭제되었습니다",
     "reset": "재설정",
-    "neverExpires": "만료되지 않음"
+    "neverExpires": "만료되지 않음",
+    "typePermanent": "영구",
+    "typeTemporary": "임시"
   },
   "adminOauth": {
     "title": "OAuth 관리",
@@ -511,13 +524,13 @@
     "presetCommands": "사전 설정 명령"
   },
   "register": {
-    "passwordMismatch": "Password mismatch",
-    "confirmPassword": "Confirm Password",
-    "emailOptional": "Email (optional)"
+    "passwordMismatch": "비밀번호가 일치하지 않습니다",
+    "confirmPassword": "비밀번호 확인",
+    "emailOptional": "이메일 (선택사항)"
   },
   "oauth": {
-    "missingCode": "Missing code",
-    "codeMismatch": "Code mismatch",
+    "missingCode": "코드가 없습니다",
+    "codeMismatch": "코드가 일치하지 않습니다",
     "loginSuccess": "로그인 성공, 이동 중..."
   }
 }

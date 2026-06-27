@@ -20,7 +20,9 @@
     "failed": "失败",
     "noData": "暂无数据",
     "logout": "退出登录",
-    "pleaseSelect": "请先选择"
+    "pleaseSelect": "请先选择",
+    "timeout": "请求超时",
+    "timeout": "请求超时"
   },
   "login": {
     "username": "用户名",
@@ -175,7 +177,9 @@
     "batchDelete": "批量删除",
     "deleteConfirm": "确定删除此登录日志吗？",
     "batchDeleteConfirm": "确定删除选中的登录日志吗？",
-    "deleteSuccess": "删除成功"
+    "deleteSuccess": "删除成功",
+    "typeWebAdmin": "Web 管理端",
+    "typeClient": "客户端"
   },
   "myShareRecord": {
     "title": "分享记录",
@@ -404,7 +408,9 @@
     "deleteConfirm": "确定要删除此登录日志吗？",
     "batchDeleteConfirm": "确定要删除选中的登录日志吗？",
     "deleteSuccess": "删除成功",
-    "reset": "重置"
+    "reset": "重置",
+    "typeWebAdmin": "Web 管理端",
+    "typeClient": "客户端"
   },
   "adminAuditConn": {
     "title": "连接审计",
@@ -423,7 +429,11 @@
     "deleteConfirm": "确定要删除此连接日志吗？",
     "batchDeleteConfirm": "确定要删除选中的连接日志吗？",
     "deleteSuccess": "删除成功",
-    "reset": "重置"
+    "reset": "重置",
+    "actionConnect": "连接",
+    "actionClose": "关闭",
+    "typeConnect": "连接",
+    "typeDisconnect": "断开"
   },
   "adminAuditFile": {
     "title": "文件审计",
@@ -445,7 +455,9 @@
     "deleteSuccess": "删除成功",
     "reset": "重置",
     "yes": "是",
-    "no": "否"
+    "no": "否",
+    "typeUpload": "上传",
+    "typeDownload": "下载"
   },
   "adminShareRecord": {
     "title": "分享记录",
@@ -462,7 +474,9 @@
     "batchDeleteConfirm": "确定要删除选中的分享记录吗？",
     "deleteSuccess": "删除成功",
     "reset": "重置",
-    "neverExpires": "永不过期"
+    "neverExpires": "永不过期",
+    "typePermanent": "永久",
+    "typeTemporary": "临时"
   },
   "adminOauth": {
     "title": "OAuth 管理",

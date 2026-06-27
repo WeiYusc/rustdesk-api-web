@@ -20,7 +20,9 @@
     "failed": "Failed",
     "noData": "No Data",
     "logout": "Logout",
-    "pleaseSelect": "Please select first"
+    "pleaseSelect": "Please select first",
+    "timeout": "Request timeout",
+    "timeout": "Request timed out"
   },
   "login": {
     "username": "Username",
@@ -175,7 +177,9 @@
     "batchDelete": "Batch Delete",
     "deleteConfirm": "Are you sure to delete this login log?",
     "batchDeleteConfirm": "Are you sure to delete the selected login logs?",
-    "deleteSuccess": "Deleted successfully"
+    "deleteSuccess": "Deleted successfully",
+    "typeWebAdmin": "Web Admin",
+    "typeClient": "Client"
   },
   "myShareRecord": {
     "title": "Share Record",
@@ -404,7 +408,9 @@
     "deleteConfirm": "Are you sure you want to delete this login log?",
     "batchDeleteConfirm": "Are you sure you want to delete the selected login logs?",
     "deleteSuccess": "Deleted successfully",
-    "reset": "Reset"
+    "reset": "Reset",
+    "typeWebAdmin": "Web Admin",
+    "typeClient": "Client"
   },
   "adminAuditConn": {
     "title": "Connection Audit",
@@ -423,7 +429,11 @@
     "deleteConfirm": "Are you sure you want to delete this connection log?",
     "batchDeleteConfirm": "Are you sure you want to delete the selected connection logs?",
     "deleteSuccess": "Deleted successfully",
-    "reset": "Reset"
+    "reset": "Reset",
+    "actionConnect": "Connect",
+    "actionClose": "Close",
+    "typeConnect": "Connect",
+    "typeDisconnect": "Disconnect"
   },
   "adminAuditFile": {
     "title": "File Audit",
@@ -445,7 +455,9 @@
     "deleteSuccess": "Deleted successfully",
     "reset": "Reset",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "typeUpload": "Upload",
+    "typeDownload": "Download"
   },
   "adminShareRecord": {
     "title": "Share Record",
@@ -462,7 +474,9 @@
     "batchDeleteConfirm": "Are you sure you want to delete the selected share records?",
     "deleteSuccess": "Deleted successfully",
     "reset": "Reset",
-    "neverExpires": "Never Expires"
+    "neverExpires": "Never Expires",
+    "typePermanent": "Permanent",
+    "typeTemporary": "Temporary"
   },
   "adminOauth": {
     "title": "OAuth Management",

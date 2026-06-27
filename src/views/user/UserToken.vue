@@ -35,8 +35,8 @@ const pagination = reactive({
 
 const columns = computed<DataTableColumns<UserToken>>(() => [
   { type: 'selection' },
-  { title: t('adminUserToken.deviceUuid'), key: 'device_uuid' },
-  { title: t('adminUserToken.deviceId'), key: 'device_id' },
+  { title: t('adminUserToken.deviceUuid'), key: 'device_uuid', ellipsis: { tooltip: true } },
+  { title: t('adminUserToken.deviceId'), key: 'device_id', ellipsis: { tooltip: true } },
   { title: t('adminUserToken.token'), key: 'token', ellipsis: { tooltip: true } },
   {
     title: t('adminUserToken.expiredAt'),
@@ -148,7 +148,7 @@ onMounted(loadData)
   <NCard>
     <template #header>{{ $t('adminUserToken.title') }}</template>
     <template #header-extra>
-      <NSpace align="center">
+      <NSpace align="center" wrap>
         <NInput
           v-model:value="filterUserId"
           :placeholder="$t('adminUserToken.filterUserId')"
@@ -168,6 +168,7 @@ onMounted(loadData)
     <NDataTable
       v-model:checked-row-keys="checkedRowKeys"
       remote
+      :scroll-x="1000"
       :bordered="false"
       :columns="columns"
       :data="dataList"

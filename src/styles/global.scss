@@ -12,3 +12,23 @@ body,
 * {
   box-sizing: border-box;
 }
+
+html {
+  color-scheme: light dark;
+}
+
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .app-content {
+    padding: 12px !important;
+  }
+}

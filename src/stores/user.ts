@@ -104,6 +104,7 @@ export const useUserStore = defineStore('user', () => {
   function logout(): void {
     logoutApi().catch(() => {})
     removeToken()
+    removeCode()
     token.value = ''
     username.value = ''
     email.value = ''
@@ -112,6 +113,7 @@ export const useUserStore = defineStore('user', () => {
     routeNames.value = []
     useRouteStore().clearRoutes()
     useTagsStore().clearTags()
+    useAppStore().configLoaded = false
   }
 
   function getStoredOidcCode(): string | null {

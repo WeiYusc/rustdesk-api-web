@@ -5,6 +5,7 @@ import type { DataTableColumns, PaginationProps } from 'naive-ui'
 import { list, deleteLoginLog, batchDelete } from '@/api/my/loginLog'
 import { useAppStore } from '@/stores/app'
 import type { LoginLog } from '@/types'
+import { formatTime } from '@/utils/format'
 
 const appStore = useAppStore()
 const message = useMessage()
@@ -48,11 +49,6 @@ async function fetchData(): Promise<void> {
   }
 }
 
-function formatTime(t: string): string {
-  if (!t) return ''
-  return new Date(t).toLocaleString()
-}
-
 const columns = computed<DataTableColumns<LoginLog>>(() => [
   { type: 'selection' },
   { title: appStore.t('myLoginLog.ip'), key: 'ip' },
@@ -61,7 +57,7 @@ const columns = computed<DataTableColumns<LoginLog>>(() => [
     title: appStore.t('myLoginLog.type'),
     key: 'type',
     render: (row: LoginLog) =>
-      row.type === '1' ? 'Web Admin' : row.type === '2' ? 'Client' : String(row.type),
+      row.type === '1' ? appStore.t('myLoginLog.typeWebAdmin') : row.type === '2' ? appStore.t('myLoginLog.typeClient') : String(row.type),
   },
   { title: appStore.t('myLoginLog.platform'), key: 'platform' },
   {
@@ -93,7 +89,7 @@ function handleDelete(row: LoginLog): void {
   dialog.warning({
     title: appStore.t('common.confirm'),
     content: appStore.t('myLoginLog.deleteConfirm'),
-    positiveText: appStore.t('common.confirm'),
+    positiveText: appStore.t('common.delete'),
     negativeText: appStore.t('common.cancel'),
     onPositiveClick: async () => {
       try {
@@ -115,7 +111,7 @@ function handleBatchDelete(): void {
   dialog.warning({
     title: appStore.t('common.confirm'),
     content: appStore.t('myLoginLog.batchDeleteConfirm'),
-    positiveText: appStore.t('common.confirm'),
+    positiveText: appStore.t('common.delete'),
     negativeText: appStore.t('common.cancel'),
     onPositiveClick: async () => {
       try {
@@ -151,6 +147,7 @@ onMounted(() => {
       <NDataTable
         v-model:checked-row-keys="checkedRowKeys"
         remote
+        :scroll-x="900"
         :columns="columns"
         :data="data"
         :loading="loading"

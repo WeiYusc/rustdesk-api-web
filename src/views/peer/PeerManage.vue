@@ -28,6 +28,7 @@ import {
 } from '@/api/peer'
 import { list as listGroups } from '@/api/deviceGroup'
 import type { Peer } from '@/types'
+import { formatTimeOrDash } from '@/utils/format'
 
 const { t } = useI18n()
 const message = useMessage()
@@ -66,24 +67,18 @@ async function loadGroups(): Promise<void> {
   }
 }
 
-function formatTime(ts: number): string {
-  if (!ts) return '-'
-  const ms = ts < 1e12 ? ts * 1000 : ts
-  return new Date(ms).toLocaleString()
-}
-
 const columns = computed<DataTableColumns<Peer>>(() => [
   { type: 'selection' },
   { title: t('adminPeer.id'), key: 'id', width: 180 },
-  { title: t('adminPeer.hostname'), key: 'hostname' },
-  { title: t('adminPeer.alias'), key: 'alias' },
-  { title: t('adminPeer.os'), key: 'os' },
-  { title: t('adminPeer.username'), key: 'username' },
-  { title: t('adminPeer.lastOnlineIp'), key: 'last_online_ip' },
+  { title: t('adminPeer.hostname'), key: 'hostname', ellipsis: { tooltip: true } },
+  { title: t('adminPeer.alias'), key: 'alias', ellipsis: { tooltip: true } },
+  { title: t('adminPeer.os'), key: 'os', ellipsis: { tooltip: true } },
+  { title: t('adminPeer.username'), key: 'username', ellipsis: { tooltip: true } },
+  { title: t('adminPeer.lastOnlineIp'), key: 'last_online_ip', ellipsis: { tooltip: true } },
   {
     title: t('adminPeer.lastOnlineTime'),
     key: 'last_online_time',
-    render: (row) => formatTime(row.last_online_time),
+    render: (row) => formatTimeOrDash(row.last_online_time),
   },
   {
     title: t('common.actions'),
@@ -328,7 +323,7 @@ onMounted(() => {
   <NCard>
     <template #header>{{ $t('adminPeer.title') }}</template>
     <template #header-extra>
-      <NSpace>
+      <NSpace wrap>
         <NButton type="primary" @click="openCreate">
           {{ $t('adminPeer.create') }}
         </NButton>
@@ -341,7 +336,7 @@ onMounted(() => {
         </NButton>
       </NSpace>
     </template>
-    <NSpace align="center" style="margin-bottom: 16px">
+    <NSpace align="center" style="margin-bottom: 16px" wrap>
       <NInput
         v-model:value="searchId"
         :placeholder="$t('adminPeer.searchId')"

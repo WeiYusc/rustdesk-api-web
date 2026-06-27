@@ -243,12 +243,18 @@ function handleDelete(row: ServerCmd): void {
 }
 
 onMounted(loadData)
+
+function handleTabChange(name: string | number): void {
+  if (name === 'advanced') {
+    loadData()
+  }
+}
 </script>
 
 <template>
   <NCard>
     <template #header>{{ $t('adminServerCmd.title') }}</template>
-    <NTabs type="line">
+    <NTabs type="line" @update:value="handleTabChange">
       <NTabPane name="simple" :tab="$t('adminServerCmd.simpleMode')">
         <NSpace vertical :size="16">
           <NText depth="3">{{ $t('adminServerCmd.presetCommands') }}</NText>

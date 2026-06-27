@@ -635,7 +635,7 @@ onMounted(() => {
 <template>
   <NCard :bordered="false">
     <NSpace justify="space-between" align="center" style="margin-bottom: 16px">
-      <NSpace>
+      <NSpace wrap>
         <NButton type="primary" @click="openCreate">
           {{ $t('adminAddressBook.create') }}
         </NButton>
@@ -655,7 +655,7 @@ onMounted(() => {
       </NSpace>
     </NSpace>
 
-    <NSpace align="center" style="margin-bottom: 16px">
+    <NSpace align="center" style="margin-bottom: 16px" wrap>
       <NSelect
         v-model:value="filterUserId"
         :options="userOptions"
@@ -874,7 +874,7 @@ onMounted(() => {
         />
       </NFormItem>
     </NForm>
-    <NSpace align="center" style="margin-bottom: 16px">
+    <NSpace align="center" style="margin-bottom: 16px" wrap>
       <NInput
         v-model:value="peerSearchId"
         :placeholder="$t('adminPeer.searchId')"

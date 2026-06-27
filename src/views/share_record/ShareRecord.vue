@@ -14,6 +14,7 @@ import {
 } from 'naive-ui'
 import { list, deleteShareRecord, batchDelete } from '@/api/shareRecord'
 import type { ShareRecord } from '@/types'
+import { formatTime } from '@/utils/format'
 
 const { t } = useI18n()
 const message = useMessage()
@@ -31,14 +32,6 @@ const pagination = reactive({
   showSizePicker: true,
   pageSizes: [10, 20, 50],
 })
-
-function formatTime(ts: number | string): string {
-  if (!ts) return ''
-  const num =
-    typeof ts === 'number' ? (ts < 1e12 ? ts * 1000 : ts) : Date.parse(ts)
-  if (!num) return ''
-  return new Date(num).toLocaleString()
-}
 
 function formatExpire(expire: number): string {
   if (!expire) return t('adminShareRecord.neverExpires')
@@ -65,8 +58,8 @@ const columns = computed<DataTableColumns<ShareRecord>>(() => [
     key: 'password_type',
     render: (row) => {
       const map: Record<string, string> = {
-        permanent: 'Permanent',
-        temporary: 'Temporary',
+        permanent: t('adminShareRecord.typePermanent'),
+        temporary: t('adminShareRecord.typeTemporary'),
       }
       return map[row.password_type] || String(row.password_type)
     },
@@ -190,7 +183,7 @@ onMounted(loadData)
   <NCard>
     <template #header>{{ $t('adminShareRecord.title') }}</template>
     <template #header-extra>
-      <NSpace align="center">
+      <NSpace align="center" wrap>
         <NInput
           v-model:value="filterUserId"
           :placeholder="$t('adminShareRecord.filterUserId')"
@@ -213,6 +206,7 @@ onMounted(loadData)
     <NDataTable
       v-model:checked-row-keys="checkedRowKeys"
       remote
+      :scroll-x="1100"
       :bordered="false"
       :columns="columns"
       :data="dataList"

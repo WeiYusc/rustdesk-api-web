@@ -466,7 +466,7 @@ onMounted(() => {
 <template>
   <NCard :bordered="false">
     <NSpace justify="space-between" align="center" style="margin-bottom: 16px">
-      <NSpace>
+      <NSpace wrap>
         <NButton type="primary" @click="openCreate">
           {{ $t('myAddressBook.create') }}
         </NButton>
@@ -489,7 +489,7 @@ onMounted(() => {
       </NSpace>
     </NSpace>
 
-    <NSpace align="center" style="margin-bottom: 16px">
+    <NSpace align="center" style="margin-bottom: 16px" wrap>
       <NInput
         v-model:value="searchId"
         :placeholder="$t('myAddressBook.searchId')"
@@ -614,7 +614,7 @@ onMounted(() => {
     :title="$t('myAddressBook.importFromPeers')"
     style="width: 800px; max-width: 90vw"
   >
-    <NSpace align="center" style="margin-bottom: 16px">
+    <NSpace align="center" style="margin-bottom: 16px" wrap>
       <NInput
         v-model:value="peerSearchId"
         :placeholder="$t('myPeer.searchId')"

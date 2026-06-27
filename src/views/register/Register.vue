@@ -73,7 +73,7 @@ async function handleRegister(e: Event): Promise<void> {
       <div class="register-header">
         <h2 class="register-title">{{ appStore.t('login.register') }}</h2>
       </div>
-      <NForm ref="formRef" :model="form" :rules="rules" size="large" @submit="handleRegister">
+      <NForm ref="formRef" :model="form" :rules="rules" size="large" @submit.prevent="handleRegister">
         <NFormItem path="username">
           <NInput v-model:value="form.username" :placeholder="appStore.t('login.username')" clearable />
         </NFormItem>
@@ -86,7 +86,7 @@ async function handleRegister(e: Event): Promise<void> {
         <NFormItem path="email">
           <NInput v-model:value="form.email" :placeholder="appStore.t('register.emailOptional')" clearable />
         </NFormItem>
-        <NButton type="primary" block size="large" :loading="loading" @click="handleRegister">
+        <NButton type="primary" block size="large" :loading="loading" native-type="submit">
           {{ appStore.t('login.register') }}
         </NButton>
         <NButton text block style="margin-top: 12px" @click="router.push('/login')">

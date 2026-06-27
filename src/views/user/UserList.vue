@@ -59,9 +59,9 @@ function groupName(id: number): string {
 }
 
 const columns = computed<DataTableColumns<AdminUser>>(() => [
-  { title: t('adminUser.username'), key: 'username' },
-  { title: t('adminUser.email'), key: 'email' },
-  { title: t('adminUser.nickname'), key: 'nickname' },
+  { title: t('adminUser.username'), key: 'username', ellipsis: { tooltip: true } },
+  { title: t('adminUser.email'), key: 'email', ellipsis: { tooltip: true } },
+  { title: t('adminUser.nickname'), key: 'nickname', ellipsis: { tooltip: true } },
   {
     title: t('adminUser.groupId'),
     key: 'group_id',
@@ -365,7 +365,7 @@ onMounted(() => {
   <NCard>
     <template #header>{{ $t('adminUser.title') }}</template>
     <template #header-extra>
-      <NSpace align="center">
+      <NSpace align="center" wrap>
         <NInput
           v-model:value="searchUsername"
           :placeholder="$t('adminUser.searchUsername')"

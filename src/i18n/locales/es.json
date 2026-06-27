@@ -20,7 +20,8 @@
     "failed": "Fallido",
     "noData": "Sin datos",
     "logout": "Cerrar sesión",
-    "pleaseSelect": "Seleccione primero"
+    "pleaseSelect": "Seleccione primero",
+    "timeout": "Tiempo de solicitud agotado"
   },
   "login": {
     "username": "Nombre de usuario",
@@ -37,7 +38,8 @@
     "captchaError": "Error de captcha.",
     "usernameOrPasswordError": "Error de usuario o contraseña.",
     "paramsError": "La validación de los parámetros falló.",
-    "loginBanned": "Inicio de sesión prohibido."
+    "loginBanned": "Inicio de sesión prohibido.",
+    "noLoginMethod": "Póngase en contacto con el administrador para configurar un método de inicio de sesión."
   },
   "menu": {
     "My": "Mi",
@@ -174,7 +176,9 @@
     "batchDelete": "Eliminación por lotes",
     "deleteConfirm": "¿Está seguro de eliminar este registro de inicio de sesión?",
     "batchDeleteConfirm": "¿Está seguro de eliminar los registros de inicio de sesión seleccionados?",
-    "deleteSuccess": "Eliminado con éxito"
+    "deleteSuccess": "Eliminado con éxito",
+    "typeWebAdmin": "Admin Web",
+    "typeClient": "Cliente"
   },
   "myShareRecord": {
     "title": "Registro de compartición",
@@ -403,7 +407,9 @@
     "deleteConfirm": "¿Está seguro de que desea eliminar este registro de inicio de sesión?",
     "batchDeleteConfirm": "¿Está seguro de que desea eliminar los registros de inicio de sesión seleccionados?",
     "deleteSuccess": "Eliminado con éxito",
-    "reset": "Restablecer"
+    "reset": "Restablecer",
+    "typeWebAdmin": "Admin Web",
+    "typeClient": "Cliente"
   },
   "adminAuditConn": {
     "title": "Auditoría de conexiones",
@@ -422,7 +428,11 @@
     "deleteConfirm": "¿Está seguro de que desea eliminar este registro de conexión?",
     "batchDeleteConfirm": "¿Está seguro de que desea eliminar los registros de conexión seleccionados?",
     "deleteSuccess": "Eliminado con éxito",
-    "reset": "Restablecer"
+    "reset": "Restablecer",
+    "actionConnect": "Conectar",
+    "actionClose": "Cerrar",
+    "typeConnect": "Conexión",
+    "typeDisconnect": "Desconexión"
   },
   "adminAuditFile": {
     "title": "Auditoría de archivos",
@@ -444,7 +454,9 @@
     "deleteSuccess": "Eliminado con éxito",
     "reset": "Restablecer",
     "yes": "Sí",
-    "no": "No"
+    "no": "No",
+    "typeUpload": "Subir",
+    "typeDownload": "Descargar"
   },
   "adminShareRecord": {
     "title": "Registro de compartición",
@@ -461,7 +473,9 @@
     "batchDeleteConfirm": "¿Está seguro de que desea eliminar los registros de compartición seleccionados?",
     "deleteSuccess": "Eliminado con éxito",
     "reset": "Restablecer",
-    "neverExpires": "Sin expiración"
+    "neverExpires": "Sin expiración",
+    "typePermanent": "Permanente",
+    "typeTemporary": "Temporal"
   },
   "adminOauth": {
     "title": "Gestión de OAuth",
@@ -510,12 +524,13 @@
     "presetCommands": "Comandos predefinidos"
   },
   "register": {
-    "passwordMismatch": "Password mismatch",
-    "confirmPassword": "Confirm Password",
-    "emailOptional": "Email (optional)"
+    "passwordMismatch": "Las contraseñas no coinciden",
+    "confirmPassword": "Confirmar contraseña",
+    "emailOptional": "Email (opcional)"
   },
   "oauth": {
-    "missingCode": "Missing code",
-    "codeMismatch": "Code mismatch"
+    "missingCode": "Falta el código",
+    "codeMismatch": "El código no coincide",
+    "loginSuccess": "Inicio de sesión exitoso, redirigiendo..."
   }
 }

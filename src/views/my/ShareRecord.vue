@@ -5,6 +5,7 @@ import type { DataTableColumns, PaginationProps } from 'naive-ui'
 import { list, deleteShareRecord, batchDelete } from '@/api/my/shareRecord'
 import { useAppStore } from '@/stores/app'
 import type { ShareRecord } from '@/types'
+import { formatTime } from '@/utils/format'
 
 const appStore = useAppStore()
 const message = useMessage()
@@ -45,11 +46,6 @@ async function fetchData(): Promise<void> {
   } finally {
     loading.value = false
   }
-}
-
-function formatTime(t: string): string {
-  if (!t) return ''
-  return new Date(t).toLocaleString()
 }
 
 function formatExpire(expire: number): string {
@@ -101,7 +97,7 @@ function handleDelete(row: ShareRecord): void {
   dialog.warning({
     title: appStore.t('common.confirm'),
     content: appStore.t('myShareRecord.deleteConfirm'),
-    positiveText: appStore.t('common.confirm'),
+    positiveText: appStore.t('common.delete'),
     negativeText: appStore.t('common.cancel'),
     onPositiveClick: async () => {
       try {
@@ -123,7 +119,7 @@ function handleBatchDelete(): void {
   dialog.warning({
     title: appStore.t('common.confirm'),
     content: appStore.t('myShareRecord.batchDeleteConfirm'),
-    positiveText: appStore.t('common.confirm'),
+    positiveText: appStore.t('common.delete'),
     negativeText: appStore.t('common.cancel'),
     onPositiveClick: async () => {
       try {
@@ -159,6 +155,7 @@ onMounted(() => {
       <NDataTable
         v-model:checked-row-keys="checkedRowKeys"
         remote
+        :scroll-x="900"
         :columns="columns"
         :data="data"
         :loading="loading"

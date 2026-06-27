@@ -157,6 +157,7 @@ onMounted(() => {
             v-model:value="form.username"
             :placeholder="appStore.t('login.username')"
             clearable
+            @keyup.enter="handleLogin"
           />
         </NFormItem>
         <NFormItem path="password">
@@ -270,22 +271,6 @@ onMounted(() => {
   border-radius: 4px;
   overflow: hidden;
   border: 1px solid var(--n-border-color, #efeff5);
-}
-.captcha-img-loading {
-  width: 120px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: default;
-}
-.captcha-img-loading {
-  width: 120px;
-  height: 40px;
-  cursor: default;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 .captcha-img-loading {
   width: 120px;

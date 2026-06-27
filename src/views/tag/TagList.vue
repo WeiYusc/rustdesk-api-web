@@ -78,7 +78,7 @@ async function loadUsers(): Promise<void> {
 }
 
 const columns = computed<DataTableColumns<Tag>>(() => [
-  { title: t('adminTag.name'), key: 'name' },
+  { title: t('adminTag.name'), key: 'name', ellipsis: { tooltip: true } },
   {
     title: t('adminTag.color'),
     key: 'color',
@@ -273,7 +273,7 @@ onMounted(() => {
         {{ $t('adminTag.createTag') }}
       </NButton>
     </template>
-    <NSpace align="center" style="margin-bottom: 16px">
+    <NSpace align="center" style="margin-bottom: 16px" wrap>
       <NSelect
         v-model:value="filterUserId"
         :options="userOptions"

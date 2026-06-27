@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineOptions({ name: 'UserEdit' })
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import {
@@ -153,6 +153,10 @@ function handleBack(): void {
 onMounted(() => {
   loadGroups()
   loadDetail()
+})
+
+watch(id, () => {
+  if (id.value) loadDetail()
 })
 </script>
 

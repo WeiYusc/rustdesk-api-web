@@ -10,6 +10,7 @@ const router = useRouter()
 const appStore = useAppStore()
 
 const status = ref<'loading' | 'success' | 'error'>('loading')
+const errorMsg = ref('')
 
 async function doBind(): Promise<void> {
   const code = route.params.code as string
@@ -19,7 +20,12 @@ async function doBind(): Promise<void> {
   }
   status.value = 'loading'
   try {
+    const timeout = setTimeout(() => {
+      status.value = 'error'
+      errorMsg.value = appStore.t('common.timeout')
+    }, 15000)
     await bindConfirm({ code })
+    clearTimeout(timeout)
     status.value = 'success'
   } catch {
     status.value = 'error'
@@ -46,7 +52,7 @@ onMounted(() => {
           </NButton>
         </template>
         <template v-else>
-          <NText type="error">{{ appStore.t('common.failed') }}</NText>
+          <NText type="error">{{ errorMsg || appStore.t('common.failed') }}</NText>
           <NButton style="margin-top: 16px" @click="router.push('/login')">
             {{ appStore.t('common.back') }}
           </NButton>
@@ -66,6 +72,7 @@ onMounted(() => {
 }
 .oauth-card {
   width: 360px;
+  max-width: 90vw;
 }
 .oauth-content {
   display: flex;

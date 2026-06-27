@@ -20,7 +20,8 @@
     "failed": "Ошибка",
     "noData": "Нет данных",
     "logout": "Выход",
-    "pleaseSelect": "Сначала выберите элементы"
+    "pleaseSelect": "Сначала выберите элементы",
+    "timeout": "Время запроса истекло"
   },
   "login": {
     "username": "Имя пользователя",
@@ -175,7 +176,9 @@
     "batchDelete": "Пакетное удаление",
     "deleteConfirm": "Вы уверены, что хотите удалить этот журнал входов?",
     "batchDeleteConfirm": "Вы уверены, что хотите удалить выбранные журналы входов?",
-    "deleteSuccess": "Успешно удалено"
+    "deleteSuccess": "Успешно удалено",
+    "typeWebAdmin": "Веб-админ",
+    "typeClient": "Клиент"
   },
   "myShareRecord": {
     "title": "Запись обмена",
@@ -404,7 +407,9 @@
     "deleteConfirm": "Вы уверены, что хотите удалить этот журнал входов?",
     "batchDeleteConfirm": "Вы уверены, что хотите удалить выбранные журналы входов?",
     "deleteSuccess": "Успешно удалено",
-    "reset": "Сбросить"
+    "reset": "Сбросить",
+    "typeWebAdmin": "Веб-админ",
+    "typeClient": "Клиент"
   },
   "adminAuditConn": {
     "title": "Аудит соединений",
@@ -423,7 +428,11 @@
     "deleteConfirm": "Вы уверены, что хотите удалить этот журнал соединений?",
     "batchDeleteConfirm": "Вы уверены, что хотите удалить выбранные журналы соединений?",
     "deleteSuccess": "Успешно удалено",
-    "reset": "Сбросить"
+    "reset": "Сбросить",
+    "actionConnect": "Подключить",
+    "actionClose": "Закрыть",
+    "typeConnect": "Подключение",
+    "typeDisconnect": "Отключение"
   },
   "adminAuditFile": {
     "title": "Аудит файлов",
@@ -445,7 +454,9 @@
     "deleteSuccess": "Успешно удалено",
     "reset": "Сбросить",
     "yes": "Да",
-    "no": "Нет"
+    "no": "Нет",
+    "typeUpload": "Загрузить",
+    "typeDownload": "Скачать"
   },
   "adminShareRecord": {
     "title": "Запись обмена",
@@ -462,7 +473,9 @@
     "batchDeleteConfirm": "Вы уверены, что хотите удалить выбранные записи обмена?",
     "deleteSuccess": "Успешно удалено",
     "reset": "Сбросить",
-    "neverExpires": "Бессрочно"
+    "neverExpires": "Бессрочно",
+    "typePermanent": "Постоянный",
+    "typeTemporary": "Временный"
   },
   "adminOauth": {
     "title": "Управление OAuth",
@@ -511,13 +524,13 @@
     "presetCommands": "Предустановленные команды"
   },
   "register": {
-    "passwordMismatch": "Password mismatch",
-    "confirmPassword": "Confirm Password",
-    "emailOptional": "Email (optional)"
+    "passwordMismatch": "Пароли не совпадают",
+    "confirmPassword": "Подтвердите пароль",
+    "emailOptional": "Email (необязательно)"
   },
   "oauth": {
-    "missingCode": "Missing code",
-    "codeMismatch": "Code mismatch",
+    "missingCode": "Отсутствует код",
+    "codeMismatch": "Несоответствие кода",
     "loginSuccess": "Вход выполнен, перенаправление..."
   }
 }

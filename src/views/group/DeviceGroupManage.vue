@@ -44,7 +44,7 @@ const pagination = reactive({
 })
 
 const columns = computed<DataTableColumns<DeviceGroup>>(() => [
-  { title: t('adminDeviceGroup.name'), key: 'name' },
+  { title: t('adminDeviceGroup.name'), key: 'name', ellipsis: { tooltip: true } },
   {
     title: t('adminDeviceGroup.createdAt'),
     key: 'created_at',

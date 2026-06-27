@@ -14,6 +14,7 @@ import {
 } from 'naive-ui'
 import { fileList, fileDelete, fileBatchDelete } from '@/api/audit'
 import type { AuditFile } from '@/types'
+import { formatTime } from '@/utils/format'
 
 const { t } = useI18n()
 const message = useMessage()
@@ -33,19 +34,11 @@ const pagination = reactive({
   pageSizes: [10, 20, 50],
 })
 
-function formatTime(ts: number | string): string {
-  if (!ts) return ''
-  const num =
-    typeof ts === 'number' ? (ts < 1e12 ? ts * 1000 : ts) : Date.parse(ts)
-  if (!num) return ''
-  return new Date(num).toLocaleString()
-}
-
 const columns = computed<DataTableColumns<AuditFile>>(() => [
   { type: 'selection' },
-  { title: t('adminAuditFile.fromPeer'), key: 'from_peer' },
-  { title: t('adminAuditFile.fromName'), key: 'from_name' },
-  { title: t('adminAuditFile.peerId'), key: 'peer_id' },
+  { title: t('adminAuditFile.fromPeer'), key: 'from_peer', ellipsis: { tooltip: true } },
+  { title: t('adminAuditFile.fromName'), key: 'from_name', ellipsis: { tooltip: true } },
+  { title: t('adminAuditFile.peerId'), key: 'peer_id', ellipsis: { tooltip: true } },
   { title: t('adminAuditFile.path'), key: 'path', ellipsis: { tooltip: true } },
   { title: t('adminAuditFile.info'), key: 'info', ellipsis: { tooltip: true } },
   {
@@ -59,7 +52,10 @@ const columns = computed<DataTableColumns<AuditFile>>(() => [
     title: t('adminAuditFile.type'),
     key: 'type',
     render: (row) => {
-      const map: Record<number, string> = { 1: 'Upload', 2: 'Download' }
+      const map: Record<number, string> = {
+        1: t('adminAuditFile.typeUpload'),
+        2: t('adminAuditFile.typeDownload'),
+      }
       return map[row.type] || String(row.type)
     },
   },
@@ -176,7 +172,7 @@ onMounted(loadData)
   <NCard>
     <template #header>{{ $t('adminAuditFile.title') }}</template>
     <template #header-extra>
-      <NSpace align="center">
+      <NSpace align="center" wrap>
         <NInput
           v-model:value="filterPeerId"
           :placeholder="$t('adminAuditFile.filterPeerId')"
