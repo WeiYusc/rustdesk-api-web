@@ -5,6 +5,7 @@ import { login as loginApi, oidcAuth, oidcQuery, logout as logoutApi } from '@/a
 import { setToken, removeToken, setCode, getCode, removeCode } from '@/utils/auth'
 import { useRouteStore } from '@/stores/router'
 import { useAppStore } from '@/stores/app'
+import { useTagsStore } from '@/stores/tags'
 import type { UserInfo } from '@/types'
 
 function detectPlatform(): string {
@@ -76,7 +77,7 @@ export const useUserStore = defineStore('user', () => {
       op: provider,
       id: `${platform}-browser`,
       uuid: '',
-      device_info: {
+      deviceInfo: {
         name: navigator.userAgent,
         os: platform,
         type: 'webadmin',
@@ -110,6 +111,7 @@ export const useUserStore = defineStore('user', () => {
     nickname.value = ''
     routeNames.value = []
     useRouteStore().clearRoutes()
+    useTagsStore().clearTags()
   }
 
   function getStoredOidcCode(): string | null {

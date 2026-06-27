@@ -506,5 +506,14 @@
     "getAllDevices": "모든 장치 가져오기",
     "reloadService": "서비스 새로고침",
     "presetCommands": "사전 설정 명령"
+  },
+  "register": {
+    "passwordMismatch": "Password mismatch",
+    "confirmPassword": "Confirm Password",
+    "emailOptional": "Email (optional)"
+  },
+  "oauth": {
+    "missingCode": "Missing code",
+    "codeMismatch": "Code mismatch"
   }
 }

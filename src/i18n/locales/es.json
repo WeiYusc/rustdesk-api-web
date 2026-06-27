@@ -506,5 +506,14 @@
     "getAllDevices": "Obtener todos los dispositivos",
     "reloadService": "Recargar servicio",
     "presetCommands": "Comandos predefinidos"
+  },
+  "register": {
+    "passwordMismatch": "Password mismatch",
+    "confirmPassword": "Confirm Password",
+    "emailOptional": "Email (optional)"
+  },
+  "oauth": {
+    "missingCode": "Missing code",
+    "codeMismatch": "Code mismatch"
   }
 }

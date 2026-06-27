@@ -43,6 +43,8 @@ async function fetchData(): Promise<void> {
     })
     data.value = res.data.list
     pagination.itemCount = res.data.total
+  } catch {
+    // ignore
   } finally {
     loading.value = false
   }

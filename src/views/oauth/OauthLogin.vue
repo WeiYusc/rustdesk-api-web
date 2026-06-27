@@ -18,14 +18,14 @@ async function handleOidcCallback(): Promise<void> {
   const code = route.params.code as string
   if (!code) {
     status.value = 'error'
-    errorMsg.value = 'Missing code'
+    errorMsg.value = appStore.t('oauth.missingCode')
     return
   }
 
   const storedCode = userStore.getStoredOidcCode()
   if (storedCode && storedCode !== code) {
     status.value = 'error'
-    errorMsg.value = 'Code mismatch'
+    errorMsg.value = appStore.t('oauth.codeMismatch')
     return
   }
 

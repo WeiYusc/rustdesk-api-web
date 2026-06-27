@@ -506,5 +506,14 @@
     "getAllDevices": "获取所有设备",
     "reloadService": "重载服务",
     "presetCommands": "预设命令"
+  },
+  "register": {
+    "passwordMismatch": "两次输入的密码不一致",
+    "confirmPassword": "确认密码",
+    "emailOptional": "邮箱（可选）"
+  },
+  "oauth": {
+    "missingCode": "缺少 code",
+    "codeMismatch": "code 不匹配"
   }
 }

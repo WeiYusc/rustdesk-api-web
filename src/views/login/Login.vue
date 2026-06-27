@@ -17,15 +17,12 @@ import { useUserStore } from '@/stores/user'
 import { useAppStore } from '@/stores/app'
 import { useRouteStore } from '@/stores/router'
 import { loginOptions as fetchLoginOptions, captcha as fetchCaptcha } from '@/api/login'
-import { registerErrorHandler } from '@/utils/request'
 import type { LoginOptionsResponse } from '@/types'
 
 const router = useRouter()
 const userStore = useUserStore()
 const appStore = useAppStore()
 const message = useMessage()
-
-registerErrorHandler({ error: (msg) => message.error(msg) })
 
 const formRef = ref()
 const loading = ref(false)

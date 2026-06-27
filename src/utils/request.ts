@@ -159,6 +159,11 @@ export function createAdminRequest(): AxiosInstance {
       }
       if (res.code === 403) {
         showError(res.message)
+        removeToken()
+        const redirect = window.location.hash.replace('#', '')
+        if (!redirect.startsWith('/login')) {
+          window.location.hash = '#/login'
+        }
         return Promise.reject(res)
       }
       if (res.code === 110) {

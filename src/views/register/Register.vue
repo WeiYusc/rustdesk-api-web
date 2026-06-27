@@ -34,7 +34,7 @@ const rules = {
     trigger: 'blur',
     validator: (_rule: unknown, value: string) => {
       if (value !== form.password) {
-        return new Error('Password mismatch')
+        return new Error(appStore.t('register.passwordMismatch'))
       }
       return true
     },
@@ -81,10 +81,10 @@ async function handleRegister(e: Event): Promise<void> {
           <NInput v-model:value="form.password" type="password" show-password-on="click" :placeholder="appStore.t('login.password')" />
         </NFormItem>
         <NFormItem path="confirm_password">
-          <NInput v-model:value="form.confirm_password" type="password" show-password-on="click" placeholder="Confirm Password" />
+          <NInput v-model:value="form.confirm_password" type="password" show-password-on="click" :placeholder="appStore.t('register.confirmPassword')" />
         </NFormItem>
         <NFormItem path="email">
-          <NInput v-model:value="form.email" placeholder="Email (optional)" clearable />
+          <NInput v-model:value="form.email" :placeholder="appStore.t('register.emailOptional')" clearable />
         </NFormItem>
         <NButton type="primary" block size="large" :loading="loading" @click="handleRegister">
           {{ appStore.t('login.register') }}

@@ -41,6 +41,8 @@ async function fetchData(): Promise<void> {
     })
     data.value = res.data.list
     pagination.itemCount = res.data.total
+  } catch {
+    // ignore
   } finally {
     loading.value = false
   }
@@ -89,9 +91,13 @@ function handleDelete(row: LoginLog): void {
     positiveText: appStore.t('common.confirm'),
     negativeText: appStore.t('common.cancel'),
     onPositiveClick: async () => {
-      await deleteLoginLog({ id: row.id })
-      message.success(appStore.t('myLoginLog.deleteSuccess'))
-      fetchData()
+      try {
+        await deleteLoginLog({ id: row.id })
+        message.success(appStore.t('myLoginLog.deleteSuccess'))
+        fetchData()
+      } catch {
+        // ignore
+      }
     },
   })
 }
@@ -104,10 +110,14 @@ function handleBatchDelete(): void {
     positiveText: appStore.t('common.confirm'),
     negativeText: appStore.t('common.cancel'),
     onPositiveClick: async () => {
-      await batchDelete({ ids: checkedRowKeys.value as number[] })
-      message.success(appStore.t('myLoginLog.deleteSuccess'))
-      checkedRowKeys.value = []
-      fetchData()
+      try {
+        await batchDelete({ ids: checkedRowKeys.value as number[] })
+        message.success(appStore.t('myLoginLog.deleteSuccess'))
+        checkedRowKeys.value = []
+        fetchData()
+      } catch {
+        // ignore
+      }
     },
   })
 }

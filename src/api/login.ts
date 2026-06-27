@@ -33,7 +33,7 @@ export function oidcAuth(data: {
   op: string
   id: string
   uuid: string
-  device_info: {
+  deviceInfo: {
     name: string
     os: string
     type: string

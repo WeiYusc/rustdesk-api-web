@@ -506,5 +506,14 @@
     "getAllDevices": "取得所有裝置",
     "reloadService": "重載服務",
     "presetCommands": "預設命令"
+  },
+  "register": {
+    "passwordMismatch": "Password mismatch",
+    "confirmPassword": "Confirm Password",
+    "emailOptional": "Email (optional)"
+  },
+  "oauth": {
+    "missingCode": "Missing code",
+    "codeMismatch": "Code mismatch"
   }
 }

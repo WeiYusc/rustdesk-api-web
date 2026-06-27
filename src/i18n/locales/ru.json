@@ -506,5 +506,14 @@
     "getAllDevices": "Получить все устройства",
     "reloadService": "Перезагрузить сервис",
     "presetCommands": "Предустановленные команды"
+  },
+  "register": {
+    "passwordMismatch": "Password mismatch",
+    "confirmPassword": "Confirm Password",
+    "emailOptional": "Email (optional)"
+  },
+  "oauth": {
+    "missingCode": "Missing code",
+    "codeMismatch": "Code mismatch"
   }
 }

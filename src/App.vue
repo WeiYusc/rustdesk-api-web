@@ -8,6 +8,8 @@ import {
   darkTheme,
   zhCN,
   dateZhCN,
+  zhTW,
+  dateZhTW,
   enUS,
   dateEnUS,
   frFR,
@@ -28,8 +30,9 @@ const theme = computed(() => (appStore.darkMode ? darkTheme : null))
 const locale = computed(() => {
   switch (appStore.locale) {
     case 'zh-CN':
-    case 'zh-TW':
       return zhCN
+    case 'zh-TW':
+      return zhTW
     case 'fr':
       return frFR
     case 'ko':
@@ -45,8 +48,9 @@ const locale = computed(() => {
 const dateLocale = computed(() => {
   switch (appStore.locale) {
     case 'zh-CN':
-    case 'zh-TW':
       return dateZhCN
+    case 'zh-TW':
+      return dateZhTW
     case 'fr':
       return dateFrFR
     case 'ko':
