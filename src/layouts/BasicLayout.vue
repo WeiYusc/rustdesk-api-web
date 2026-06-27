@@ -47,9 +47,67 @@ const siderWidth = computed(() => {
   return 220
 })
 
+import {
+  PersonCircleOutline,
+  HardwareChipOutline,
+  FileTrayStackedOutline,
+  BookOutline,
+  PricetagsOutline,
+  ShareSocialOutline,
+  ListOutline,
+  SettingsOutline,
+  PeopleOutline,
+  LinkOutline,
+  TicketOutline,
+  DocumentTextOutline,
+  FolderOpenOutline,
+  ServerOutline,
+} from '@vicons/ionicons5'
+import type { Component } from 'vue'
+
+const iconMap: Record<string, Component> = {
+  UserFilled: PersonCircleOutline,
+  User: PersonCircleOutline,
+  Userinfo: PersonCircleOutline,
+  Monitor: HardwareChipOutline,
+  MyPeer: HardwareChipOutline,
+  PeerManage: HardwareChipOutline,
+  Collection: FileTrayStackedOutline,
+  AddressBookCollection: FileTrayStackedOutline,
+  AddressBookCollectionManage: FileTrayStackedOutline,
+  Notebook: BookOutline,
+  AddressBooks: BookOutline,
+  AddressBookManage: BookOutline,
+  CollectionTag: PricetagsOutline,
+  Tags: PricetagsOutline,
+  TagsManage: PricetagsOutline,
+  Share: ShareSocialOutline,
+  ShareRecord: ShareSocialOutline,
+  List: ListOutline,
+  LoginLog: ListOutline,
+  Setting: SettingsOutline,
+  System: SettingsOutline,
+  ChatRound: PeopleOutline,
+  GroupManage: PeopleOutline,
+  DeviceGroupManage: PeopleOutline,
+  UserManage: PeopleOutline,
+  Link: LinkOutline,
+  OauthManage: LinkOutline,
+  Ticket: TicketOutline,
+  UserToken: TicketOutline,
+  Tickets: DocumentTextOutline,
+  AuditConnLog: DocumentTextOutline,
+  AuditFileLog: FolderOpenOutline,
+  Files: FolderOpenOutline,
+  Tools: ServerOutline,
+  ServerCmd: ServerOutline,
+}
+
 function renderIcon(icon: string): (() => VNodeChild) | undefined {
   if (!icon) return undefined
-  return () => h(NIcon, null, { default: () => icon })
+  const IconComp = iconMap[icon]
+  if (!IconComp) return undefined
+  return () => h(NIcon, null, { default: () => h(IconComp) })
 }
 
 function buildMenuOptions(routes: RouteRecordRaw[]): MenuOption[] {
