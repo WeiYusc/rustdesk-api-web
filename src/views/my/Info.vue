@@ -15,6 +15,8 @@ import {
   NEmpty,
   NSpin,
   NText,
+  NAlert,
+  NModal,
   type FormRules,
   useMessage,
 } from 'naive-ui'
@@ -24,6 +26,7 @@ import { useAppStore } from '@/stores/app'
 import { changeCurPwd, myOauth } from '@/api/user'
 import { unbind } from '@/api/oauth'
 import type { UserOauthItem } from '@/types'
+import clipboard from 'clipboard'
 
 const userStore = useUserStore()
 const appStore = useAppStore()
@@ -137,6 +140,48 @@ onMounted(() => {
   }
   loadOauth()
 })
+
+const serverConfigText = computed(() => {
+  const cfg = appStore.serverConfig
+  if (!cfg) return ''
+  const lines: string[] = []
+  if (cfg.id_server) lines.push(`ID Server: ${cfg.id_server}`)
+  if (cfg.relay_server) lines.push(`Relay Server: ${cfg.relay_server}`)
+  if (cfg.api_server) lines.push(`API Server: ${cfg.api_server}`)
+  if (cfg.key) lines.push(`Key: ${cfg.key}`)
+  return lines.join('\n')
+})
+
+function copyCredentials(): void {
+  if (!serverConfigText.value) {
+    message.warning(appStore.t('myInfo.noServerConfig'))
+    return
+  }
+  try {
+    clipboard.copy(serverConfigText.value)
+    message.success(appStore.t('myInfo.copied'))
+  } catch {
+    message.error(appStore.t('myInfo.copyFailed'))
+  }
+}
+
+const editModalShow = ref(false)
+const editForm = reactive({
+  nickname: '',
+  avatar: '',
+})
+const editLoading = ref(false)
+
+function openEditProfile(): void {
+  editForm.nickname = userStore.nickname || ''
+  editForm.avatar = userStore.avatar || ''
+  editModalShow.value = true
+}
+
+async function handleSaveProfile(): Promise<void> {
+  message.warning(appStore.t('myInfo.editNotAvailable'))
+  editModalShow.value = false
+}
 </script>
 
 <template>
@@ -146,6 +191,9 @@ onMounted(() => {
     </NCard>
 
     <NCard :title="$t('myInfo.profile')" :bordered="false">
+      <template #header-extra>
+        <NButton size="small" @click="openEditProfile">{{ $t('common.edit') }}</NButton>
+      </template>
       <NSpace align="center" :size="24">
         <NAvatar
           round
@@ -204,6 +252,29 @@ onMounted(() => {
       </NForm>
     </NCard>
 
+    <NCard :title="$t('myInfo.serverCredentials')" :bordered="false">
+      <NSpace vertical :size="12">
+        <NText depth="3" style="font-size: 13px">{{ $t('myInfo.credentialsDesc') }}</NText>
+        <NDescriptions v-if="appStore.serverConfig" label-placement="left" :column="1" bordered size="small">
+          <NDescriptionsItem :label="$t('myInfo.idServer')">
+            {{ appStore.serverConfig.id_server || '-' }}
+          </NDescriptionsItem>
+          <NDescriptionsItem :label="$t('myInfo.relayServer')">
+            {{ appStore.serverConfig.relay_server || '-' }}
+          </NDescriptionsItem>
+          <NDescriptionsItem :label="$t('myInfo.apiServer')">
+            {{ appStore.serverConfig.api_server || '-' }}
+          </NDescriptionsItem>
+          <NDescriptionsItem :label="$t('myInfo.key')">
+            <NText code>{{ appStore.serverConfig.key ? appStore.serverConfig.key.slice(0, 8) + '••••' : '-' }}</NText>
+          </NDescriptionsItem>
+        </NDescriptions>
+        <NButton type="primary" @click="copyCredentials">
+          {{ $t('myInfo.copyCredentials') }}
+        </NButton>
+      </NSpace>
+    </NCard>
+
     <NCard :title="$t('myInfo.oauthBindings')" :bordered="false">
       <NSpin :show="oauthLoading">
         <NEmpty v-if="oauthList.length === 0" :description="$t('myInfo.noOauth')" />
@@ -230,5 +301,32 @@ onMounted(() => {
         </NSpace>
       </NSpin>
     </NCard>
+
+    <NModal
+      v-model:show="editModalShow"
+      preset="card"
+      :title="$t('myInfo.editProfile')"
+      style="width: 480px; max-width: 90vw"
+    >
+      <NAlert type="warning" :show-icon="true" style="margin-bottom: 16px">
+        {{ $t('myInfo.editNotAvailable') }}
+      </NAlert>
+      <NForm label-placement="top">
+        <NFormItem :label="$t('myInfo.nickname')">
+          <NInput v-model:value="editForm.nickname" :placeholder="$t('myInfo.nickname')" />
+        </NFormItem>
+        <NFormItem :label="$t('myInfo.avatar')">
+          <NInput v-model:value="editForm.avatar" :placeholder="$t('myInfo.avatarUrlPlaceholder')" />
+        </NFormItem>
+      </NForm>
+      <template #footer>
+        <NSpace justify="end">
+          <NButton @click="editModalShow = false">{{ $t('common.cancel') }}</NButton>
+          <NButton type="primary" :loading="editLoading" @click="handleSaveProfile">
+            {{ $t('common.save') }}
+          </NButton>
+        </NSpace>
+      </template>
+    </NModal>
   </NSpace>
 </template>

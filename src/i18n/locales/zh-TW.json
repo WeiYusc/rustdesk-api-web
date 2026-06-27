@@ -87,7 +87,20 @@
     "bound": "已綁定",
     "unbound": "未綁定",
     "unbind": "解除綁定",
-    "noOauth": "暫無第三方帳號綁定"
+    "noOauth": "暫無第三方帳號綁定",
+    "serverCredentials": "伺服器連線憑證",
+    "credentialsDesc": "以下資訊用於 RustDesk 客戶端設定，點擊下方按鈕一鍵複製",
+    "idServer": "ID 伺服器",
+    "relayServer": "中繼伺服器",
+    "apiServer": "API 伺服器",
+    "key": "Key",
+    "copyCredentials": "一鍵複製憑證",
+    "copied": "已複製到剪貼簿",
+    "copyFailed": "複製失敗",
+    "noServerConfig": "伺服器設定未載入",
+    "editProfile": "編輯個人資料",
+    "editNotAvailable": "修改暱稱和頭像需要後端支援，暫未開放",
+    "avatarUrlPlaceholder": "頭像圖片 URL"
   },
   "myAddressBook": {
     "create": "新增",

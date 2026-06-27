@@ -87,7 +87,20 @@
     "bound": "연결됨",
     "unbound": "연결되지 않음",
     "unbind": "연결 해제",
-    "noOauth": "OAuth 연결이 없습니다"
+    "noOauth": "OAuth 연결이 없습니다",
+    "serverCredentials": "Server Connection Credentials",
+    "credentialsDesc": "The following information is used for RustDesk client configuration. Click the button below to copy.",
+    "idServer": "ID Server",
+    "relayServer": "Relay Server",
+    "apiServer": "API Server",
+    "key": "Key",
+    "copyCredentials": "Copy Credentials",
+    "copied": "Copied to clipboard",
+    "copyFailed": "Copy failed",
+    "noServerConfig": "Server config not loaded",
+    "editProfile": "Edit Profile",
+    "editNotAvailable": "Editing nickname and avatar requires backend support, not yet available",
+    "avatarUrlPlaceholder": "Avatar image URL"
   },
   "myAddressBook": {
     "create": "생성",
