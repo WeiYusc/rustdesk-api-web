@@ -165,7 +165,7 @@ const shareModalVisible = ref(false)
 const shareSaving = ref(false)
 const shareForm = reactive<ShareFormData>({
   id: '',
-  password_type: 'permanent',
+  password_type: 'once',
   password: '',
   expire: 0,
 })
@@ -173,8 +173,8 @@ const shareTokenModalVisible = ref(false)
 const shareToken = ref('')
 
 const passwordTypeOptions = computed(() => [
-  { label: t('adminAddressBook.passwordTypePermanent'), value: 'permanent' },
-  { label: t('adminAddressBook.passwordTypeTemporary'), value: 'temporary' },
+  { label: t('adminAddressBook.passwordTypeOnce'), value: 'once' },
+  { label: t('adminAddressBook.passwordTypeFixed'), value: 'fixed' },
 ])
 
 const columns = computed<DataTableColumns<AddressBook>>(() => [
@@ -600,7 +600,7 @@ async function handleImportFromPeers(): Promise<void> {
 
 function openShare(row: AddressBook): void {
   shareForm.id = row.id
-  shareForm.password_type = 'permanent'
+  shareForm.password_type = 'once'
   shareForm.password = ''
   shareForm.expire = 0
   shareModalVisible.value = true

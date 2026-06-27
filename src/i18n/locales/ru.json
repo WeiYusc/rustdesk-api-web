@@ -337,8 +337,8 @@
     "selectUsers": "Выбрать пользователей",
     "selectTags": "Выбрать теги",
     "passwordType": "Тип пароля",
-    "passwordTypePermanent": "Постоянный",
-    "passwordTypeTemporary": "Временный",
+    "passwordTypeOnce": "Одноразовый",
+    "passwordTypeFixed": "Фиксированный",
     "expire": "Срок действия (секунды, 0=бессрочно)",
     "shareToken": "Токен обмена",
     "shareTokenCopied": "Токен обмена скопирован",
@@ -490,8 +490,8 @@
     "deleteSuccess": "Успешно удалено",
     "reset": "Сбросить",
     "neverExpires": "Бессрочно",
-    "typePermanent": "Постоянный",
-    "typeTemporary": "Временный"
+    "typeOnce": "Одноразовый",
+    "typeFixed": "Фиксированный"
   },
   "adminOauth": {
     "title": "Управление OAuth",

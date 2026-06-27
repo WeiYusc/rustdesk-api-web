@@ -58,8 +58,8 @@ const columns = computed<DataTableColumns<ShareRecord>>(() => [
     key: 'password_type',
     render: (row) => {
       const map: Record<string, string> = {
-        permanent: t('adminShareRecord.typePermanent'),
-        temporary: t('adminShareRecord.typeTemporary'),
+        once: t('adminShareRecord.typeOnce'),
+        fixed: t('adminShareRecord.typeFixed'),
       }
       return map[row.password_type] || String(row.password_type)
     },

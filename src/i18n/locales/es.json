@@ -337,8 +337,8 @@
     "selectUsers": "Seleccionar usuarios",
     "selectTags": "Seleccionar etiquetas",
     "passwordType": "Tipo de contraseña",
-    "passwordTypePermanent": "Permanente",
-    "passwordTypeTemporary": "Temporal",
+    "passwordTypeOnce": "Único",
+    "passwordTypeFixed": "Fijo",
     "expire": "Expiración (segundos, 0=nunca)",
     "shareToken": "Token de compartición",
     "shareTokenCopied": "Token de compartición copiado",
@@ -490,8 +490,8 @@
     "deleteSuccess": "Eliminado con éxito",
     "reset": "Restablecer",
     "neverExpires": "Sin expiración",
-    "typePermanent": "Permanente",
-    "typeTemporary": "Temporal"
+    "typeOnce": "Único",
+    "typeFixed": "Fijo"
   },
   "adminOauth": {
     "title": "Gestión de OAuth",

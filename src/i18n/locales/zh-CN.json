@@ -337,8 +337,8 @@
     "selectUsers": "选择用户",
     "selectTags": "选择标签",
     "passwordType": "密码类型",
-    "passwordTypePermanent": "永久",
-    "passwordTypeTemporary": "临时",
+    "passwordTypeOnce": "固定",
+    "passwordTypeFixed": "长期",
     "expire": "过期时间（秒，0=永不过期）",
     "shareToken": "分享令牌",
     "shareTokenCopied": "分享令牌已复制",
@@ -490,8 +490,8 @@
     "deleteSuccess": "删除成功",
     "reset": "重置",
     "neverExpires": "永不过期",
-    "typePermanent": "永久",
-    "typeTemporary": "临时"
+    "typeOnce": "固定",
+    "typeFixed": "长期"
   },
   "adminOauth": {
     "title": "OAuth 管理",

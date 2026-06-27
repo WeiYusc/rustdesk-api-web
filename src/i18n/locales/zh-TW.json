@@ -337,8 +337,8 @@
     "selectUsers": "選擇使用者",
     "selectTags": "選擇標籤",
     "passwordType": "密碼類型",
-    "passwordTypePermanent": "永久",
-    "passwordTypeTemporary": "臨時",
+    "passwordTypeOnce": "一次性",
+    "passwordTypeFixed": "固定",
     "expire": "過期時間（秒，0=永不過期）",
     "shareToken": "分享權杖",
     "shareTokenCopied": "分享權杖已複製",
@@ -490,8 +490,8 @@
     "deleteSuccess": "刪除成功",
     "reset": "重設",
     "neverExpires": "永不過期",
-    "typePermanent": "永久",
-    "typeTemporary": "臨時"
+    "typeOnce": "一次性",
+    "typeFixed": "固定"
   },
   "adminOauth": {
     "title": "OAuth 管理",

@@ -154,12 +154,14 @@ const ruleSaving = ref(false)
 const ruleFormModel = reactive<{
   id: number | undefined
   collection_id: number | undefined
+  user_id: number | undefined
   type: number | null
   rule: number | null
   to_id: number | null
 }>({
   id: undefined,
   collection_id: undefined,
+  user_id: undefined,
   type: null,
   rule: null,
   to_id: null,
@@ -402,6 +404,7 @@ function handleRulePageSizeChange(pageSize: number): void {
 function resetRuleForm(): void {
   ruleFormModel.id = undefined
   ruleFormModel.collection_id = currentCollection.value?.id
+  ruleFormModel.user_id = currentCollection.value?.user_id
   ruleFormModel.type = null
   ruleFormModel.rule = null
   ruleFormModel.to_id = null
@@ -418,6 +421,7 @@ function openEditRule(row: AddressBookCollectionRule): void {
   ruleFormMode.value = 'edit'
   ruleFormModel.id = row.id
   ruleFormModel.collection_id = row.collection_id
+  ruleFormModel.user_id = row.user_id
   ruleFormModel.type = row.type
   ruleFormModel.rule = row.rule
   ruleFormModel.to_id = row.to_id
@@ -447,6 +451,7 @@ async function handleRuleSubmit(): Promise<void> {
   try {
     const payload: AddressBookCollectionRuleForm = {
       collection_id: collectionId,
+      user_id: ruleFormModel.user_id ?? undefined,
       rule: ruleVal,
       type: ruleTypeVal,
       to_id: toIdVal,

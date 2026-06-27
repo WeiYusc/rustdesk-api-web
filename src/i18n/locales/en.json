@@ -337,8 +337,8 @@
     "selectUsers": "Select Users",
     "selectTags": "Select Tags",
     "passwordType": "Password Type",
-    "passwordTypePermanent": "Permanent",
-    "passwordTypeTemporary": "Temporary",
+    "passwordTypeOnce": "Once",
+    "passwordTypeFixed": "Fixed",
     "expire": "Expire (seconds, 0=never)",
     "shareToken": "Share Token",
     "shareTokenCopied": "Share token copied",
@@ -490,8 +490,8 @@
     "deleteSuccess": "Deleted successfully",
     "reset": "Reset",
     "neverExpires": "Never Expires",
-    "typePermanent": "Permanent",
-    "typeTemporary": "Temporary"
+    "typeOnce": "Once",
+    "typeFixed": "Fixed"
   },
   "adminOauth": {
     "title": "OAuth Management",

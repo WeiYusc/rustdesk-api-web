@@ -337,8 +337,8 @@
     "selectUsers": "사용자 선택",
     "selectTags": "태그 선택",
     "passwordType": "비밀번호 유형",
-    "passwordTypePermanent": "영구",
-    "passwordTypeTemporary": "임시",
+    "passwordTypeOnce": "일회용",
+    "passwordTypeFixed": "고정",
     "expire": "만료 (초, 0=만료 없음)",
     "shareToken": "공유 토큰",
     "shareTokenCopied": "공유 토큰이 복사되었습니다",
@@ -490,8 +490,8 @@
     "deleteSuccess": "삭제되었습니다",
     "reset": "재설정",
     "neverExpires": "만료되지 않음",
-    "typePermanent": "영구",
-    "typeTemporary": "임시"
+    "typeOnce": "일회용",
+    "typeFixed": "고정"
   },
   "adminOauth": {
     "title": "OAuth 관리",
