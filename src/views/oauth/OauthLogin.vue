@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { NCard, NSpin, NText } from 'naive-ui'
 import { useUserStore } from '@/stores/user'
 import { useAppStore } from '@/stores/app'
+import { useRouteStore } from '@/stores/router'
 
 const route = useRoute()
 const router = useRouter()
@@ -32,7 +33,7 @@ async function handleOidcCallback(): Promise<void> {
     const result = await userStore.queryOidc(code)
     if (result) {
       status.value = 'success'
-      router.push('/')
+      router.push(useRouteStore().firstAvailablePath())
     } else {
       status.value = 'error'
       errorMsg.value = appStore.t('login.noAccess')

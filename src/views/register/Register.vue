@@ -53,6 +53,7 @@ async function handleRegister(e: Event): Promise<void> {
     await registerApi({
       username: form.username,
       password: form.password,
+      confirm_password: form.confirm_password,
       email: form.email || undefined,
     })
     message.success(appStore.t('common.success'))

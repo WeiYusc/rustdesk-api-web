@@ -42,7 +42,7 @@ router.beforeEach(async (to, _from, next) => {
   }
 
   if (to.path === '/login') {
-    next('/')
+    next(routeStore.firstAvailablePath())
     return
   }
 

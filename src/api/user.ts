@@ -40,8 +40,9 @@ export function myOauth(): Promise<ApiResponse<UserOauthItem[]>> {
 export function register(data: {
   username: string
   password: string
+  confirm_password: string
   email?: string
-}): Promise<ApiResponse<null>> {
+}): Promise<ApiResponse<UserInfo | null>> {
   return request.post('/user/register', data)
 }
 

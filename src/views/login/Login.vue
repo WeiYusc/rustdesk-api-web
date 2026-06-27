@@ -15,6 +15,7 @@ import {
 } from 'naive-ui'
 import { useUserStore } from '@/stores/user'
 import { useAppStore } from '@/stores/app'
+import { useRouteStore } from '@/stores/router'
 import { loginOptions as fetchLoginOptions, captcha as fetchCaptcha } from '@/api/login'
 import { registerErrorHandler } from '@/utils/request'
 import type { LoginOptionsResponse } from '@/types'
@@ -97,7 +98,7 @@ async function handleLogin(e: Event): Promise<void> {
       captcha: needCaptcha.value ? form.captcha : undefined,
     })
     message.success(appStore.t('common.success'))
-    router.push('/')
+    router.push(useRouteStore().firstAvailablePath())
   } catch (err: unknown) {
     const errRes = err as { code?: number }
     if (errRes.code === 110) {

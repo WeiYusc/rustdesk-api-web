@@ -196,20 +196,16 @@ export const lastRoutes: RouteRecordRaw[] = [
   { path: '/:catchAll(.*)', redirect: '/404', meta: { hide: true } },
 ]
 
+function resolveRoutePath(parentPath: string, childPath: string): string {
+  if (childPath.startsWith('/')) return childPath
+  return `${parentPath.replace(/\/$/, '')}/${childPath}`
+}
+
 export function filterRoutes(
   routes: RouteRecordRaw[],
   enableNames: string[],
 ): RouteRecordRaw[] {
   return routes
-    .filter((route) => {
-      if (route.children && route.children.length > 0) {
-        return (
-          enableNames.includes(route.name as string) ||
-          route.children.some((r) => enableNames.includes(r.name as string))
-        )
-      }
-      return enableNames.includes(route.name as string)
-    })
     .map((route) => {
       if (route.children && route.children.length > 0) {
         return {
@@ -219,4 +215,21 @@ export function filterRoutes(
       }
       return { ...route }
     })
+    .filter((route) => {
+      if (route.children && route.children.length > 0) {
+        return route.children.length > 0
+      }
+      return enableNames.includes(route.name as string)
+    })
+}
+
+export function getFirstAvailableRoutePath(routes: RouteRecordRaw[]): string {
+  for (const route of routes) {
+    const visibleChildren = route.children?.filter((child) => !child.meta?.hide) || []
+    if (visibleChildren.length > 0) {
+      return resolveRoutePath(route.path, visibleChildren[0].path)
+    }
+    if (!route.meta?.hide) return route.path
+  }
+  return '/404'
 }
