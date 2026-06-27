@@ -311,12 +311,14 @@ function handleSearch(): void {
 
 function handlePageChange(page: number): void {
   pagination.page = page
+  checkedRowKeys.value = []
   loadData()
 }
 
 function handlePageSizeChange(pageSize: number): void {
   pagination.pageSize = pageSize
   pagination.page = 1
+  checkedRowKeys.value = []
   loadData()
 }
 

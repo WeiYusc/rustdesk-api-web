@@ -149,7 +149,7 @@ const formModel = reactive<{
   password: string
   email: string
   nickname: string
-  group_id: number
+  group_id: number | null
   is_admin: boolean
   status: number
   remark: string
@@ -159,7 +159,7 @@ const formModel = reactive<{
   password: '',
   email: '',
   nickname: '',
-  group_id: 0,
+  group_id: null,
   is_admin: false,
   status: 1,
   remark: '',
@@ -248,7 +248,7 @@ function resetForm(): void {
   formModel.password = ''
   formModel.email = ''
   formModel.nickname = ''
-  formModel.group_id = 0
+  formModel.group_id = null
   formModel.is_admin = false
   formModel.status = 1
   formModel.remark = ''
@@ -287,7 +287,7 @@ async function handleSubmit(): Promise<void> {
       username: formModel.username,
       email: formModel.email,
       nickname: formModel.nickname,
-      group_id: formModel.group_id,
+      group_id: formModel.group_id!,
       is_admin: formModel.is_admin,
       status: formModel.status,
       remark: formModel.remark,
@@ -347,6 +347,9 @@ function handleDelete(row: AdminUser): void {
       try {
         await deleteUser({ id: row.id })
         message.success(t('common.success'))
+        if (dataList.value.length === 1 && pagination.page > 1) {
+          pagination.page--
+        }
         loadData()
       } catch {
         // ignore

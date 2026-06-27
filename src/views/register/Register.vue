@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import {
   NCard,
@@ -26,7 +26,7 @@ const form = reactive({
   email: '',
 })
 
-const rules = {
+const rules = computed(() => ({
   username: { required: true, message: appStore.t('login.username'), trigger: 'blur' },
   password: { required: true, message: appStore.t('login.password'), trigger: 'blur' },
   confirm_password: {
@@ -39,7 +39,7 @@ const rules = {
       return true
     },
   },
-}
+}))
 
 async function handleRegister(e: Event): Promise<void> {
   e.preventDefault()

@@ -21,7 +21,6 @@
     "noData": "No Data",
     "logout": "Logout",
     "pleaseSelect": "Please select first",
-    "timeout": "Request timeout",
     "timeout": "Request timed out"
   },
   "login": {

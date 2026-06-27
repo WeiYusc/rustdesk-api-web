@@ -13,6 +13,7 @@ const appStore = useAppStore()
 
 const status = ref<'loading' | 'success' | 'error'>('loading')
 const errorMsg = ref('')
+const timedOut = ref(false)
 
 async function handleOidcCallback(): Promise<void> {
   const code = route.params.code as string
@@ -29,13 +30,16 @@ async function handleOidcCallback(): Promise<void> {
     return
   }
 
+  timedOut.value = false
   try {
     const timeout = setTimeout(() => {
+      timedOut.value = true
       status.value = 'error'
       errorMsg.value = appStore.t('common.timeout')
     }, 15000)
     const result = await userStore.queryOidc(code)
     clearTimeout(timeout)
+    if (timedOut.value) return
     if (result) {
       status.value = 'success'
       router.push(useRouteStore().firstAvailablePath())
@@ -44,6 +48,7 @@ async function handleOidcCallback(): Promise<void> {
       errorMsg.value = appStore.t('login.noAccess')
     }
   } catch {
+    if (timedOut.value) return
     status.value = 'error'
     errorMsg.value = appStore.t('login.noAccess')
   }

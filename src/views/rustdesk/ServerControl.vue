@@ -268,6 +268,7 @@ function handleTabChange(name: string | number): void {
                 <NButton
                   type="primary"
                   block
+                  :disabled="!!runningCmd"
                   :loading="runningCmd === item.cmd"
                   @click="runPreset(item.cmd)"
                 >

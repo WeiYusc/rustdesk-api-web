@@ -11,6 +11,7 @@ const appStore = useAppStore()
 
 const status = ref<'loading' | 'success' | 'error'>('loading')
 const errorMsg = ref('')
+const timedOut = ref(false)
 
 async function doBind(): Promise<void> {
   const code = route.params.code as string
@@ -19,15 +20,19 @@ async function doBind(): Promise<void> {
     return
   }
   status.value = 'loading'
+  timedOut.value = false
   try {
     const timeout = setTimeout(() => {
+      timedOut.value = true
       status.value = 'error'
       errorMsg.value = appStore.t('common.timeout')
     }, 15000)
     await bindConfirm({ code })
     clearTimeout(timeout)
+    if (timedOut.value) return
     status.value = 'success'
   } catch {
+    if (timedOut.value) return
     status.value = 'error'
   }
 }

@@ -76,10 +76,6 @@ service.interceptors.response.use(
 
     if (res.code === 110) {
       needCaptchaCallback(res.code)
-    }
-
-    if (res.code === 101) {
-      showError(res.message)
       return Promise.reject(res)
     }
 
@@ -159,15 +155,11 @@ export function createAdminRequest(): AxiosInstance {
       }
       if (res.code === 403) {
         showError(res.message)
-        removeToken()
-        const redirect = window.location.hash.replace('#', '')
-        if (!redirect.startsWith('/login')) {
-          window.location.hash = '#/login'
-        }
         return Promise.reject(res)
       }
       if (res.code === 110) {
         needCaptchaCallback(res.code)
+        return Promise.reject(res)
       }
       showError(res.message)
       return Promise.reject(res)

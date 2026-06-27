@@ -494,7 +494,7 @@ onMounted(() => {
         {{ $t('adminAddressBookCollection.createCollection') }}
       </NButton>
     </template>
-    <NSpace align="center" style="margin-bottom: 16px">
+    <NSpace align="center" style="margin-bottom: 16px" wrap>
       <NSelect
         v-model:value="filterUserId"
         :options="userOptions"

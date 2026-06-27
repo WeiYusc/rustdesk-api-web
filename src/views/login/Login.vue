@@ -42,10 +42,10 @@ const captchaData = reactive({
   b64: '',
 })
 
-const rules = {
+const rules = computed(() => ({
   username: { required: true, message: appStore.t('login.username'), trigger: 'blur' },
   password: { required: true, message: appStore.t('login.password'), trigger: 'blur' },
-}
+}))
 
 const showPasswordForm = computed(() => !loginOptionsData.value?.disable_pwd)
 const showRegisterLink = computed(() => loginOptionsData.value?.register)

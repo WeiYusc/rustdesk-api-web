@@ -60,11 +60,13 @@ const pagination = reactive({
   pageSizes: [10, 20, 50],
   onUpdatePage: (p: number) => {
     pagination.page = p
+    checkedRowKeys.value = []
     loadData()
   },
   onUpdatePageSize: (ps: number) => {
     pagination.pageSize = ps
     pagination.page = 1
+    checkedRowKeys.value = []
     loadData()
   },
 })
@@ -127,13 +129,13 @@ const peerPagination = reactive({
   },
 })
 
-const formRules: FormRules = {
+const formRules = computed<FormRules>(() => ({
   id: {
     required: true,
     message: appStore.t('myAddressBook.required'),
     trigger: 'blur',
   },
-}
+}))
 
 const columns = computed<DataTableColumns<AddressBook>>(() => [
   { type: 'selection' },
@@ -273,6 +275,7 @@ function openCreate(): void {
   isEdit.value = false
   modalTitle.value = appStore.t('myAddressBook.create')
   resetForm()
+  formRef.value?.restoreValidation()
   modalVisible.value = true
 }
 
@@ -290,6 +293,7 @@ function openEdit(row: AddressBook): void {
   form.forceAlwaysRelay = row.forceAlwaysRelay || false
   form.rdpPort = row.rdpPort || ''
   form.rdpUsername = row.rdpUsername || ''
+  formRef.value?.restoreValidation()
   modalVisible.value = true
 }
 

@@ -40,7 +40,7 @@ const pwdForm = reactive({
   confirm_password: '',
 })
 
-const pwdRules: FormRules = {
+const pwdRules = computed<FormRules>(() => ({
   old_password: {
     required: true,
     message: appStore.t('myInfo.oldPassword'),
@@ -64,7 +64,7 @@ const pwdRules: FormRules = {
       return true
     },
   },
-}
+}))
 
 const helloText = computed(() => {
   const hello = appStore.adminConfig.hello

@@ -5,7 +5,7 @@ import type { DataTableColumns, PaginationProps } from 'naive-ui'
 import { list } from '@/api/my/peer'
 import { useAppStore } from '@/stores/app'
 import type { Peer } from '@/types'
-import { formatTime } from '@/utils/format'
+import { formatTimeOrDash } from '@/utils/format'
 
 const appStore = useAppStore()
 
@@ -42,8 +42,8 @@ async function fetchData(): Promise<void> {
       hostname: searchHostname.value || undefined,
       alias: searchAlias.value || undefined,
     })
-    data.value = res.data.list
-    pagination.itemCount = res.data.total
+    data.value = res.data.list ?? []
+    pagination.itemCount = res.data.total ?? 0
   } catch {
     // ignore
   } finally {
@@ -61,7 +61,7 @@ const columns = computed<DataTableColumns<Peer>>(() => [
   {
     title: appStore.t('myPeer.lastOnlineTime'),
     key: 'last_online_time',
-    render: (row: Peer) => formatTime(row.last_online_time),
+    render: (row: Peer) => formatTimeOrDash(row.last_online_time),
   },
 ])
 

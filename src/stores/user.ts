@@ -114,6 +114,8 @@ export const useUserStore = defineStore('user', () => {
     useRouteStore().clearRoutes()
     useTagsStore().clearTags()
     useAppStore().configLoaded = false
+    useAppStore().adminConfig = { title: 'RustDesk API Admin' }
+    useAppStore().serverConfig = null
   }
 
   function getStoredOidcCode(): string | null {

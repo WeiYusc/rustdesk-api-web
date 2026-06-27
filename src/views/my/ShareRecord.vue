@@ -39,8 +39,8 @@ async function fetchData(): Promise<void> {
       page: pagination.page,
       page_size: pagination.pageSize,
     })
-    data.value = res.data.list
-    pagination.itemCount = res.data.total
+    data.value = res.data.list ?? []
+    pagination.itemCount = res.data.total ?? 0
   } catch {
     // ignore
   } finally {
@@ -103,6 +103,10 @@ function handleDelete(row: ShareRecord): void {
       try {
         await deleteShareRecord({ id: row.id })
         message.success(appStore.t('myShareRecord.deleteSuccess'))
+        const currentPage = pagination.page ?? 1
+        if (data.value.length === 1 && currentPage > 1) {
+          pagination.page = currentPage - 1
+        }
         fetchData()
       } catch {
         // ignore

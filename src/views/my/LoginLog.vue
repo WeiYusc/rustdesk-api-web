@@ -40,8 +40,8 @@ async function fetchData(): Promise<void> {
       page_size: pagination.pageSize,
       is_my: 1,
     })
-    data.value = res.data.list
-    pagination.itemCount = res.data.total
+    data.value = res.data.list ?? []
+    pagination.itemCount = res.data.total ?? 0
   } catch {
     // ignore
   } finally {
@@ -95,6 +95,10 @@ function handleDelete(row: LoginLog): void {
       try {
         await deleteLoginLog({ id: row.id })
         message.success(appStore.t('myLoginLog.deleteSuccess'))
+        const currentPage = pagination.page ?? 1
+        if (data.value.length === 1 && currentPage > 1) {
+          pagination.page = currentPage - 1
+        }
         fetchData()
       } catch {
         // ignore
