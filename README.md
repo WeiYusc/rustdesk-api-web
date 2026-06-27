@@ -55,7 +55,7 @@ Output is in `dist/`.
 ### Deploy to backend
 
 ```bash
-# Option 1: Use sync script
+# Option 1: Use sync script for a sibling rustdesk-api checkout
 bash scripts/sync-admin.sh
 
 # Option 2: Manual copy
@@ -63,6 +63,12 @@ cp -r dist/* ../rustdesk-api/resources/admin/
 ```
 
 The backend serves the frontend at `/_admin/` via Gin's `StaticFS`.
+
+### Consumed by the full-s6 image build
+
+The `WeiYusc/rustdesk-server` full-s6 build also consumes this repository as an external input: it copies this checkout to a temporary build directory, runs `pnpm install --frozen-lockfile` and `pnpm build`, then injects the resulting `dist/` into the image at `/app/resources/admin`.
+
+That image is currently a locally built artifact (`rustdesk-server-full-s6:local`) and has not been published to Docker Hub/GHCR.
 
 ## License
 
