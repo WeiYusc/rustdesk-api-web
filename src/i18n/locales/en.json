@@ -254,7 +254,10 @@
     "nameRequired": "Please enter a name",
     "typeShared": "Shared Group",
     "typeNormal": "Normal Group",
-    "deleteConfirm": "Are you sure you want to delete this group?"
+    "deleteConfirm": "Are you sure you want to delete this group?",
+    "typeNormalDesc": "Normal: Users can only view their own devices",
+    "typeSharedDesc": "Shared: Users can view devices of other users in the same group",
+    "typeHint": "Type Description"
   },
   "adminDeviceGroup": {
     "title": "Device Groups",

@@ -254,7 +254,10 @@
     "nameRequired": "請輸入名稱",
     "typeShared": "共享群組",
     "typeNormal": "普通群組",
-    "deleteConfirm": "確定要刪除此使用者群組嗎？"
+    "deleteConfirm": "確定要刪除此使用者群組嗎？",
+    "typeNormalDesc": "普通組：組內用戶僅能查看自己的裝置",
+    "typeSharedDesc": "共享組：組內用戶可以查看同組其他用戶的裝置",
+    "typeHint": "類型說明"
   },
   "adminDeviceGroup": {
     "title": "設備組管理",

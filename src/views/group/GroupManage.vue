@@ -12,6 +12,8 @@ import {
   NModal,
   NSelect,
   NSpace,
+  NTag,
+  NText,
   useDialog,
   useMessage,
   type DataTableColumns,
@@ -53,7 +55,15 @@ const columns = computed<DataTableColumns<Group>>(() => [
   {
     title: t('adminGroup.type'),
     key: 'type',
-    render: (row) => typeName(row.type),
+    render: (row) =>
+      h(
+        NTag,
+        {
+          type: row.type === 2 ? 'info' : 'default',
+          size: 'small',
+        },
+        () => typeName(row.type),
+      ),
   },
   {
     title: t('adminGroup.createdAt'),
@@ -237,6 +247,9 @@ onMounted(loadData)
             :options="typeOptions"
             :placeholder="$t('adminGroup.type')"
           />
+          <NText depth="3" style="font-size: 12px; margin-top: 4px; display: block">
+            {{ formModel.type === 2 ? $t('adminGroup.typeSharedDesc') : $t('adminGroup.typeNormalDesc') }}
+          </NText>
         </NFormItem>
       </NForm>
       <template #footer>

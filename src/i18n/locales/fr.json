@@ -254,7 +254,10 @@
     "nameRequired": "Veuillez saisir un nom",
     "typeShared": "Groupe partagé",
     "typeNormal": "Groupe normal",
-    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce groupe ?"
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce groupe ?",
+    "typeNormalDesc": "Normal : Les utilisateurs ne peuvent voir que leurs propres appareils",
+    "typeSharedDesc": "Partagé : Les utilisateurs peuvent voir les appareils des autres membres du groupe",
+    "typeHint": "Description du type"
   },
   "adminDeviceGroup": {
     "title": "Groupes d'appareils",

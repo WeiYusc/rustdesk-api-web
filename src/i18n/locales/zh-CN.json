@@ -254,7 +254,10 @@
     "nameRequired": "请输入名称",
     "typeShared": "共享组",
     "typeNormal": "普通组",
-    "deleteConfirm": "确定要删除此用户组吗？"
+    "deleteConfirm": "确定要删除此用户组吗？",
+    "typeNormalDesc": "普通组：组内用户仅能查看自己的设备",
+    "typeSharedDesc": "共享组：组内用户可以查看同组其他用户的设备",
+    "typeHint": "类型说明"
   },
   "adminDeviceGroup": {
     "title": "设备组管理",
