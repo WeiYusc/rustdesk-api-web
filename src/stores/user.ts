@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { current } from '@/api/user'
 import { login as loginApi, oidcAuth, oidcQuery, logout as logoutApi } from '@/api/login'
-import { setToken, removeToken, setCode, getCode, removeCode } from '@/utils/auth'
+import { setToken, removeToken, setCode, getCode, removeCode, clearWcConfig } from '@/utils/auth'
 import { useRouteStore } from '@/stores/router'
 import { useAppStore } from '@/stores/app'
 import { useTagsStore } from '@/stores/tags'
@@ -86,7 +86,7 @@ export const useUserStore = defineStore('user', () => {
     const res = await oidcAuth(data)
     setCode(res.data.code)
     if (provider === 'webauth') {
-      window.open(res.data.url)
+      window.open(res.data.url, '_blank', 'noopener,noreferrer')
     } else {
       window.location.href = res.data.url
     }
@@ -105,6 +105,7 @@ export const useUserStore = defineStore('user', () => {
     logoutApi().catch(() => {})
     removeToken()
     removeCode()
+    clearWcConfig()
     token.value = ''
     username.value = ''
     email.value = ''

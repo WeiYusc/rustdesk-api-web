@@ -1,4 +1,3 @@
-import request from '@/utils/request'
 import { createAdminRequest } from '@/utils/request'
 import type {
   ApiResponse,
@@ -85,5 +84,5 @@ export function batchCreateFromPeers(
 export function shareByWebClient(
   data: ShareByWebClientForm,
 ): Promise<ApiResponse<ShareByWebClientResult>> {
-  return request.post('/address_book/shareByWebClient', data)
+  return adminRequest.post('/address_book/shareByWebClient', data)
 }

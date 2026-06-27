@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, h, onUnmounted, ref, watch, type VNodeChild } from 'vue'
+import { computed, h, ref, watch, type VNodeChild } from 'vue'
 import { useRoute, useRouter, type RouteRecordRaw } from 'vue-router'
 import {
   NLayout,
@@ -22,6 +22,7 @@ import { useAppStore } from '@/stores/app'
 import { useUserStore } from '@/stores/user'
 import { useRouteStore } from '@/stores/router'
 import { useTagsStore } from '@/stores/tags'
+import { useIsMobile } from '@/composables/useIsMobile'
 import { SUPPORTED_LOCALES, type AppLocale } from '@/i18n'
 
 const appStore = useAppStore()
@@ -31,25 +32,19 @@ const tagsStore = useTagsStore()
 const route = useRoute()
 const router = useRouter()
 
+const { isMobile } = useIsMobile()
 const collapsed = ref(false)
 const drawerVisible = ref(false)
-const isMobile = ref(window.innerWidth < 768)
 
-function checkMobile(): void {
-  isMobile.value = window.innerWidth < 768
-  if (isMobile.value) {
+watch(isMobile, (mobile) => {
+  if (mobile) {
     collapsed.value = false
   }
-}
-window.addEventListener('resize', checkMobile)
-
-onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile)
 })
 
 const siderWidth = computed(() => {
-  if (appStore.locale === 'fr') return 240
-  return 210
+  if (isMobile.value) return Math.min(window.innerWidth * 0.78, 280)
+  return 220
 })
 
 function renderIcon(icon: string): (() => VNodeChild) | undefined {
@@ -215,11 +210,13 @@ watch(
             >
               <template #icon><NIcon>☰</NIcon></template>
             </NButton>
-            <NBreadcrumb>
-              <NBreadcrumbItem v-for="item in breadcrumbItems" :key="item">
-                {{ appStore.t(`menu.${item}`) || item }}
-              </NBreadcrumbItem>
-            </NBreadcrumb>
+            <div class="breadcrumb-wrap">
+              <NBreadcrumb>
+                <NBreadcrumbItem v-for="item in breadcrumbItems" :key="item">
+                  {{ appStore.t(`menu.${item}`) || item }}
+                </NBreadcrumbItem>
+              </NBreadcrumb>
+            </div>
           </NSpace>
           <NSpace align="center">
             <NDropdown :options="localeOptions" trigger="click" @select="handleLocale">
@@ -232,7 +229,7 @@ watch(
               <NSpace align="center" style="cursor: pointer">
                 <NAvatar v-if="userStore.avatar" :src="userStore.avatar" round size="small" />
                 <NAvatar v-else round size="small">{{ (userStore.username || '?').charAt(0).toUpperCase() || '?' }}</NAvatar>
-                <NText>{{ userStore.nickname || userStore.username }}</NText>
+                <NText v-if="!isMobile">{{ userStore.nickname || userStore.username }}</NText>
               </NSpace>
             </NDropdown>
           </NSpace>
@@ -275,6 +272,12 @@ watch(
 }
 .header-inner {
   width: 100%;
+}
+.breadcrumb-wrap {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .logo-area {
   height: 56px;

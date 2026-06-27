@@ -34,10 +34,12 @@ import { list as listTags } from '@/api/tag'
 import { list as listUsers } from '@/api/user'
 import { list as listPeers } from '@/api/peer'
 import type { AddressBook, Peer } from '@/types'
+import { useIsMobile } from '@/composables/useIsMobile'
 
 const { t } = useI18n()
 const message = useMessage()
 const dialog = useDialog()
+const { isMobile } = useIsMobile()
 
 interface AddressBookFormData {
   row_id?: number
@@ -256,7 +258,10 @@ function peerRowKey(row: Peer): number {
   return row.row_id
 }
 
+let latestRequestId = 0
+
 async function loadData(): Promise<void> {
+  const requestId = ++latestRequestId
   loading.value = true
   try {
     const res = await list({
@@ -267,12 +272,15 @@ async function loadData(): Promise<void> {
       hostname: searchHostname.value || undefined,
       alias: searchAlias.value || undefined,
     })
+    if (requestId !== latestRequestId) return
     dataList.value = res.data.list || []
     pagination.itemCount = res.data.total || 0
   } catch {
-    // ignore
+    if (requestId !== latestRequestId) return
   } finally {
-    loading.value = false
+    if (requestId === latestRequestId) {
+      loading.value = false
+    }
   }
 }
 
@@ -720,8 +728,8 @@ onMounted(() => {
       ref="formRef"
       :model="form"
       :rules="formRules"
-      label-placement="left"
-      label-width="140"
+      :label-placement="isMobile ? 'top' : 'left'"
+      :label-width="isMobile ? undefined : 140"
     >
       <NFormItem :label="$t('adminAddressBook.id')" path="id">
         <NInput v-model:value="form.id" :disabled="isEdit" />
@@ -793,7 +801,7 @@ onMounted(() => {
     :title="$t('adminAddressBook.batchCreate')"
     style="width: 600px; max-width: 90vw"
   >
-    <NForm label-placement="left" label-width="140">
+    <NForm :label-placement="isMobile ? 'top' : 'left'" :label-width="isMobile ? undefined : 140">
       <NFormItem :label="$t('adminAddressBook.selectUsers')">
         <NSelect
           v-model:value="batchCreateForm.user_ids"
@@ -865,7 +873,7 @@ onMounted(() => {
     :title="$t('adminAddressBook.batchCreateFromPeers')"
     style="width: 800px; max-width: 90vw"
   >
-    <NForm label-placement="left" label-width="100" style="margin-bottom: 16px">
+    <NForm :label-placement="isMobile ? 'top' : 'left'" :label-width="isMobile ? undefined : 100" style="margin-bottom: 16px">
       <NFormItem :label="$t('adminAddressBook.userId')" required>
         <NSelect
           v-model:value="peerImportUserId"

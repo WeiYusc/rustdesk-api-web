@@ -95,7 +95,10 @@ function rowKey(row: AuditConn): number {
   return row.id
 }
 
+let latestRequestId = 0
+
 async function loadData(): Promise<void> {
+  const requestId = ++latestRequestId
   loading.value = true
   try {
     const res = await connList({
@@ -104,12 +107,15 @@ async function loadData(): Promise<void> {
       peer_id: filterPeerId.value || undefined,
       from_peer: filterFromPeer.value || undefined,
     })
+    if (requestId !== latestRequestId) return
     dataList.value = res.data.list ?? []
     pagination.itemCount = res.data.total ?? 0
   } catch {
-    // ignore
+    if (requestId !== latestRequestId) return
   } finally {
-    loading.value = false
+    if (requestId === latestRequestId) {
+      loading.value = false
+    }
   }
 }
 

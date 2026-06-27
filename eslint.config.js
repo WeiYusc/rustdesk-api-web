@@ -59,6 +59,6 @@ export default [
     },
   },
   {
-    ignores: ['dist/**', 'node_modules/**', 'src/auto-imports.d.ts', 'src/components.d.ts', '*.config.*'],
+    ignores: ['dist/**', 'node_modules/**', '**/.pnpm/**', '**/.corepack/**', '.cache/**', 'src/auto-imports.d.ts', 'src/components.d.ts', '*.config.*'],
   },
 ]

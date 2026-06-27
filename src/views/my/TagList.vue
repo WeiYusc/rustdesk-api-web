@@ -122,16 +122,22 @@ const rules = computed<FormRules>(() => ({
   color: [{ required: true, type: 'number', message: t('myTag.colorRequired'), trigger: 'change' }],
 }))
 
+let latestRequestId = 0
+
 async function loadData(): Promise<void> {
+  const requestId = ++latestRequestId
   loading.value = true
   try {
     const res = await list({ page: pagination.page, page_size: pagination.pageSize })
+    if (requestId !== latestRequestId) return
     dataList.value = res.data.list ?? []
     pagination.itemCount = res.data.total ?? 0
   } catch {
-    // handled by global error handler
+    if (requestId !== latestRequestId) return
   } finally {
-    loading.value = false
+    if (requestId === latestRequestId) {
+      loading.value = false
+    }
   }
 }
 
@@ -222,6 +228,7 @@ onMounted(loadData)
     </template>
     <NDataTable
       remote
+      :scroll-x="600"
       :bordered="false"
       :columns="columns"
       :data="dataList"

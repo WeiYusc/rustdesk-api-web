@@ -29,10 +29,12 @@ import {
 import { list as listGroups } from '@/api/deviceGroup'
 import type { Peer } from '@/types'
 import { formatTimeOrDash } from '@/utils/format'
+import { useIsMobile } from '@/composables/useIsMobile'
 
 const { t } = useI18n()
 const message = useMessage()
 const dialog = useDialog()
+const { isMobile } = useIsMobile()
 
 const loading = ref(false)
 const saving = ref(false)
@@ -147,7 +149,10 @@ const rules = computed<FormRules>(() => ({
   id: [{ required: true, message: t('adminPeer.required'), trigger: ['blur', 'input'] }],
 }))
 
+let latestRequestId = 0
+
 async function loadData(): Promise<void> {
+  const requestId = ++latestRequestId
   loading.value = true
   try {
     const res = await list({
@@ -159,12 +164,15 @@ async function loadData(): Promise<void> {
       username: searchUsername.value || undefined,
       ip: searchIp.value || undefined,
     })
+    if (requestId !== latestRequestId) return
     dataList.value = res.data.list ?? []
     pagination.itemCount = res.data.total ?? 0
   } catch {
-    // ignore
+    if (requestId !== latestRequestId) return
   } finally {
-    loading.value = false
+    if (requestId === latestRequestId) {
+      loading.value = false
+    }
   }
 }
 
@@ -405,8 +413,8 @@ onMounted(() => {
         ref="formRef"
         :model="formModel"
         :rules="rules"
-        label-placement="left"
-        label-width="120"
+        :label-placement="isMobile ? 'top' : 'left'"
+        :label-width="isMobile ? undefined : 120"
       >
         <NFormItem :label="$t('adminPeer.id')" path="id">
           <NInput v-model:value="formModel.id" :disabled="modalMode === 'edit'" />

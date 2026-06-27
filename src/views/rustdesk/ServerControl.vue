@@ -116,16 +116,22 @@ const columns = computed<DataTableColumns<ServerCmd>>(() => [
   },
 ])
 
+let latestRequestId = 0
+
 async function loadData(): Promise<void> {
+  const requestId = ++latestRequestId
   loading.value = true
   try {
     const res = await cmdList({ page: pagination.page, page_size: pagination.pageSize })
+    if (requestId !== latestRequestId) return
     dataList.value = res.data.list ?? []
     pagination.itemCount = res.data.total ?? 0
   } catch {
-    //ignore
+    if (requestId !== latestRequestId) return
   } finally {
-    loading.value = false
+    if (requestId === latestRequestId) {
+      loading.value = false
+    }
   }
 }
 
@@ -289,6 +295,7 @@ function handleTabChange(name: string | number): void {
           <NButton type="primary" @click="openCreate">{{ $t('adminServerCmd.createCmd') }}</NButton>
           <NDataTable
             remote
+            :scroll-x="800"
             :bordered="false"
             :columns="columns"
             :data="dataList"

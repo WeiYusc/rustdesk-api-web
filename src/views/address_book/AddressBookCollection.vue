@@ -244,7 +244,10 @@ const ruleColumns = computed<DataTableColumns<AddressBookCollectionRule>>(() => 
   },
 ])
 
+let latestRequestId = 0
+
 async function loadData(): Promise<void> {
+  const requestId = ++latestRequestId
   loading.value = true
   try {
     const res = await list({
@@ -252,12 +255,15 @@ async function loadData(): Promise<void> {
       page_size: pagination.pageSize,
       user_id: filterUserId.value ?? undefined,
     })
+    if (requestId !== latestRequestId) return
     dataList.value = res.data.list ?? []
     pagination.itemCount = res.data.total ?? 0
   } catch {
-    // ignore
+    if (requestId !== latestRequestId) return
   } finally {
-    loading.value = false
+    if (requestId === latestRequestId) {
+      loading.value = false
+    }
   }
 }
 
@@ -512,6 +518,7 @@ onMounted(() => {
     </NSpace>
     <NDataTable
       remote
+      :scroll-x="700"
       :bordered="false"
       :columns="columns"
       :data="dataList"
@@ -577,6 +584,7 @@ onMounted(() => {
       </NSpace>
       <NDataTable
         remote
+        :scroll-x="700"
         :bordered="false"
         :columns="ruleColumns"
         :data="ruleList"

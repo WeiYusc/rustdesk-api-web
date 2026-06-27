@@ -37,7 +37,16 @@ const columns = computed<DataTableColumns<UserToken>>(() => [
   { type: 'selection' },
   { title: t('adminUserToken.deviceUuid'), key: 'device_uuid', ellipsis: { tooltip: true } },
   { title: t('adminUserToken.deviceId'), key: 'device_id', ellipsis: { tooltip: true } },
-  { title: t('adminUserToken.token'), key: 'token', ellipsis: { tooltip: true } },
+  {
+    title: t('adminUserToken.token'),
+    key: 'token',
+    render: (row) => {
+      const token = row.token
+      if (!token) return '-'
+      if (token.length <= 12) return '••••••'
+      return `${token.slice(0, 6)}••••••••${token.slice(-4)}`
+    },
+  },
   {
     title: t('adminUserToken.expiredAt'),
     key: 'expired_at',
@@ -70,7 +79,10 @@ function rowKey(row: UserToken): number {
   return row.id
 }
 
+let latestRequestId = 0
+
 async function loadData(): Promise<void> {
+  const requestId = ++latestRequestId
   loading.value = true
   try {
     const res = await list({
@@ -78,12 +90,15 @@ async function loadData(): Promise<void> {
       page_size: pagination.pageSize,
       user_id: filterUserId.value ? Number(filterUserId.value) : undefined,
     })
+    if (requestId !== latestRequestId) return
     dataList.value = res.data.list ?? []
     pagination.itemCount = res.data.total ?? 0
   } catch {
-    // ignore
+    if (requestId !== latestRequestId) return
   } finally {
-    loading.value = false
+    if (requestId === latestRequestId) {
+      loading.value = false
+    }
   }
 }
 

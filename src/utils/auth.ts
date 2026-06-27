@@ -17,6 +17,12 @@ export function removeToken(): void {
   localStorage.removeItem(`${WC_PREFIX}option:local:access_token`)
 }
 
+export function clearWcConfig(): void {
+  localStorage.removeItem(`${WC_PREFIX}custom-rendezvous-server`)
+  localStorage.removeItem(`${WC_PREFIX}key`)
+  localStorage.removeItem(`${WC_PREFIX}api-server`)
+}
+
 export function setCode(code: string): void {
   const now = Date.now()
   const expiry = now + 60 * 1000

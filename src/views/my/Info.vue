@@ -18,7 +18,7 @@ import {
   type FormRules,
   useMessage,
 } from 'naive-ui'
-import { marked } from 'marked'
+
 import { useUserStore } from '@/stores/user'
 import { useAppStore } from '@/stores/app'
 import { changeCurPwd, myOauth } from '@/api/user'
@@ -67,10 +67,7 @@ const pwdRules = computed<FormRules>(() => ({
 }))
 
 const helloText = computed(() => {
-  const hello = appStore.adminConfig.hello
-  if (!hello) return ''
-  const html = marked.parse(hello, { async: false }) as string
-  return html.replace(/<[^>]*>/g, '')
+  return appStore.adminConfig.hello || ''
 })
 
 function resetPwdForm(): void {

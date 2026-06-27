@@ -32,7 +32,10 @@ const pagination = reactive<PaginationProps>({
   },
 })
 
+let latestRequestId = 0
+
 async function fetchData(): Promise<void> {
+  const requestId = ++latestRequestId
   loading.value = true
   try {
     const res = await list({
@@ -40,12 +43,15 @@ async function fetchData(): Promise<void> {
       page_size: pagination.pageSize,
       is_my: 1,
     })
+    if (requestId !== latestRequestId) return
     data.value = res.data.list ?? []
     pagination.itemCount = res.data.total ?? 0
   } catch {
-    // ignore
+    if (requestId !== latestRequestId) return
   } finally {
-    loading.value = false
+    if (requestId === latestRequestId) {
+      loading.value = false
+    }
   }
 }
 

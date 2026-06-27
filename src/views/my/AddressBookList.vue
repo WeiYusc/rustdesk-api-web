@@ -30,6 +30,7 @@ import {
 import { list as listTags } from '@/api/my/tag'
 import { list as listPeers } from '@/api/my/peer'
 import type { AddressBook, Peer } from '@/types'
+import { useIsMobile } from '@/composables/useIsMobile'
 
 interface AddressBookFormData {
   row_id?: number
@@ -48,6 +49,7 @@ interface AddressBookFormData {
 const appStore = useAppStore()
 const message = useMessage()
 const dialog = useDialog()
+const { isMobile } = useIsMobile()
 
 const loading = ref(false)
 const dataList = ref<AddressBook[]>([])
@@ -208,7 +210,10 @@ function peerRowKey(row: Peer): number {
   return row.row_id
 }
 
+let latestRequestId = 0
+
 async function loadData(): Promise<void> {
+  const requestId = ++latestRequestId
   loading.value = true
   try {
     const res = await list({
@@ -219,12 +224,15 @@ async function loadData(): Promise<void> {
       hostname: searchHostname.value || undefined,
       alias: searchAlias.value || undefined,
     })
+    if (requestId !== latestRequestId) return
     dataList.value = res.data.list || []
     pagination.itemCount = res.data.total || 0
   } catch {
-    // ignore
+    if (requestId !== latestRequestId) return
   } finally {
-    loading.value = false
+    if (requestId === latestRequestId) {
+      loading.value = false
+    }
   }
 }
 
@@ -542,8 +550,8 @@ onMounted(() => {
       ref="formRef"
       :model="form"
       :rules="formRules"
-      label-placement="left"
-      label-width="140"
+      :label-placement="isMobile ? 'top' : 'left'"
+      :label-width="isMobile ? undefined : 140"
     >
       <NFormItem :label="$t('myAddressBook.id')" path="id">
         <NInput v-model:value="form.id" :disabled="isEdit" />
