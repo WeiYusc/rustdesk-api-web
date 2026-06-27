@@ -57,7 +57,12 @@ const columns = computed<DataTableColumns<LoginLog>>(() => [
   { type: 'selection' },
   { title: appStore.t('myLoginLog.ip'), key: 'ip' },
   { title: appStore.t('myLoginLog.client'), key: 'client' },
-  { title: appStore.t('myLoginLog.type'), key: 'type' },
+  {
+    title: appStore.t('myLoginLog.type'),
+    key: 'type',
+    render: (row: LoginLog) =>
+      row.type === '1' ? 'Web Admin' : row.type === '2' ? 'Client' : String(row.type),
+  },
   { title: appStore.t('myLoginLog.platform'), key: 'platform' },
   {
     title: appStore.t('myLoginLog.createdAt'),
@@ -103,7 +108,10 @@ function handleDelete(row: LoginLog): void {
 }
 
 function handleBatchDelete(): void {
-  if (checkedRowKeys.value.length === 0) return
+  if (checkedRowKeys.value.length === 0) {
+    message.warning(appStore.t('common.pleaseSelect'))
+    return
+  }
   dialog.warning({
     title: appStore.t('common.confirm'),
     content: appStore.t('myLoginLog.batchDeleteConfirm'),

@@ -21,6 +21,7 @@ import {
 } from 'naive-ui'
 import { create, deleteTag, list, update, type TagForm } from '@/api/my/tag'
 import type { Tag } from '@/types'
+import { formatTime } from '@/utils/format'
 
 const { t } = useI18n()
 const message = useMessage()
@@ -72,7 +73,11 @@ const columns = computed<DataTableColumns<Tag>>(() => [
         [h('span', { style: swatchStyle(row.color) }), String(row.color)],
       ),
   },
-  { title: t('myTag.createdAt'), key: 'created_at' },
+  {
+    title: t('myTag.createdAt'),
+    key: 'created_at',
+    render: (row) => formatTime(row.created_at),
+  },
   {
     title: t('common.actions'),
     key: 'actions',
@@ -229,7 +234,7 @@ onMounted(loadData)
       v-model:show="modalShow"
       preset="card"
       :title="modalMode === 'edit' ? $t('myTag.editTag') : $t('myTag.createTag')"
-      style="width: 480px"
+      style="width: 480px; max-width: 90vw"
     >
       <NForm ref="formRef" :model="formModel" :rules="rules" label-placement="top">
         <NFormItem :label="$t('myTag.name')" path="name">

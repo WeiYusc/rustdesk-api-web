@@ -56,6 +56,10 @@ onMounted(() => {
         <NSpin size="large" />
         <NText style="margin-top: 16px">{{ appStore.t('common.loading') }}</NText>
       </div>
+      <div v-else-if="status === 'success'" class="oauth-content">
+        <NSpin size="large" />
+        <NText style="margin-top: 16px">{{ appStore.t('oauth.loginSuccess') }}</NText>
+      </div>
       <div v-else-if="status === 'error'" class="oauth-content">
         <NText type="error">{{ errorMsg }}</NText>
         <NText style="margin-top: 12px; cursor: pointer" @click="router.push('/login')">

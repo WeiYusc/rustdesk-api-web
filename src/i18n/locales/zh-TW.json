@@ -19,7 +19,8 @@
     "success": "成功",
     "failed": "失敗",
     "noData": "暫無資料",
-    "logout": "退出登入"
+    "logout": "退出登入",
+    "pleaseSelect": "請先選擇"
   },
   "login": {
     "username": "使用者名稱",
@@ -36,7 +37,8 @@
     "captchaError": "驗證碼錯誤。",
     "usernameOrPasswordError": "使用者名稱或密碼錯誤。",
     "paramsError": "參數驗證失敗。",
-    "loginBanned": "登入已被封禁。"
+    "loginBanned": "登入已被封禁。",
+    "noLoginMethod": "請聯繫管理員配置登入方式。"
   },
   "menu": {
     "My": "我的",
@@ -83,6 +85,7 @@
     "oauthBindings": "第三方帳號綁定",
     "bound": "已綁定",
     "unbound": "未綁定",
+    "unbind": "解除綁定",
     "noOauth": "暫無第三方帳號綁定"
   },
   "myAddressBook": {
@@ -514,6 +517,7 @@
   },
   "oauth": {
     "missingCode": "Missing code",
-    "codeMismatch": "Code mismatch"
+    "codeMismatch": "Code mismatch",
+    "loginSuccess": "登入成功，正在跳轉..."
   }
 }

@@ -47,7 +47,12 @@ const columns = computed<DataTableColumns<LoginLog>>(() => [
   { title: t('adminLoginLog.deviceId'), key: 'device_id' },
   { title: t('adminLoginLog.uuid'), key: 'uuid', ellipsis: { tooltip: true } },
   { title: t('adminLoginLog.ip'), key: 'ip' },
-  { title: t('adminLoginLog.type'), key: 'type' },
+  {
+    title: t('adminLoginLog.type'),
+    key: 'type',
+    render: (row) =>
+      row.type === '1' ? 'Web Admin' : row.type === '2' ? 'Client' : String(row.type),
+  },
   { title: t('adminLoginLog.platform'), key: 'platform' },
   {
     title: t('adminLoginLog.createdAt'),
@@ -134,7 +139,10 @@ function handleDelete(row: LoginLog): void {
 }
 
 function handleBatchDelete(): void {
-  if (checkedRowKeys.value.length === 0) return
+  if (checkedRowKeys.value.length === 0) {
+    message.warning(t('common.pleaseSelect'))
+    return
+  }
   dialog.warning({
     title: t('common.confirm'),
     content: t('adminLoginLog.batchDeleteConfirm'),

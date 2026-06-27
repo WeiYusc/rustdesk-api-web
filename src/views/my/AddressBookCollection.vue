@@ -38,6 +38,7 @@ import {
   type AddressBookCollectionRuleForm,
 } from '@/api/my/addressBookCollectionRule'
 import type { AddressBookCollection, AddressBookCollectionRule } from '@/types'
+import { formatTime } from '@/utils/format'
 
 const { t } = useI18n()
 const message = useMessage()
@@ -60,7 +61,11 @@ const pagination = reactive({
 const columns = computed<DataTableColumns<AddressBookCollection>>(() => {
   const cols: DataTableColumns<AddressBookCollection> = [
     { title: t('myCollection.name'), key: 'name' },
-    { title: t('myCollection.createdAt'), key: 'created_at' },
+    {
+      title: t('myCollection.createdAt'),
+      key: 'created_at',
+      render: (row) => formatTime(row.created_at),
+    },
   ]
   if (activeTab.value === 'my') {
     cols.push({
@@ -478,7 +483,7 @@ onMounted(loadData)
       v-model:show="modalShow"
       preset="card"
       :title="modalMode === 'edit' ? $t('myCollection.editCollection') : $t('myCollection.createCollection')"
-      style="width: 480px"
+      style="width: 480px; max-width: 90vw"
     >
       <NForm ref="formRef" :model="formModel" :rules="rules" label-placement="top">
         <NFormItem :label="$t('myCollection.name')" path="name">
@@ -499,7 +504,7 @@ onMounted(loadData)
       v-model:show="ruleModalShow"
       preset="card"
       :title="$t('myCollection.ruleManagement')"
-      style="width: 720px"
+      style="width: 720px; max-width: 90vw"
     >
       <NSpace justify="space-between" align="center" style="margin-bottom: 16px">
         <span>{{ currentCollection?.name }}</span>
@@ -523,7 +528,7 @@ onMounted(loadData)
       v-model:show="ruleFormModalShow"
       preset="card"
       :title="ruleFormMode === 'edit' ? $t('myCollection.editRule') : $t('myCollection.createRule')"
-      style="width: 480px"
+      style="width: 480px; max-width: 90vw"
     >
       <NForm
         ref="ruleFormRef"

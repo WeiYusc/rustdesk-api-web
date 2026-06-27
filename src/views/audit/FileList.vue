@@ -55,7 +55,14 @@ const columns = computed<DataTableColumns<AuditFile>>(() => [
   },
   { title: t('adminAuditFile.num'), key: 'num' },
   { title: t('adminAuditFile.ip'), key: 'ip' },
-  { title: t('adminAuditFile.type'), key: 'type' },
+  {
+    title: t('adminAuditFile.type'),
+    key: 'type',
+    render: (row) => {
+      const map: Record<number, string> = { 1: 'Upload', 2: 'Download' }
+      return map[row.type] || String(row.type)
+    },
+  },
   {
     title: t('adminAuditFile.createdAt'),
     key: 'created_at',

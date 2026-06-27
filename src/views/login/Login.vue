@@ -11,6 +11,7 @@ import {
   NDivider,
   NImage,
   NText,
+  NSpin,
   useMessage,
 } from 'naive-ui'
 import { useUserStore } from '@/stores/user'
@@ -174,7 +175,10 @@ onMounted(() => {
               :placeholder="appStore.t('login.captcha')"
               style="flex: 1"
             />
-            <div v-if="captchaData.b64" class="captcha-img" @click="loadCaptcha">
+            <div v-if="captchaLoading" class="captcha-img captcha-img-loading">
+              <NSpin size="small" />
+            </div>
+            <div v-else-if="captchaData.b64" class="captcha-img" @click="loadCaptcha">
               <NImage :src="captchaData.b64" width="120" height="40" object-fit="fill" preview-disabled />
             </div>
           </NSpace>
@@ -189,6 +193,14 @@ onMounted(() => {
           {{ appStore.t('login.login') }}
         </NButton>
       </NForm>
+
+      <NText
+        v-if="!showPasswordForm && oidcProviders.length === 0"
+        type="warning"
+        style="display: block; text-align: center; margin-top: 12px"
+      >
+        {{ appStore.t('login.noLoginMethod') }}
+      </NText>
 
       <NButton
         v-if="showRegisterLink"
@@ -258,6 +270,30 @@ onMounted(() => {
   border-radius: 4px;
   overflow: hidden;
   border: 1px solid var(--n-border-color, #efeff5);
+}
+.captcha-img-loading {
+  width: 120px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+}
+.captcha-img-loading {
+  width: 120px;
+  height: 40px;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.captcha-img-loading {
+  width: 120px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
 }
 .login-footer {
   position: relative;

@@ -208,7 +208,11 @@ const columns = computed<DataTableColumns<AddressBook>>(() => [
       )
     },
   },
-  { title: t('adminAddressBook.userId'), key: 'user_id' },
+  {
+    title: t('adminAddressBook.userId'),
+    key: 'user_id',
+    render: (row) => '#' + row.user_id,
+  },
   {
     title: t('common.actions'),
     key: 'actions',
@@ -708,7 +712,7 @@ onMounted(() => {
     v-model:show="modalVisible"
     preset="card"
     :title="modalTitle"
-    style="width: 600px"
+    style="width: 600px; max-width: 90vw"
   >
     <NForm
       ref="formRef"
@@ -785,7 +789,7 @@ onMounted(() => {
     v-model:show="batchCreateModalVisible"
     preset="card"
     :title="$t('adminAddressBook.batchCreate')"
-    style="width: 600px"
+    style="width: 600px; max-width: 90vw"
   >
     <NForm label-placement="left" label-width="140">
       <NFormItem :label="$t('adminAddressBook.selectUsers')">
@@ -857,7 +861,7 @@ onMounted(() => {
     v-model:show="peerModalVisible"
     preset="card"
     :title="$t('adminAddressBook.batchCreateFromPeers')"
-    style="width: 800px"
+    style="width: 800px; max-width: 90vw"
   >
     <NForm label-placement="left" label-width="100" style="margin-bottom: 16px">
       <NFormItem :label="$t('adminAddressBook.userId')" required>
@@ -941,7 +945,7 @@ onMounted(() => {
     v-model:show="shareModalVisible"
     preset="card"
     :title="$t('adminAddressBook.shareByWebClient')"
-    style="width: 480px"
+    style="width: 480px; max-width: 90vw"
   >
     <NForm label-placement="top">
       <NFormItem :label="$t('adminAddressBook.id')">
@@ -984,7 +988,7 @@ onMounted(() => {
     v-model:show="shareTokenModalVisible"
     preset="card"
     :title="$t('adminAddressBook.shareToken')"
-    style="width: 480px"
+    style="width: 480px; max-width: 90vw"
   >
     <NSpace vertical>
       <NInput :value="shareToken" readonly />

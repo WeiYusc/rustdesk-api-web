@@ -37,6 +37,7 @@ import {
 } from '@/api/addressBookCollectionRule'
 import { list as listUsers } from '@/api/user'
 import type { AddressBookCollection, AddressBookCollectionRule } from '@/types'
+import { formatTime } from '@/utils/format'
 
 const { t } = useI18n()
 const message = useMessage()
@@ -70,8 +71,16 @@ async function loadUsers(): Promise<void> {
 
 const columns = computed<DataTableColumns<AddressBookCollection>>(() => [
   { title: t('adminAddressBookCollection.name'), key: 'name' },
-  { title: t('adminAddressBookCollection.userId'), key: 'user_id' },
-  { title: t('adminAddressBookCollection.createdAt'), key: 'created_at' },
+  {
+    title: t('adminAddressBookCollection.userId'),
+    key: 'user_id',
+    render: (row) => '#' + row.user_id,
+  },
+  {
+    title: t('adminAddressBookCollection.createdAt'),
+    key: 'created_at',
+    render: (row) => formatTime(row.created_at),
+  },
   {
     title: t('common.actions'),
     key: 'actions',
@@ -515,7 +524,7 @@ onMounted(() => {
       v-model:show="modalShow"
       preset="card"
       :title="modalMode === 'edit' ? $t('adminAddressBookCollection.editCollection') : $t('adminAddressBookCollection.createCollection')"
-      style="width: 480px"
+      style="width: 480px; max-width: 90vw"
     >
       <NForm
         ref="formRef"
@@ -558,7 +567,7 @@ onMounted(() => {
       v-model:show="ruleModalShow"
       preset="card"
       :title="$t('adminAddressBookCollection.ruleManagement')"
-      style="width: 720px"
+      style="width: 720px; max-width: 90vw"
     >
       <NSpace justify="space-between" align="center" style="margin-bottom: 16px">
         <span>{{ currentCollection?.name }}</span>
@@ -582,7 +591,7 @@ onMounted(() => {
       v-model:show="ruleFormModalShow"
       preset="card"
       :title="ruleFormMode === 'edit' ? $t('adminAddressBookCollection.editRule') : $t('adminAddressBookCollection.createRule')"
-      style="width: 480px"
+      style="width: 480px; max-width: 90vw"
     >
       <NForm
         ref="ruleFormRef"

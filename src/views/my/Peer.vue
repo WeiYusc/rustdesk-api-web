@@ -110,6 +110,7 @@ onMounted(() => {
       </NSpace>
       <NDataTable
         remote
+        :scroll-x="1000"
         :columns="columns"
         :data="data"
         :loading="loading"

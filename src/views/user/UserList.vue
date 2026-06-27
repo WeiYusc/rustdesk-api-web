@@ -24,6 +24,7 @@ import {
 import { list, createUser, updateUser, deleteUser, changePwd, type UserForm } from '@/api/user'
 import { list as listGroups } from '@/api/group'
 import type { AdminUser, Group } from '@/types'
+import { formatTime } from '@/utils/format'
 
 const { t } = useI18n()
 const message = useMessage()
@@ -93,7 +94,11 @@ const columns = computed<DataTableColumns<AdminUser>>(() => [
         },
       ),
   },
-  { title: t('adminUser.createdAt'), key: 'created_at' },
+  {
+    title: t('adminUser.createdAt'),
+    key: 'created_at',
+    render: (row) => formatTime(row.created_at),
+  },
   {
     title: t('common.actions'),
     key: 'actions',
@@ -141,6 +146,7 @@ const modalMode = ref<'create' | 'edit'>('create')
 const formModel = reactive<{
   id: number | undefined
   username: string
+  password: string
   email: string
   nickname: string
   group_id: number
@@ -150,6 +156,7 @@ const formModel = reactive<{
 }>({
   id: undefined,
   username: '',
+  password: '',
   email: '',
   nickname: '',
   group_id: 0,
@@ -162,6 +169,9 @@ const rules = computed<FormRules>(() => ({
   username: [
     { required: true, message: t('adminUser.username'), trigger: ['blur', 'input'] },
   ],
+  password: modalMode.value === 'create' ? [
+    { required: true, message: t('adminUser.passwordRequired'), trigger: ['blur', 'input'] },
+  ] : [],
   group_id: [
     { required: true, type: 'number', message: t('adminUser.groupId'), trigger: 'change' },
   ],
@@ -235,6 +245,7 @@ function handleSearch(): void {
 function resetForm(): void {
   formModel.id = undefined
   formModel.username = ''
+  formModel.password = ''
   formModel.email = ''
   formModel.nickname = ''
   formModel.group_id = 0
@@ -285,6 +296,7 @@ async function handleSubmit(): Promise<void> {
       payload.id = formModel.id
       await updateUser(payload)
     } else {
+      payload.password = formModel.password
       await createUser(payload)
     }
     message.success(t('common.success'))
@@ -379,11 +391,19 @@ onMounted(() => {
       v-model:show="modalShow"
       preset="card"
       :title="modalMode === 'edit' ? $t('adminUser.editUser') : $t('adminUser.createUser')"
-      style="width: 520px"
+      style="width: 520px; max-width: 90vw"
     >
       <NForm ref="formRef" :model="formModel" :rules="rules" label-placement="top">
         <NFormItem :label="$t('adminUser.username')" path="username">
           <NInput v-model:value="formModel.username" :placeholder="$t('adminUser.username')" />
+        </NFormItem>
+        <NFormItem v-if="modalMode === 'create'" :label="$t('adminUser.password')" path="password">
+          <NInput
+            v-model:value="formModel.password"
+            type="password"
+            show-password-on="click"
+            :placeholder="$t('adminUser.password')"
+          />
         </NFormItem>
         <NFormItem :label="$t('adminUser.email')" path="email">
           <NInput v-model:value="formModel.email" :placeholder="$t('adminUser.email')" />
@@ -429,7 +449,7 @@ onMounted(() => {
       v-model:show="pwdModalShow"
       preset="card"
       :title="$t('adminUser.changePwd')"
-      style="width: 440px"
+      style="width: 440px; max-width: 90vw"
     >
       <NForm ref="pwdFormRef" :model="pwdForm" :rules="pwdRules" label-placement="top">
         <NFormItem :label="$t('adminUser.password')" path="password">

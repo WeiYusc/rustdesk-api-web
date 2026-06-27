@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { NCard, NSpin, NText, NButton } from 'naive-ui'
 import { useAppStore } from '@/stores/app'
+import { bindConfirm } from '@/api/oauth'
 
 const route = useRoute()
 const router = useRouter()
@@ -10,13 +11,23 @@ const appStore = useAppStore()
 
 const status = ref<'loading' | 'success' | 'error'>('loading')
 
-onMounted(() => {
+async function doBind(): Promise<void> {
   const code = route.params.code as string
-  if (code) {
+  if (!code) {
+    status.value = 'error'
+    return
+  }
+  status.value = 'loading'
+  try {
+    await bindConfirm({ code })
     status.value = 'success'
-  } else {
+  } catch {
     status.value = 'error'
   }
+}
+
+onMounted(() => {
+  doBind()
 })
 </script>
 

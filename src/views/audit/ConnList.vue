@@ -43,7 +43,17 @@ function formatTime(ts: number | string): string {
 
 const columns = computed<DataTableColumns<AuditConn>>(() => [
   { type: 'selection' },
-  { title: t('adminAuditConn.action'), key: 'action' },
+  {
+    title: t('adminAuditConn.action'),
+    key: 'action',
+    render: (row) => {
+      const map: Record<string, string> = {
+        connect: 'Connect',
+        close: 'Close',
+      }
+      return map[row.action] || String(row.action)
+    },
+  },
   { title: t('adminAuditConn.connId'), key: 'conn_id' },
   { title: t('adminAuditConn.peerId'), key: 'peer_id' },
   { title: t('adminAuditConn.fromPeer'), key: 'from_peer' },
@@ -54,7 +64,14 @@ const columns = computed<DataTableColumns<AuditConn>>(() => [
     key: 'session_id',
     ellipsis: { tooltip: true },
   },
-  { title: t('adminAuditConn.type'), key: 'type' },
+  {
+    title: t('adminAuditConn.type'),
+    key: 'type',
+    render: (row) => {
+      const map: Record<number, string> = { 1: 'Connect', 2: 'Disconnect' }
+      return map[row.type] || String(row.type)
+    },
+  },
   {
     title: t('adminAuditConn.createdAt'),
     key: 'created_at',

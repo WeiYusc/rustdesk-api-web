@@ -303,7 +303,7 @@ onMounted(loadData)
       v-model:show="modalShow"
       preset="card"
       :title="modalMode === 'edit' ? $t('adminOauth.editOauth') : $t('adminOauth.createOauth')"
-      style="width: 520px"
+      style="width: 520px; max-width: 90vw"
     >
       <NForm ref="formRef" :model="formModel" :rules="rules" label-placement="top">
         <NFormItem :label="$t('adminOauth.op')" path="op">

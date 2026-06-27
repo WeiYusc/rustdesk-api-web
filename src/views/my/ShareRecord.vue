@@ -62,7 +62,11 @@ const columns = computed<DataTableColumns<ShareRecord>>(() => [
   { type: 'selection' },
   { title: appStore.t('myShareRecord.peerId'), key: 'peer_id' },
   { title: appStore.t('myShareRecord.shareToken'), key: 'share_token' },
-  { title: appStore.t('myShareRecord.password'), key: 'password' },
+  {
+    title: appStore.t('myShareRecord.password'),
+    key: 'password',
+    render: () => '•••••',
+  },
   {
     title: appStore.t('myShareRecord.expire'),
     key: 'expire',
@@ -112,7 +116,10 @@ function handleDelete(row: ShareRecord): void {
 }
 
 function handleBatchDelete(): void {
-  if (checkedRowKeys.value.length === 0) return
+  if (checkedRowKeys.value.length === 0) {
+    message.warning(appStore.t('common.pleaseSelect'))
+    return
+  }
   dialog.warning({
     title: appStore.t('common.confirm'),
     content: appStore.t('myShareRecord.batchDeleteConfirm'),

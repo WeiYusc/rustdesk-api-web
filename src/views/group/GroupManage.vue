@@ -21,6 +21,7 @@ import {
 } from 'naive-ui'
 import { list, create, update, deleteGroup, type GroupForm } from '@/api/group'
 import type { Group } from '@/types'
+import { formatTime } from '@/utils/format'
 
 const { t } = useI18n()
 const message = useMessage()
@@ -54,7 +55,11 @@ const columns = computed<DataTableColumns<Group>>(() => [
     key: 'type',
     render: (row) => typeName(row.type),
   },
-  { title: t('adminGroup.createdAt'), key: 'created_at' },
+  {
+    title: t('adminGroup.createdAt'),
+    key: 'created_at',
+    render: (row) => formatTime(row.created_at),
+  },
   {
     title: t('common.actions'),
     key: 'actions',
@@ -213,7 +218,7 @@ onMounted(loadData)
       v-model:show="modalShow"
       preset="card"
       :title="modalMode === 'edit' ? $t('adminGroup.edit') : $t('adminGroup.create')"
-      style="width: 440px"
+      style="width: 440px; max-width: 90vw"
     >
       <NForm ref="formRef" :model="formModel" :rules="rules" label-placement="top">
         <NFormItem :label="$t('adminGroup.name')" path="name">

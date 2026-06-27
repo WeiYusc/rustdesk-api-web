@@ -402,7 +402,7 @@ onMounted(() => {
       v-model:show="modalShow"
       preset="card"
       :title="modalMode === 'edit' ? $t('adminPeer.edit') : $t('adminPeer.create')"
-      style="width: 600px"
+      style="width: 600px; max-width: 90vw"
     >
       <NForm
         ref="formRef"

@@ -19,7 +19,8 @@
     "success": "Succès",
     "failed": "Échec",
     "noData": "Aucune donnée",
-    "logout": "Déconnexion"
+    "logout": "Déconnexion",
+    "pleaseSelect": "Veuillez d'abord sélectionner"
   },
   "login": {
     "username": "Nom d'utilisateur",
@@ -36,7 +37,8 @@
     "captchaError": "Erreur de captcha.",
     "usernameOrPasswordError": "Nom d'utilisateur ou de mot de passe incorrect.",
     "paramsError": "La validation des paramètres a échoué.",
-    "loginBanned": "Connexion bannie."
+    "loginBanned": "Connexion bannie.",
+    "noLoginMethod": "Veuillez contacter l'administrateur pour configurer une méthode de connexion."
   },
   "menu": {
     "My": "Moi",
@@ -83,6 +85,7 @@
     "oauthBindings": "Liaisons OAuth",
     "bound": "Lié",
     "unbound": "Non lié",
+    "unbind": "Délier",
     "noOauth": "Aucune liaison OAuth"
   },
   "myAddressBook": {
@@ -514,6 +517,7 @@
   },
   "oauth": {
     "missingCode": "Missing code",
-    "codeMismatch": "Code mismatch"
+    "codeMismatch": "Code mismatch",
+    "loginSuccess": "Connexion réussie, redirection..."
   }
 }

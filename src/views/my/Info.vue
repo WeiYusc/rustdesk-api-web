@@ -22,6 +22,7 @@ import { marked } from 'marked'
 import { useUserStore } from '@/stores/user'
 import { useAppStore } from '@/stores/app'
 import { changeCurPwd, myOauth } from '@/api/user'
+import { unbind } from '@/api/oauth'
 import type { UserOauthItem } from '@/types'
 
 const userStore = useUserStore()
@@ -112,6 +113,21 @@ async function loadOauth(): Promise<void> {
   }
 }
 
+const unbindLoading = ref(false)
+
+async function handleUnbind(op: string): Promise<void> {
+  unbindLoading.value = true
+  try {
+    await unbind({ op })
+    message.success(appStore.t('common.success'))
+    await loadOauth()
+  } catch {
+    // ignore
+  } finally {
+    unbindLoading.value = false
+  }
+}
+
 function oauthStatusText(status: number): string {
   return status === 1
     ? appStore.t('myInfo.bound')
@@ -195,13 +211,25 @@ onMounted(() => {
       <NSpin :show="oauthLoading">
         <NEmpty v-if="oauthList.length === 0" :description="$t('myInfo.noOauth')" />
         <NSpace v-else>
-          <NTag
+          <NSpace
             v-for="item in oauthList"
             :key="item.op"
-            :type="item.status === 1 ? 'success' : 'default'"
+            align="center"
           >
-            {{ item.op }} - {{ oauthStatusText(item.status) }}
-          </NTag>
+            <NTag :type="item.status === 1 ? 'success' : 'default'">
+              {{ item.op }} - {{ oauthStatusText(item.status) }}
+            </NTag>
+            <NButton
+              v-if="item.status === 1"
+              size="small"
+              type="warning"
+              ghost
+              :loading="unbindLoading"
+              @click="handleUnbind(item.op)"
+            >
+              {{ $t('myInfo.unbind') }}
+            </NButton>
+          </NSpace>
         </NSpace>
       </NSpin>
     </NCard>

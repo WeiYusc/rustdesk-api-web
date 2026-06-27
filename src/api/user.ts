@@ -13,6 +13,7 @@ const adminRequest = createAdminRequest()
 export interface UserForm {
   id?: number
   username: string
+  password?: string
   email?: string
   nickname?: string
   avatar?: string

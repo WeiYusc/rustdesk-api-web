@@ -532,7 +532,7 @@ onMounted(() => {
     v-model:show="modalVisible"
     preset="card"
     :title="modalTitle"
-    style="width: 600px"
+    style="width: 600px; max-width: 90vw"
   >
     <NForm
       ref="formRef"
@@ -591,7 +591,7 @@ onMounted(() => {
     v-model:show="batchTagModalVisible"
     preset="card"
     :title="$t('myAddressBook.batchUpdateTags')"
-    style="width: 500px"
+    style="width: 500px; max-width: 90vw"
   >
     <NForm label-placement="top">
       <NFormItem :label="$t('myAddressBook.selectTags')">
@@ -612,7 +612,7 @@ onMounted(() => {
     v-model:show="peerModalVisible"
     preset="card"
     :title="$t('myAddressBook.importFromPeers')"
-    style="width: 800px"
+    style="width: 800px; max-width: 90vw"
   >
     <NSpace align="center" style="margin-bottom: 16px">
       <NInput

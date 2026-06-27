@@ -19,7 +19,8 @@
     "success": "成功",
     "failed": "失败",
     "noData": "暂无数据",
-    "logout": "退出登录"
+    "logout": "退出登录",
+    "pleaseSelect": "请先选择"
   },
   "login": {
     "username": "用户名",
@@ -36,7 +37,8 @@
     "captchaError": "验证码错误。",
     "usernameOrPasswordError": "用户名或密码错误。",
     "paramsError": "参数错误。",
-    "loginBanned": "登录已被封禁。"
+    "loginBanned": "登录已被封禁。",
+    "noLoginMethod": "请联系管理员配置登录方式。"
   },
   "menu": {
     "My": "我的",
@@ -83,6 +85,7 @@
     "oauthBindings": "第三方账号绑定",
     "bound": "已绑定",
     "unbound": "未绑定",
+    "unbind": "解绑",
     "noOauth": "暂无第三方账号绑定"
   },
   "myAddressBook": {
@@ -514,6 +517,7 @@
   },
   "oauth": {
     "missingCode": "缺少 code",
-    "codeMismatch": "code 不匹配"
+    "codeMismatch": "code 不匹配",
+    "loginSuccess": "登录成功，正在跳转..."
   }
 }

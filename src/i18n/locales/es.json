@@ -19,7 +19,8 @@
     "success": "Éxito",
     "failed": "Fallido",
     "noData": "Sin datos",
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "pleaseSelect": "Seleccione primero"
   },
   "login": {
     "username": "Nombre de usuario",
@@ -83,6 +84,7 @@
     "oauthBindings": "Vinculaciones OAuth",
     "bound": "Vinculado",
     "unbound": "No vinculado",
+    "unbind": "Desvincular",
     "noOauth": "Sin vinculaciones OAuth"
   },
   "myAddressBook": {

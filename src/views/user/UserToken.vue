@@ -14,6 +14,7 @@ import {
 } from 'naive-ui'
 import { list, deleteUserToken, batchDelete } from '@/api/userToken'
 import type { UserToken } from '@/types'
+import { formatTime } from '@/utils/format'
 
 const { t } = useI18n()
 const message = useMessage()
@@ -32,14 +33,6 @@ const pagination = reactive({
   pageSizes: [10, 20, 50],
 })
 
-function formatTime(ts: number | string): string {
-  if (!ts) return ''
-  const num =
-    typeof ts === 'number' ? (ts < 1e12 ? ts * 1000 : ts) : Date.parse(ts)
-  if (!num) return ''
-  return new Date(num).toLocaleString()
-}
-
 const columns = computed<DataTableColumns<UserToken>>(() => [
   { type: 'selection' },
   { title: t('adminUserToken.deviceUuid'), key: 'device_uuid' },
@@ -50,7 +43,11 @@ const columns = computed<DataTableColumns<UserToken>>(() => [
     key: 'expired_at',
     render: (row) => formatTime(row.expired_at),
   },
-  { title: t('adminUserToken.createdAt'), key: 'created_at' },
+  {
+    title: t('adminUserToken.createdAt'),
+    key: 'created_at',
+    render: (row) => formatTime(row.created_at),
+  },
   {
     title: t('common.actions'),
     key: 'actions',

@@ -55,8 +55,22 @@ const columns = computed<DataTableColumns<ShareRecord>>(() => [
     key: 'share_token',
     ellipsis: { tooltip: true },
   },
-  { title: t('adminShareRecord.password'), key: 'password' },
-  { title: t('adminShareRecord.passwordType'), key: 'password_type' },
+  {
+    title: t('adminShareRecord.password'),
+    key: 'password',
+    render: () => '•••••',
+  },
+  {
+    title: t('adminShareRecord.passwordType'),
+    key: 'password_type',
+    render: (row) => {
+      const map: Record<string, string> = {
+        permanent: 'Permanent',
+        temporary: 'Temporary',
+      }
+      return map[row.password_type] || String(row.password_type)
+    },
+  },
   {
     title: t('adminShareRecord.expire'),
     key: 'expire',
@@ -147,7 +161,10 @@ function handleDelete(row: ShareRecord): void {
 }
 
 function handleBatchDelete(): void {
-  if (checkedRowKeys.value.length === 0) return
+  if (checkedRowKeys.value.length === 0) {
+    message.warning(t('common.pleaseSelect'))
+    return
+  }
   dialog.warning({
     title: t('common.confirm'),
     content: t('adminShareRecord.batchDeleteConfirm'),

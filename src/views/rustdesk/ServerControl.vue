@@ -41,7 +41,7 @@ const presetCommands: PresetCommand[] = [
   { cmd: 'reload', explainKey: 'adminServerCmd.reloadService' },
 ]
 
-const simpleRunning = ref(false)
+const runningCmd = ref<string>('')
 const simpleResult = ref('')
 
 function formatResult(data: string): string {
@@ -56,7 +56,7 @@ function formatResult(data: string): string {
 }
 
 async function runPreset(cmd: string): Promise<void> {
-  simpleRunning.value = true
+  runningCmd.value = cmd
   simpleResult.value = ''
   try {
     const res = await sendCmd({ cmd, target: '' })
@@ -65,7 +65,7 @@ async function runPreset(cmd: string): Promise<void> {
   } catch {
     //ignore
   } finally {
-    simpleRunning.value = false
+    runningCmd.value = ''
   }
 }
 
@@ -262,7 +262,7 @@ onMounted(loadData)
                 <NButton
                   type="primary"
                   block
-                  :loading="simpleRunning"
+                  :loading="runningCmd === item.cmd"
                   @click="runPreset(item.cmd)"
                 >
                   {{ $t('adminServerCmd.execute') }}
@@ -270,7 +270,7 @@ onMounted(loadData)
               </NCard>
             </NGridItem>
           </NGrid>
-          <div v-if="simpleResult || simpleRunning">
+          <div v-if="simpleResult || runningCmd">
             <div style="margin-bottom: 8px">{{ $t('adminServerCmd.result') }}</div>
             <NCode :code="simpleResult" word-wrap />
           </div>
@@ -298,7 +298,7 @@ onMounted(loadData)
       v-model:show="createModalShow"
       preset="card"
       :title="$t('adminServerCmd.createCmd')"
-      style="width: 520px"
+      style="width: 520px; max-width: 90vw"
     >
       <NForm ref="formRef" :model="formModel" :rules="rules" label-placement="top">
         <NFormItem :label="$t('adminServerCmd.cmd')" path="cmd">
@@ -331,7 +331,7 @@ onMounted(loadData)
       v-model:show="execModalShow"
       preset="card"
       :title="$t('adminServerCmd.executeCmd')"
-      style="width: 600px"
+      style="width: 600px; max-width: 90vw"
     >
       <NSpace vertical :size="16">
         <NSpace align="center">

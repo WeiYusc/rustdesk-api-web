@@ -22,6 +22,7 @@ import {
 import { create, deleteTag, list, update, type TagForm } from '@/api/tag'
 import { list as listUsers } from '@/api/user'
 import type { Tag } from '@/types'
+import { formatTime } from '@/utils/format'
 
 const { t } = useI18n()
 const message = useMessage()
@@ -88,8 +89,16 @@ const columns = computed<DataTableColumns<Tag>>(() => [
         [h('span', { style: swatchStyle(row.color) }), String(row.color)],
       ),
   },
-  { title: t('adminTag.userId'), key: 'user_id' },
-  { title: t('adminTag.createdAt'), key: 'created_at' },
+  {
+    title: t('adminTag.userId'),
+    key: 'user_id',
+    render: (row) => '#' + row.user_id,
+  },
+  {
+    title: t('adminTag.createdAt'),
+    key: 'created_at',
+    render: (row) => formatTime(row.created_at),
+  },
   {
     title: t('common.actions'),
     key: 'actions',
@@ -294,7 +303,7 @@ onMounted(() => {
       v-model:show="modalShow"
       preset="card"
       :title="modalMode === 'edit' ? $t('adminTag.editTag') : $t('adminTag.createTag')"
-      style="width: 480px"
+      style="width: 480px; max-width: 90vw"
     >
       <NForm
         ref="formRef"

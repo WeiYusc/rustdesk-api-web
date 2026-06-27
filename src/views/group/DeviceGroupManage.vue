@@ -25,6 +25,7 @@ import {
   type DeviceGroupForm,
 } from '@/api/deviceGroup'
 import type { DeviceGroup } from '@/types'
+import { formatTime } from '@/utils/format'
 
 const { t } = useI18n()
 const message = useMessage()
@@ -44,7 +45,11 @@ const pagination = reactive({
 
 const columns = computed<DataTableColumns<DeviceGroup>>(() => [
   { title: t('adminDeviceGroup.name'), key: 'name' },
-  { title: t('adminDeviceGroup.createdAt'), key: 'created_at' },
+  {
+    title: t('adminDeviceGroup.createdAt'),
+    key: 'created_at',
+    render: (row) => formatTime(row.created_at),
+  },
   {
     title: t('common.actions'),
     key: 'actions',
@@ -206,7 +211,7 @@ onMounted(loadData)
       v-model:show="modalShow"
       preset="card"
       :title="modalMode === 'edit' ? $t('adminDeviceGroup.edit') : $t('adminDeviceGroup.create')"
-      style="width: 440px"
+      style="width: 440px; max-width: 90vw"
     >
       <NForm ref="formRef" :model="formModel" :rules="rules" label-placement="top">
         <NFormItem :label="$t('adminDeviceGroup.name')" path="name">

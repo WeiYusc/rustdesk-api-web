@@ -105,11 +105,11 @@ const breadcrumbItems = computed(() => {
   return items
 })
 
-const userMenuOptions = [
+const userMenuOptions = computed(() => [
   { label: appStore.t('menu.MyInfo'), key: 'info' },
   { type: 'divider', key: 'd1' },
   { label: appStore.t('common.logout'), key: 'logout' },
-]
+])
 
 function handleUserMenu(key: string): void {
   if (key === 'info') {
@@ -124,6 +124,11 @@ const localeOptions = SUPPORTED_LOCALES.map((l) => ({
   label: l.label,
   key: l.value,
 }))
+
+const currentLocaleLabel = computed(() => {
+  const found = SUPPORTED_LOCALES.find((l) => l.value === appStore.locale)
+  return found ? found.label : appStore.locale
+})
 
 function handleLocale(key: string): void {
   appStore.changeLocale(key as AppLocale)
@@ -206,7 +211,7 @@ watch(
           </NSpace>
           <NSpace align="center">
             <NDropdown :options="localeOptions" trigger="click" @select="handleLocale">
-              <NButton quaternary size="small">{{ appStore.locale }}</NButton>
+              <NButton quaternary size="small">{{ currentLocaleLabel }}</NButton>
             </NDropdown>
             <NButton quaternary size="small" @click="appStore.toggleDarkMode()">
               {{ appStore.darkMode ? '🌙' : '☀️' }}

@@ -19,7 +19,8 @@
     "success": "Успех",
     "failed": "Ошибка",
     "noData": "Нет данных",
-    "logout": "Выход"
+    "logout": "Выход",
+    "pleaseSelect": "Сначала выберите элементы"
   },
   "login": {
     "username": "Имя пользователя",
@@ -36,7 +37,8 @@
     "captchaError": "Ошибка капчи.",
     "usernameOrPasswordError": "Неправильное имя пользователя или пароль.",
     "paramsError": "Ошибка параметра.",
-    "loginBanned": "Вход заблокирован."
+    "loginBanned": "Вход заблокирован.",
+    "noLoginMethod": "Обратитесь к администратору для настройки способа входа."
   },
   "menu": {
     "My": "Мой",
@@ -83,6 +85,7 @@
     "oauthBindings": "Привязки OAuth",
     "bound": "Привязан",
     "unbound": "Не привязан",
+    "unbind": "Отвязать",
     "noOauth": "Нет привязок OAuth"
   },
   "myAddressBook": {
@@ -514,6 +517,7 @@
   },
   "oauth": {
     "missingCode": "Missing code",
-    "codeMismatch": "Code mismatch"
+    "codeMismatch": "Code mismatch",
+    "loginSuccess": "Вход выполнен, перенаправление..."
   }
 }
