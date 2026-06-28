@@ -15,7 +15,6 @@ import {
   NEmpty,
   NSpin,
   NText,
-  NAlert,
   NModal,
   type FormRules,
   useMessage,
@@ -23,7 +22,7 @@ import {
 
 import { useUserStore } from '@/stores/user'
 import { useAppStore } from '@/stores/app'
-import { changeCurPwd, myOauth } from '@/api/user'
+import { changeCurInfo, changeCurPwd, myOauth } from '@/api/user'
 import { unbind } from '@/api/oauth'
 import type { UserOauthItem } from '@/types'
 import clipboard from 'clipboard'
@@ -179,8 +178,20 @@ function openEditProfile(): void {
 }
 
 async function handleSaveProfile(): Promise<void> {
-  message.warning(appStore.t('myInfo.editNotAvailable'))
-  editModalShow.value = false
+  editLoading.value = true
+  try {
+    await changeCurInfo({
+      nickname: editForm.nickname,
+      avatar: editForm.avatar,
+    })
+    message.success(appStore.t('myInfo.profileUpdated'))
+    editModalShow.value = false
+    await userStore.info()
+  } catch {
+    // handled by interceptor
+  } finally {
+    editLoading.value = false
+  }
 }
 </script>
 
@@ -308,9 +319,6 @@ async function handleSaveProfile(): Promise<void> {
       :title="$t('myInfo.editProfile')"
       style="width: 480px; max-width: 90vw"
     >
-      <NAlert type="warning" :show-icon="true" style="margin-bottom: 16px">
-        {{ $t('myInfo.editNotAvailable') }}
-      </NAlert>
       <NForm label-placement="top">
         <NFormItem :label="$t('myInfo.nickname')">
           <NInput v-model:value="editForm.nickname" :placeholder="$t('myInfo.nickname')" />

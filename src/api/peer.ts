@@ -1,4 +1,3 @@
-import request from '@/utils/request'
 import { createAdminRequest } from '@/utils/request'
 import type { ApiResponse, PageResult, Peer } from '@/types'
 
@@ -59,5 +58,5 @@ export function batchDelete(data: {
 export function simpleData(data: {
   ids: string[]
 }): Promise<ApiResponse<PageResult<Peer>>> {
-  return request.post('/peer/simpleData', data)
+  return adminRequest.post('/peer/simpleData', data)
 }

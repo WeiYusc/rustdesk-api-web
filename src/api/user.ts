@@ -34,6 +34,13 @@ export function changeCurPwd(data: {
   return request.post('/user/changeCurPwd', data)
 }
 
+export function changeCurInfo(data: {
+  nickname: string
+  avatar: string
+}): Promise<ApiResponse<null>> {
+  return request.post('/user/changeCurInfo', data)
+}
+
 export function myOauth(): Promise<ApiResponse<UserOauthItem[]>> {
   return request.post('/user/myOauth')
 }
@@ -50,7 +57,7 @@ export function register(data: {
 export function groupUsers(data: {
   group_id: number
 }): Promise<ApiResponse<unknown>> {
-  return request.post('/user/groupUsers', data)
+  return adminRequest.post('/user/groupUsers', data)
 }
 
 export function list(params: {

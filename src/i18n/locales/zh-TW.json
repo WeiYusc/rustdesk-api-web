@@ -99,8 +99,8 @@
     "copyFailed": "複製失敗",
     "noServerConfig": "伺服器設定未載入",
     "editProfile": "編輯個人資料",
-    "editNotAvailable": "修改暱稱和頭像需要後端支援，暫未開放",
-    "avatarUrlPlaceholder": "頭像圖片 URL"
+    "avatarUrlPlaceholder": "頭像圖片 URL",
+    "profileUpdated": "個人資料更新成功"
   },
   "myAddressBook": {
     "create": "新增",

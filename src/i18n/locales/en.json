@@ -99,8 +99,8 @@
     "copyFailed": "Copy failed",
     "noServerConfig": "Server config not loaded",
     "editProfile": "Edit Profile",
-    "editNotAvailable": "Editing nickname and avatar requires backend support, not yet available",
-    "avatarUrlPlaceholder": "Avatar image URL"
+    "avatarUrlPlaceholder": "Avatar image URL",
+    "profileUpdated": "Profile updated successfully"
   },
   "myAddressBook": {
     "create": "Create",
