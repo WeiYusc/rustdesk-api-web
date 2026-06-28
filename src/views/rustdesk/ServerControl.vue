@@ -3,6 +3,7 @@ defineOptions({ name: 'ServerCmd' })
 import { computed, h, onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
+  NAlert,
   NButton,
   NCard,
   NCode,
@@ -26,7 +27,7 @@ import {
   type FormInst,
   type FormRules,
 } from 'naive-ui'
-import { cmdCreate, cmdDelete, cmdList, sendCmd, type ServerCmdForm } from '@/api/rustdesk'
+import { cmdCreate, cmdDelete, cmdList, cmdUpdate, sendCmd, type ServerCmdForm } from '@/api/rustdesk'
 import type { ServerCmd } from '@/types'
 
 const { t } = useI18n()
@@ -36,13 +37,12 @@ const dialog = useDialog()
 interface PresetCommand {
   cmd: string
   explainKey: string
-  target: string
 }
 
 const presetCommands: PresetCommand[] = [
-  { cmd: 'get_online_devices', explainKey: 'adminServerCmd.getOnlineDevices', target: '' },
-  { cmd: 'get_all_devices', explainKey: 'adminServerCmd.getAllDevices', target: '' },
-  { cmd: 'reload', explainKey: 'adminServerCmd.reloadService', target: '' },
+  { cmd: 'get_online_devices', explainKey: 'adminServerCmd.getOnlineDevices' },
+  { cmd: 'get_all_devices', explainKey: 'adminServerCmd.getAllDevices' },
+  { cmd: 'reload', explainKey: 'adminServerCmd.reloadService' },
 ]
 
 const cmdExplainMap: Record<string, string> = {
@@ -81,7 +81,6 @@ function targetName(target: string): string {
   return target || '-'
 }
 
-const runningCmd = ref<string>('')
 const simpleResult = ref('')
 
 function formatResult(data: string): string {
@@ -90,20 +89,6 @@ function formatResult(data: string): string {
     return JSON.stringify(JSON.parse(data), null, 2)
   } catch {
     return data
-  }
-}
-
-async function runPreset(cmd: string): Promise<void> {
-  runningCmd.value = cmd
-  simpleResult.value = ''
-  try {
-    const res = await sendCmd({ cmd, target: '' })
-    simpleResult.value = formatResult(res.data)
-    message.success(t('common.success'))
-  } catch {
-    //ignore
-  } finally {
-    runningCmd.value = ''
   }
 }
 
@@ -141,27 +126,40 @@ const columns = computed<DataTableColumns<ServerCmd>>(() => [
   {
     title: t('common.actions'),
     key: 'actions',
-    width: 160,
+    width: 220,
     fixed: 'right',
-    render: (row) =>
-      h(
-        NSpace,
-        { size: 8 },
-        () => [
+    render: (row) => {
+      const actions = [
+        h(
+          NButton,
+          { size: 'small', type: 'primary', onClick: () => openExec(row) },
+          () => t('adminServerCmd.execute'),
+        ),
+      ]
+
+      if (canModifyCommand(row)) {
+        actions.push(
           h(
             NButton,
-            { size: 'small', type: 'primary', onClick: () => openExec(row) },
-            () => t('adminServerCmd.execute'),
+            { size: 'small', type: 'info', ghost: true, onClick: () => openEdit(row) },
+            () => t('common.edit'),
           ),
           h(
             NButton,
             { size: 'small', type: 'error', ghost: true, onClick: () => handleDelete(row) },
             () => t('common.delete'),
           ),
-        ],
-      ),
+        )
+      }
+
+      return h(NSpace, { size: 8 }, () => actions)
+    },
   },
 ])
+
+function canModifyCommand(row: ServerCmd): boolean {
+  return Number(row.id) > 0
+}
 
 let latestRequestId = 0
 
@@ -172,7 +170,7 @@ async function loadData(): Promise<void> {
     const res = await cmdList({ page: pagination.page, page_size: pagination.pageSize })
     if (requestId !== latestRequestId) return
     dataList.value = res.data.list ?? []
-    pagination.itemCount = res.data.total ?? 0
+    pagination.itemCount = Math.max(res.data.total ?? 0, dataList.value.length)
   } catch {
     if (requestId !== latestRequestId) return
   } finally {
@@ -196,6 +194,8 @@ function handlePageSizeChange(pageSize: number): void {
 const formRef = ref<FormInst | null>(null)
 const createModalShow = ref(false)
 const saving = ref(false)
+const editingId = ref<number | null>(null)
+const isEditing = computed(() => editingId.value !== null)
 const formModel = reactive<ServerCmdForm>({
   cmd: '',
   alias: '',
@@ -211,6 +211,7 @@ const rules = computed<FormRules>(() => ({
 }))
 
 function resetForm(): void {
+  editingId.value = null
   formModel.cmd = ''
   formModel.alias = ''
   formModel.option = ''
@@ -224,7 +225,19 @@ function openCreate(): void {
   createModalShow.value = true
 }
 
-async function handleCreate(): Promise<void> {
+function openEdit(row: ServerCmd): void {
+  if (!canModifyCommand(row)) return
+  editingId.value = row.id
+  formModel.cmd = row.cmd
+  formModel.alias = row.alias || ''
+  formModel.option = row.option || ''
+  formModel.explain = row.explain || ''
+  formModel.target = row.target || ''
+  formRef.value?.restoreValidation()
+  createModalShow.value = true
+}
+
+async function handleSave(): Promise<void> {
   try {
     await formRef.value?.validate()
   } catch {
@@ -232,9 +245,14 @@ async function handleCreate(): Promise<void> {
   }
   saving.value = true
   try {
-    await cmdCreate({ ...formModel })
+    if (isEditing.value && editingId.value !== null) {
+      await cmdUpdate({ ...formModel, id: editingId.value })
+    } else {
+      await cmdCreate({ ...formModel })
+    }
     message.success(t('common.success'))
     createModalShow.value = false
+    resetForm()
     loadData()
   } catch {
     //ignore
@@ -276,6 +294,7 @@ async function handleExec(): Promise<void> {
 }
 
 function handleDelete(row: ServerCmd): void {
+  if (!canModifyCommand(row)) return
   dialog.warning({
     title: t('common.confirm'),
     content: t('adminServerCmd.deleteConfirm') + ': ' + row.cmd,
@@ -321,15 +340,16 @@ const referenceCommands = [
             <NButton
               v-for="item in presetCommands"
               :key="item.cmd"
-              :type="runningCmd === item.cmd ? 'primary' : 'default'"
-              :loading="runningCmd === item.cmd"
-              :disabled="!!runningCmd && runningCmd !== item.cmd"
-              @click="runPreset(item.cmd)"
+              disabled
+              :title="$t('adminServerCmd.unsupportedPresetNotice')"
             >
               {{ $t(item.explainKey) }}
             </NButton>
           </NSpace>
-          <div v-if="simpleResult || runningCmd">
+          <NAlert type="warning" :show-icon="false">
+            {{ $t('adminServerCmd.unsupportedPresetNotice') }}
+          </NAlert>
+          <div v-if="simpleResult">
             <NText depth="3" style="font-size: 13px; margin-bottom: 6px; display: block">{{ $t('adminServerCmd.result') }}</NText>
             <NCode :code="simpleResult" word-wrap style="max-height: 400px; overflow-y: auto" />
           </div>
@@ -375,7 +395,7 @@ const referenceCommands = [
     <NModal
       v-model:show="createModalShow"
       preset="card"
-      :title="$t('adminServerCmd.createCmd')"
+      :title="isEditing ? $t('adminServerCmd.editCmd') : $t('adminServerCmd.createCmd')"
       style="width: 520px; max-width: 90vw"
     >
       <NForm ref="formRef" :model="formModel" :rules="rules" label-placement="top">
@@ -398,8 +418,8 @@ const referenceCommands = [
       <template #footer>
         <NSpace justify="end">
           <NButton @click="createModalShow = false">{{ $t('common.cancel') }}</NButton>
-          <NButton type="primary" :loading="saving" @click="handleCreate">
-            {{ $t('common.save') }}
+          <NButton type="primary" :loading="saving" @click="handleSave">
+            {{ isEditing ? $t('adminServerCmd.editCmd') : $t('adminServerCmd.createCmd') }}
           </NButton>
         </NSpace>
       </template>

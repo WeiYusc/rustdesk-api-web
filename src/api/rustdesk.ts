@@ -38,3 +38,7 @@ export function cmdDelete(data: {
 export function cmdCreate(data: ServerCmdForm): Promise<ApiResponse<null>> {
   return adminRequest.post('/rustdesk/cmdCreate', data)
 }
+
+export function cmdUpdate(data: ServerCmdForm & { id: number }): Promise<ApiResponse<null>> {
+  return adminRequest.post('/rustdesk/cmdUpdate', data)
+}
