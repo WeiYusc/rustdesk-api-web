@@ -146,9 +146,7 @@ const rules = computed<FormRules>(() => ({
   client_id: [
     { required: true, message: t('adminOauth.clientIdRequired'), trigger: ['blur', 'input'] },
   ],
-  client_secret: [
-    { required: true, message: t('adminOauth.clientSecretRequired'), trigger: ['blur', 'input'] },
-  ],
+  client_secret: modalMode.value === 'create' ? [{ required: true, message: t('adminOauth.clientSecretRequired'), trigger: ['blur', 'input'] }] : [],
   issuer: [
     {
       validator: (_rule, value: string) => {
@@ -218,7 +216,7 @@ function openEdit(row: Oauth): void {
   formModel.op = row.op
   formModel.oauth_type = row.oauth_type
   formModel.client_id = row.client_id
-  formModel.client_secret = row.client_secret
+  formModel.client_secret = ''
   formModel.issuer = row.issuer
   formModel.scopes = row.scopes
   formModel.auto_register = !!row.auto_register
@@ -246,6 +244,9 @@ async function handleSubmit(): Promise<void> {
       auto_register: formModel.auto_register,
       pkce_enable: formModel.pkce_enable,
       pkce_method: formModel.pkce_enable ? formModel.pkce_method : '',
+    }
+    if (modalMode.value === 'edit' && !payload.client_secret) {
+      delete payload.client_secret
     }
     if (modalMode.value === 'edit' && formModel.id != null) {
       payload.id = formModel.id
@@ -322,7 +323,7 @@ onMounted(loadData)
             v-model:value="formModel.client_secret"
             type="password"
             show-password-on="click"
-            :placeholder="$t('adminOauth.clientSecret')"
+            :placeholder="modalMode === 'edit' ? $t('adminOauth.clientSecretKeepEmpty') : $t('adminOauth.clientSecret')"
           />
         </NFormItem>
         <NFormItem :label="$t('adminOauth.issuer')" path="issuer">

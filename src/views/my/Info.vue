@@ -16,6 +16,7 @@ import {
   NSpin,
   NText,
   NModal,
+  type FormInst,
   type FormRules,
   useMessage,
 } from 'naive-ui'
@@ -32,6 +33,7 @@ const appStore = useAppStore()
 const message = useMessage()
 
 const pwdFormRef = ref()
+const editFormRef = ref<FormInst | null>(null)
 const pwdLoading = ref(false)
 const oauthLoading = ref(false)
 const oauthList = ref<UserOauthItem[]>([])
@@ -71,6 +73,14 @@ const pwdRules = computed<FormRules>(() => ({
 const helloText = computed(() => {
   return appStore.adminConfig.hello || ''
 })
+
+const editRules = computed<FormRules>(() => ({
+  nickname: {
+    required: true,
+    message: appStore.t('myInfo.nicknameRequired'),
+    trigger: ['blur', 'input'],
+  },
+}))
 
 function resetPwdForm(): void {
   pwdForm.old_password = ''
@@ -178,6 +188,11 @@ function openEditProfile(): void {
 }
 
 async function handleSaveProfile(): Promise<void> {
+  try {
+    await editFormRef.value?.validate()
+  } catch {
+    return
+  }
   editLoading.value = true
   try {
     await changeCurInfo({
@@ -319,8 +334,8 @@ async function handleSaveProfile(): Promise<void> {
       :title="$t('myInfo.editProfile')"
       style="width: 480px; max-width: 90vw"
     >
-      <NForm label-placement="top">
-        <NFormItem :label="$t('myInfo.nickname')">
+      <NForm ref="editFormRef" :model="editForm" :rules="editRules" label-placement="top">
+        <NFormItem :label="$t('myInfo.nickname')" path="nickname">
           <NInput v-model:value="editForm.nickname" :placeholder="$t('myInfo.nickname')" />
         </NFormItem>
         <NFormItem :label="$t('myInfo.avatar')">

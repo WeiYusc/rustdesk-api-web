@@ -17,7 +17,7 @@ export interface OauthForm {
   issuer?: string
   scopes?: string
   client_id: string
-  client_secret: string
+  client_secret?: string
   auto_register?: boolean | null
   pkce_enable?: boolean | null
   pkce_method?: string

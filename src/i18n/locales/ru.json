@@ -100,7 +100,8 @@
     "noServerConfig": "Server config not loaded",
     "editProfile": "Edit Profile",
     "avatarUrlPlaceholder": "Avatar image URL",
-    "profileUpdated": "Профиль успешно обновлен"
+    "profileUpdated": "Профиль успешно обновлен",
+    "nicknameRequired": "Please enter nickname"
   },
   "myAddressBook": {
     "create": "Создать",
@@ -511,6 +512,7 @@
     "oauthTypeRequired": "Пожалуйста, выберите тип OAuth",
     "clientIdRequired": "Пожалуйста, введите Client ID",
     "clientSecretRequired": "Пожалуйста, введите Client Secret",
+    "clientSecretKeepEmpty": "Leave empty to keep current",
     "issuerRequired": "Пожалуйста, введите Issuer (обязательно для OIDC)",
     "deleteConfirm": "Вы уверены, что хотите удалить этот OAuth?",
     "yes": "Да",
@@ -539,7 +541,6 @@
     "getAllDevices": "Получить все устройства",
     "reloadService": "Перезагрузить сервис",
     "unsupportedPresetNotice": "Эти предустановленные команды пока не поддерживаются текущим backend. Используйте расширенный режим для поддерживаемых команд с конкретной целью.",
-    "presetCommands": "Предустановленные команды",
     "explainShowHelp": "Show help",
     "explainRelayServers": "Set or show relay servers",
     "explainIpBlocker": "Block/unblock IP or show blocked IPs",

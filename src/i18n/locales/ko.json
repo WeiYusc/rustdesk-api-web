@@ -100,7 +100,8 @@
     "noServerConfig": "Server config not loaded",
     "editProfile": "Edit Profile",
     "avatarUrlPlaceholder": "Avatar image URL",
-    "profileUpdated": "프로필이 성공적으로 업데이트되었습니다"
+    "profileUpdated": "프로필이 성공적으로 업데이트되었습니다",
+    "nicknameRequired": "Please enter nickname"
   },
   "myAddressBook": {
     "create": "생성",
@@ -511,6 +512,7 @@
     "oauthTypeRequired": "OAuth 유형을 선택해주세요",
     "clientIdRequired": "Client ID를 입력해주세요",
     "clientSecretRequired": "Client Secret을 입력해주세요",
+    "clientSecretKeepEmpty": "Leave empty to keep current",
     "issuerRequired": "Issuer를 입력해주세요 (OIDC 필수)",
     "deleteConfirm": "이 OAuth를 삭제하시겠습니까?",
     "yes": "예",
@@ -539,7 +541,6 @@
     "getAllDevices": "모든 장치 가져오기",
     "reloadService": "서비스 새로고침",
     "unsupportedPresetNotice": "현재 백엔드는 아직 이러한 사전 설정 명령을 지원하지 않습니다. 지원되는 대상별 명령은 고급 모드를 사용하세요.",
-    "presetCommands": "사전 설정 명령",
     "explainShowHelp": "Show help",
     "explainRelayServers": "Set or show relay servers",
     "explainIpBlocker": "Block/unblock IP or show blocked IPs",

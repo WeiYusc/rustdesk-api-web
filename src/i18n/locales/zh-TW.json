@@ -100,7 +100,8 @@
     "noServerConfig": "伺服器設定未載入",
     "editProfile": "編輯個人資料",
     "avatarUrlPlaceholder": "頭像圖片 URL",
-    "profileUpdated": "個人資料更新成功"
+    "profileUpdated": "個人資料更新成功",
+    "nicknameRequired": "Please enter nickname"
   },
   "myAddressBook": {
     "create": "新增",
@@ -511,6 +512,7 @@
     "oauthTypeRequired": "請選擇 OAuth 類型",
     "clientIdRequired": "請輸入 Client ID",
     "clientSecretRequired": "請輸入 Client Secret",
+    "clientSecretKeepEmpty": "Leave empty to keep current",
     "issuerRequired": "請輸入 Issuer（OIDC 必填）",
     "deleteConfirm": "確定要刪除此 OAuth 嗎？",
     "yes": "是",
@@ -539,7 +541,6 @@
     "getAllDevices": "取得所有裝置",
     "reloadService": "重載服務",
     "unsupportedPresetNotice": "目前後端尚不支援這些預設命令。請在進階模式中使用支援的指定目標命令。",
-    "presetCommands": "預設命令",
     "explainShowHelp": "顯示說明",
     "explainRelayServers": "設定或查看中繼伺服器清單",
     "explainIpBlocker": "封鎖/解封IP或查看已封鎖IP",

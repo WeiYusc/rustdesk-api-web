@@ -100,7 +100,8 @@
     "noServerConfig": "Server config not loaded",
     "editProfile": "Edit Profile",
     "avatarUrlPlaceholder": "Avatar image URL",
-    "profileUpdated": "Profile updated successfully"
+    "profileUpdated": "Profile updated successfully",
+    "nicknameRequired": "Please enter nickname"
   },
   "myAddressBook": {
     "create": "Create",
@@ -511,6 +512,7 @@
     "oauthTypeRequired": "Please select oauth type",
     "clientIdRequired": "Please enter client id",
     "clientSecretRequired": "Please enter client secret",
+    "clientSecretKeepEmpty": "Leave empty to keep current",
     "issuerRequired": "Please enter issuer (required for OIDC)",
     "deleteConfirm": "Are you sure you want to delete this oauth?",
     "yes": "Yes",
@@ -539,7 +541,6 @@
     "getAllDevices": "Get All Devices",
     "reloadService": "Reload Service",
     "unsupportedPresetNotice": "These preset commands are not supported by the current backend yet. Use Advanced Mode for supported target-specific commands.",
-    "presetCommands": "Preset Commands",
     "explainShowHelp": "Show help",
     "explainRelayServers": "Set or show relay servers",
     "explainIpBlocker": "Block/unblock IP or show blocked IPs",

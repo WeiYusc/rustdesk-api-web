@@ -81,8 +81,6 @@ function targetName(target: string): string {
   return target || '-'
 }
 
-const simpleResult = ref('')
-
 function formatResult(data: string): string {
   if (!data) return ''
   try {
@@ -349,11 +347,6 @@ const referenceCommands = [
           <NAlert type="warning" :show-icon="false">
             {{ $t('adminServerCmd.unsupportedPresetNotice') }}
           </NAlert>
-          <div v-if="simpleResult">
-            <NText depth="3" style="font-size: 13px; margin-bottom: 6px; display: block">{{ $t('adminServerCmd.result') }}</NText>
-            <NCode :code="simpleResult" word-wrap style="max-height: 400px; overflow-y: auto" />
-          </div>
-          <NText v-else depth="3" style="font-size: 13px">{{ $t('adminServerCmd.noResult') }}</NText>
         </NSpace>
       </NTabPane>
 

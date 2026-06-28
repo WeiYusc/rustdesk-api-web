@@ -100,7 +100,8 @@
     "noServerConfig": "服务器配置未加载",
     "editProfile": "编辑个人资料",
     "avatarUrlPlaceholder": "头像图片 URL",
-    "profileUpdated": "个人资料更新成功"
+    "profileUpdated": "个人资料更新成功",
+    "nicknameRequired": "请输入昵称"
   },
   "myAddressBook": {
     "create": "新建",
@@ -337,8 +338,8 @@
     "selectUsers": "选择用户",
     "selectTags": "选择标签",
     "passwordType": "密码类型",
-    "passwordTypeOnce": "固定",
-    "passwordTypeFixed": "长期",
+    "passwordTypeOnce": "一次性",
+    "passwordTypeFixed": "固定",
     "expire": "过期时间（秒，0=永不过期）",
     "shareToken": "分享令牌",
     "shareTokenCopied": "分享令牌已复制",
@@ -490,8 +491,8 @@
     "deleteSuccess": "删除成功",
     "reset": "重置",
     "neverExpires": "永不过期",
-    "typeOnce": "固定",
-    "typeFixed": "长期"
+    "typeOnce": "一次性",
+    "typeFixed": "固定"
   },
   "adminOauth": {
     "title": "OAuth 管理",
@@ -511,6 +512,7 @@
     "oauthTypeRequired": "请选择 OAuth 类型",
     "clientIdRequired": "请输入 Client ID",
     "clientSecretRequired": "请输入 Client Secret",
+    "clientSecretKeepEmpty": "留空不修改",
     "issuerRequired": "请输入 Issuer（OIDC 必填）",
     "deleteConfirm": "确定要删除此 OAuth 吗？",
     "yes": "是",
@@ -539,7 +541,6 @@
     "getAllDevices": "获取所有设备",
     "reloadService": "重载服务",
     "unsupportedPresetNotice": "当前后端尚不支持这些预设命令。请在高级模式中使用支持的指定目标命令。",
-    "presetCommands": "预设命令",
     "explainShowHelp": "显示帮助",
     "explainRelayServers": "设置或查看中继服务器列表",
     "explainIpBlocker": "封禁/解封IP或查看已封禁IP",
