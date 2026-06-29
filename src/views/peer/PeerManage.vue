@@ -26,6 +26,7 @@ import {
   batchDelete,
   type PeerForm,
 } from '@/api/peer'
+import { connectByClient } from '@/utils/peer'
 import { list as listGroups } from '@/api/deviceGroup'
 import type { Peer } from '@/types'
 import { formatTimeOrDash } from '@/utils/format'
@@ -85,13 +86,18 @@ const columns = computed<DataTableColumns<Peer>>(() => [
   {
     title: t('common.actions'),
     key: 'actions',
-    width: 180,
+    width: 240,
     render: (row) =>
       h(
         NSpace,
         { size: 8 },
         {
           default: () => [
+            h(
+              NButton,
+              { size: 'small', type: 'success', ghost: true, onClick: () => connectByClient(row.id) },
+              { default: () => t('common.connect') },
+            ),
             h(
               NButton,
               { size: 'small', onClick: () => openEdit(row) },

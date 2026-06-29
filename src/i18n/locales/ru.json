@@ -21,7 +21,8 @@
     "noData": "Нет данных",
     "logout": "Выход",
     "pleaseSelect": "Сначала выберите элементы",
-    "timeout": "Время запроса истекло"
+    "timeout": "Время запроса истекло",
+    "connect": "Подключить"
   },
   "login": {
     "username": "Имя пользователя",
@@ -104,7 +105,7 @@
     "avatarExternal": "External link",
     "avatarEmptyHelp": "Choose an image or enter an external link.",
     "avatarInvalidType": "Only JPG, PNG, and WebP images are supported",
-    "avatarTooLarge": "Avatar image must be 2 MB or smaller",
+    "avatarTooLarge": "Avatar image must be 10 MB or smaller",
     "avatarPreviewFailed": "Avatar preview failed. Please choose another image or external link.",
     "profileUpdated": "Профиль успешно обновлен",
     "nicknameRequired": "Please enter nickname",

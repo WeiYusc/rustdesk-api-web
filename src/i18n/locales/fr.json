@@ -21,7 +21,8 @@
     "noData": "Aucune donnée",
     "logout": "Déconnexion",
     "pleaseSelect": "Veuillez d'abord sélectionner",
-    "timeout": "Délai de requête dépassé"
+    "timeout": "Délai de requête dépassé",
+    "connect": "Connecter"
   },
   "login": {
     "username": "Nom d'utilisateur",
@@ -104,7 +105,7 @@
     "avatarExternal": "External link",
     "avatarEmptyHelp": "Choose an image or enter an external link.",
     "avatarInvalidType": "Only JPG, PNG, and WebP images are supported",
-    "avatarTooLarge": "Avatar image must be 2 MB or smaller",
+    "avatarTooLarge": "Avatar image must be 10 MB or smaller",
     "avatarPreviewFailed": "Avatar preview failed. Please choose another image or external link.",
     "profileUpdated": "Profil mis à jour avec succès",
     "nicknameRequired": "Please enter nickname",

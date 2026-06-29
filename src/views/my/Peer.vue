@@ -6,6 +6,8 @@ import { list } from '@/api/my/peer'
 import { useAppStore } from '@/stores/app'
 import type { Peer } from '@/types'
 import { formatTimeOrDash } from '@/utils/format'
+import { connectByClient } from '@/utils/peer'
+import { h } from 'vue'
 
 const appStore = useAppStore()
 
@@ -68,6 +70,17 @@ const columns = computed<DataTableColumns<Peer>>(() => [
     title: appStore.t('myPeer.lastOnlineTime'),
     key: 'last_online_time',
     render: (row: Peer) => formatTimeOrDash(row.last_online_time),
+  },
+  {
+    title: appStore.t('common.actions'),
+    key: 'actions',
+    width: 100,
+    render: (row: Peer) =>
+      h(
+        NButton,
+        { size: 'small', type: 'success', ghost: true, onClick: () => connectByClient(row.id) },
+        { default: () => appStore.t('common.connect') },
+      ),
   },
 ])
 

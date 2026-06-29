@@ -207,7 +207,7 @@ function handleAvatarFileChange(event: Event): void {
     input.value = ''
     return
   }
-  if (file.size > 2 * 1024 * 1024) {
+  if (file.size > 10 * 1024 * 1024) {
     message.error(appStore.t('myInfo.avatarTooLarge'))
     input.value = ''
     return

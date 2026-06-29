@@ -21,7 +21,8 @@
     "noData": "暂无数据",
     "logout": "退出登录",
     "pleaseSelect": "请先选择",
-    "timeout": "请求超时"
+    "timeout": "请求超时",
+    "connect": "连接"
   },
   "login": {
     "username": "用户名",
@@ -104,7 +105,7 @@
     "avatarExternal": "外部链接",
     "avatarEmptyHelp": "请选择图片或输入外部链接。",
     "avatarInvalidType": "仅支持 JPG、PNG、WebP 图片",
-    "avatarTooLarge": "头像图片不能超过 2MB",
+    "avatarTooLarge": "头像图片不能超过 10MB",
     "avatarPreviewFailed": "头像预览失败，请更换图片或外部链接。",
     "profileUpdated": "个人资料更新成功",
     "nicknameRequired": "请输入昵称",

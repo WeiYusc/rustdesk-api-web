@@ -31,6 +31,7 @@ import { list as listTags } from '@/api/my/tag'
 import { list as listPeers } from '@/api/my/peer'
 import type { AddressBook, Peer } from '@/types'
 import { useIsMobile } from '@/composables/useIsMobile'
+import { connectByClient } from '@/utils/peer'
 
 interface AddressBookFormData {
   row_id?: number
@@ -175,9 +176,14 @@ const columns = computed<DataTableColumns<AddressBook>>(() => [
   {
     title: appStore.t('common.actions'),
     key: 'actions',
-    width: 160,
+    width: 220,
     render(row) {
       return h(NSpace, null, () => [
+        h(
+          NButton,
+          { size: 'small', type: 'success', ghost: true, onClick: () => connectByClient(row.id) },
+          () => appStore.t('common.connect'),
+        ),
         h(
           NButton,
           { size: 'small', onClick: () => openEdit(row) },

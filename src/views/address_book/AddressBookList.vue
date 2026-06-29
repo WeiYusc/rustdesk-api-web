@@ -35,6 +35,7 @@ import { list as listUsers } from '@/api/user'
 import { list as listPeers } from '@/api/peer'
 import type { AddressBook, Peer } from '@/types'
 import { useIsMobile } from '@/composables/useIsMobile'
+import { connectByClient } from '@/utils/peer'
 
 const { t } = useI18n()
 const message = useMessage()
@@ -218,9 +219,14 @@ const columns = computed<DataTableColumns<AddressBook>>(() => [
   {
     title: t('common.actions'),
     key: 'actions',
-    width: 240,
+    width: 300,
     render(row) {
       return h(NSpace, null, () => [
+        h(
+          NButton,
+          { size: 'small', type: 'success', ghost: true, onClick: () => connectByClient(row.id) },
+          () => t('common.connect'),
+        ),
         h(
           NButton,
           { size: 'small', onClick: () => openEdit(row) },

@@ -21,7 +21,8 @@
     "noData": "No Data",
     "logout": "Logout",
     "pleaseSelect": "Please select first",
-    "timeout": "Request timed out"
+    "timeout": "Request timed out",
+    "connect": "Connect"
   },
   "login": {
     "username": "Username",
@@ -104,7 +105,7 @@
     "avatarExternal": "External link",
     "avatarEmptyHelp": "Choose an image or enter an external link.",
     "avatarInvalidType": "Only JPG, PNG, and WebP images are supported",
-    "avatarTooLarge": "Avatar image must be 2 MB or smaller",
+    "avatarTooLarge": "Avatar image must be 10 MB or smaller",
     "avatarPreviewFailed": "Avatar preview failed. Please choose another image or external link.",
     "profileUpdated": "Profile updated successfully",
     "nicknameRequired": "Please enter nickname",

@@ -21,7 +21,8 @@
     "noData": "데이터 없음",
     "logout": "로그아웃",
     "pleaseSelect": "먼저 선택하세요",
-    "timeout": "요청 시간 초과"
+    "timeout": "요청 시간 초과",
+    "connect": "연결"
   },
   "login": {
     "username": "사용자 이름",
@@ -104,7 +105,7 @@
     "avatarExternal": "External link",
     "avatarEmptyHelp": "Choose an image or enter an external link.",
     "avatarInvalidType": "Only JPG, PNG, and WebP images are supported",
-    "avatarTooLarge": "Avatar image must be 2 MB or smaller",
+    "avatarTooLarge": "Avatar image must be 10 MB or smaller",
     "avatarPreviewFailed": "Avatar preview failed. Please choose another image or external link.",
     "profileUpdated": "프로필이 성공적으로 업데이트되었습니다",
     "nicknameRequired": "Please enter nickname",
