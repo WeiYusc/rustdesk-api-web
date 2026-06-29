@@ -119,7 +119,18 @@ const formModel = reactive<{ id: number | undefined; name: string; color: number
 })
 const rules = computed<FormRules>(() => ({
   name: [{ required: true, message: t('myTag.nameRequired'), trigger: ['blur', 'input'] }],
-  color: [{ required: true, type: 'number', message: t('myTag.colorRequired'), trigger: 'change' }],
+  color: [
+    {
+      type: 'number',
+      message: t('myTag.colorRequired'),
+      trigger: ['blur', 'change'],
+      validator: (_rule, value: number | null | undefined) =>
+        typeof value === 'number'
+        && Number.isInteger(value)
+        && value >= 0
+        && value < TAG_COLOR_HEX.length,
+    },
+  ],
 }))
 
 let latestRequestId = 0
