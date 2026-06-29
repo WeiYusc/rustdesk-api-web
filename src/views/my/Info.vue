@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineOptions({ name: 'MyInfo' })
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, watch, nextTick } from 'vue'
 import {
   NCard,
   NForm,
@@ -16,19 +16,19 @@ import {
   NSpin,
   NText,
   NModal,
-  NRadioButton,
   NRadioGroup,
-  NSlider,
+  NRadioButton,
   type FormInst,
   type FormRules,
   useMessage,
 } from 'naive-ui'
-
+import Cropper from 'cropperjs'
+import 'cropperjs/dist/cropper.css'
 import { useUserStore } from '@/stores/user'
 import { useAppStore } from '@/stores/app'
-import { changeCurInfo, changeCurPwd, myOauth } from '@/api/user'
-import { uploadFile } from '@/api/file'
+import { changeCurPwd, changeCurInfo, myOauth } from '@/api/user'
 import { unbind } from '@/api/oauth'
+import { uploadFile } from '@/api/file'
 import type { UserOauthItem } from '@/types'
 import clipboard from 'clipboard'
 
@@ -36,9 +36,6 @@ const userStore = useUserStore()
 const appStore = useAppStore()
 const message = useMessage()
 
-const pwdFormRef = ref()
-const editFormRef = ref<FormInst | null>(null)
-const pwdLoading = ref(false)
 const oauthLoading = ref(false)
 const oauthList = ref<UserOauthItem[]>([])
 
@@ -48,70 +45,14 @@ const pwdForm = reactive({
   confirm_password: '',
 })
 
-const pwdRules = computed<FormRules>(() => ({
-  old_password: {
-    required: true,
-    message: appStore.t('myInfo.oldPassword'),
-    trigger: 'blur',
-  },
-  new_password: {
-    required: true,
-    message: appStore.t('myInfo.newPassword'),
-    trigger: 'blur',
-  },
-  confirm_password: {
-    required: true,
-    trigger: 'blur',
-    validator: (_rule, value: string) => {
-      if (!value) {
-        return new Error(appStore.t('myInfo.confirmPassword'))
-      }
-      if (value !== pwdForm.new_password) {
-        return new Error(appStore.t('myInfo.passwordMismatch'))
-      }
-      return true
-    },
-  },
-}))
-
 const helloText = computed(() => {
   return appStore.adminConfig.hello || ''
 })
-
-const editRules = computed<FormRules>(() => ({
-  nickname: {
-    required: true,
-    message: appStore.t('myInfo.nicknameRequired'),
-    trigger: ['blur', 'input'],
-  },
-}))
 
 function resetPwdForm(): void {
   pwdForm.old_password = ''
   pwdForm.new_password = ''
   pwdForm.confirm_password = ''
-}
-
-async function handleChangePwd(e: Event): Promise<void> {
-  e.preventDefault()
-  try {
-    await pwdFormRef.value?.validate()
-  } catch {
-    return
-  }
-  pwdLoading.value = true
-  try {
-    await changeCurPwd({
-      old_password: pwdForm.old_password,
-      new_password: pwdForm.new_password,
-    })
-    message.success(appStore.t('myInfo.passwordChanged'))
-    resetPwdForm()
-  } catch {
-    // handled by interceptor
-  } finally {
-    pwdLoading.value = false
-  }
 }
 
 async function loadOauth(): Promise<void> {
@@ -165,30 +106,15 @@ const serverConfigText = computed(() => {
   return lines.join('\n')
 })
 
-function base64UrlEncode(bytes: Uint8Array): string {
-  let binary = ''
-  bytes.forEach((byte) => {
-    binary += String.fromCharCode(byte)
-  })
-  return btoa(binary)
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-}
-
 const serverConfigImportText = computed(() => {
   const cfg = appStore.serverConfig
   if (!cfg) return ''
-  const config = {
-    host: cfg.id_server?.trim() || '',
-    relay: cfg.relay_server?.trim() || '',
-    api: cfg.api_server?.trim() || '',
-    key: cfg.key?.trim() || '',
-  }
-  if (!config.host) return ''
-  return base64UrlEncode(new TextEncoder().encode(JSON.stringify(config)))
-    .split('')
-    .reverse()
-    .join('')
+  const parts: string[] = []
+  if (cfg.id_server) parts.push(cfg.id_server)
+  if (cfg.relay_server) parts.push(cfg.relay_server)
+  if (cfg.api_server) parts.push(cfg.api_server)
+  if (cfg.key) parts.push(cfg.key)
+  return parts.join(',')
 })
 
 function copyCredentials(): void {
@@ -224,13 +150,18 @@ const editForm = reactive({
   avatar: '',
 })
 const editLoading = ref(false)
+const editFormRef = ref<FormInst | null>(null)
 const avatarMode = ref<'upload' | 'external'>('upload')
 const avatarPreviewUrl = ref('')
-const avatarScale = ref(1)
-const avatarOffsetX = ref(0)
-const avatarOffsetY = ref(0)
-const avatarCanvasRef = ref<HTMLCanvasElement | null>(null)
+const cropperImageRef = ref<HTMLImageElement | null>(null)
+let cropperInstance: Cropper | null = null
 let avatarObjectUrl = ''
+
+const editRules = computed<FormRules>(() => ({
+  nickname: [
+    { required: true, message: appStore.t('myInfo.nicknameRequired'), trigger: ['blur', 'input'] },
+  ],
+}))
 
 function revokeAvatarObjectUrl(): void {
   if (avatarObjectUrl) {
@@ -239,12 +170,17 @@ function revokeAvatarObjectUrl(): void {
   }
 }
 
+function destroyCropper(): void {
+  if (cropperInstance) {
+    cropperInstance.destroy()
+    cropperInstance = null
+  }
+}
+
 function resetAvatarEditor(): void {
+  destroyCropper()
   revokeAvatarObjectUrl()
   avatarPreviewUrl.value = editForm.avatar || ''
-  avatarScale.value = 1
-  avatarOffsetX.value = 0
-  avatarOffsetY.value = 0
 }
 
 function openEditProfile(): void {
@@ -258,6 +194,7 @@ function openEditProfile(): void {
 
 function closeEditProfile(): void {
   editModalShow.value = false
+  destroyCropper()
   revokeAvatarObjectUrl()
 }
 
@@ -275,13 +212,12 @@ function handleAvatarFileChange(event: Event): void {
     input.value = ''
     return
   }
+  destroyCropper()
   revokeAvatarObjectUrl()
   avatarObjectUrl = URL.createObjectURL(file)
   avatarPreviewUrl.value = avatarObjectUrl
   avatarMode.value = 'upload'
-  avatarScale.value = 1
-  avatarOffsetX.value = 0
-  avatarOffsetY.value = 0
+  nextTick(() => initCropper())
 }
 
 function handleExternalAvatarInput(value: string): void {
@@ -289,33 +225,57 @@ function handleExternalAvatarInput(value: string): void {
   avatarPreviewUrl.value = editForm.avatar
 }
 
+function initCropper(): void {
+  if (!cropperImageRef.value || !avatarPreviewUrl.value) return
+  destroyCropper()
+  cropperInstance = new Cropper(cropperImageRef.value, {
+    aspectRatio: 1,
+    viewMode: 1,
+    dragMode: 'move',
+    autoCropArea: 0.9,
+    cropBoxResizable: true,
+    cropBoxMovable: true,
+    background: false,
+    responsive: true,
+    checkCrossOrigin: false,
+  })
+}
+
+watch(avatarMode, (mode) => {
+  if (mode === 'upload' && avatarPreviewUrl.value) {
+    nextTick(() => initCropper())
+  } else {
+    destroyCropper()
+  }
+})
+
+watch(avatarPreviewUrl, () => {
+  if (avatarMode.value === 'upload' && avatarPreviewUrl.value) {
+    nextTick(() => initCropper())
+  }
+})
+
 async function renderCroppedAvatarBlob(): Promise<Blob | null> {
-  if (!avatarPreviewUrl.value) return null
-  const image = new Image()
-  image.crossOrigin = 'anonymous'
-  image.src = avatarPreviewUrl.value
-  try {
-    await image.decode()
-  } catch {
+  if (avatarMode.value === 'external' || !cropperInstance) {
     return null
   }
-  const canvas = avatarCanvasRef.value || document.createElement('canvas')
-  const size = 512
-  canvas.width = size
-  canvas.height = size
-  const ctx = canvas.getContext('2d')
-  if (!ctx) return null
-  ctx.clearRect(0, 0, size, size)
-  ctx.fillStyle = '#fff'
-  ctx.fillRect(0, 0, size, size)
-  const baseScale = Math.max(size / image.naturalWidth, size / image.naturalHeight)
-  const scale = baseScale * avatarScale.value
-  const width = image.naturalWidth * scale
-  const height = image.naturalHeight * scale
-  const x = (size - width) / 2 + avatarOffsetX.value
-  const y = (size - height) / 2 + avatarOffsetY.value
-  ctx.drawImage(image, x, y, width, height)
-  return new Promise((resolve) => canvas.toBlob(resolve, 'image/webp', 0.9))
+  return new Promise((resolve) => {
+    const canvas = cropperInstance!.getCroppedCanvas({
+      width: 512,
+      height: 512,
+      imageSmoothingEnabled: true,
+      imageSmoothingQuality: 'high',
+    })
+    if (!canvas) {
+      resolve(null)
+      return
+    }
+    canvas.toBlob(
+      (blob: Blob | null) => resolve(blob),
+      'image/webp',
+      0.9,
+    )
+  })
 }
 
 async function uploadEditedAvatar(): Promise<string> {
@@ -343,9 +303,17 @@ async function handleSaveProfile(): Promise<void> {
       email: editForm.email,
       avatar,
     })
+    if (pwdForm.old_password && pwdForm.new_password) {
+      await changeCurPwd({
+        old_password: pwdForm.old_password,
+        new_password: pwdForm.new_password,
+      })
+    }
     message.success(appStore.t('myInfo.profileUpdated'))
     editModalShow.value = false
+    destroyCropper()
     revokeAvatarObjectUrl()
+    resetPwdForm()
     await userStore.info()
   } catch (error) {
     if (error instanceof Error) {
@@ -365,7 +333,7 @@ async function handleSaveProfile(): Promise<void> {
 
     <NCard :title="$t('myInfo.profile')" :bordered="false">
       <template #header-extra>
-        <NButton size="small" @click="openEditProfile">{{ $t('common.edit') }}</NButton>
+        <NButton size="small" type="primary" ghost @click="openEditProfile">{{ $t('common.edit') }}</NButton>
       </template>
       <NSpace align="center" :size="24">
         <NAvatar
@@ -387,42 +355,6 @@ async function handleSaveProfile(): Promise<void> {
           </NDescriptionsItem>
         </NDescriptions>
       </NSpace>
-    </NCard>
-
-    <NCard :title="$t('myInfo.changePassword')" :bordered="false">
-      <NForm
-        ref="pwdFormRef"
-        :model="pwdForm"
-        :rules="pwdRules"
-        label-placement="left"
-        style="max-width: 480px"
-        @submit="handleChangePwd"
-      >
-        <NFormItem :label="$t('myInfo.oldPassword')" path="old_password">
-          <NInput
-            v-model:value="pwdForm.old_password"
-            type="password"
-            show-password-on="click"
-          />
-        </NFormItem>
-        <NFormItem :label="$t('myInfo.newPassword')" path="new_password">
-          <NInput
-            v-model:value="pwdForm.new_password"
-            type="password"
-            show-password-on="click"
-          />
-        </NFormItem>
-        <NFormItem :label="$t('myInfo.confirmPassword')" path="confirm_password">
-          <NInput
-            v-model:value="pwdForm.confirm_password"
-            type="password"
-            show-password-on="click"
-          />
-        </NFormItem>
-        <NButton type="primary" :loading="pwdLoading" @click="handleChangePwd">
-          {{ $t('common.save') }}
-        </NButton>
-      </NForm>
     </NCard>
 
     <NCard :title="$t('myInfo.serverCredentials')" :bordered="false">
@@ -486,6 +418,7 @@ async function handleSaveProfile(): Promise<void> {
       preset="card"
       :title="$t('myInfo.editProfile')"
       style="width: 680px; max-width: 94vw"
+      @after-leave="destroyCropper"
     >
       <NForm ref="editFormRef" :model="editForm" :rules="editRules" label-placement="top">
         <NFormItem :label="$t('myInfo.nickname')" path="nickname">
@@ -516,34 +449,40 @@ async function handleSaveProfile(): Promise<void> {
               :placeholder="$t('myInfo.avatarUrlPlaceholder')"
               @update:value="handleExternalAvatarInput"
             />
-            <NSpace v-if="avatarPreviewUrl" align="start" :size="20" wrap>
-              <div class="avatar-crop-preview">
+            <NSpace v-if="avatarMode === 'upload' && avatarPreviewUrl" vertical :size="12">
+              <NText depth="3" style="font-size: 13px">{{ $t('myInfo.avatarCropHelp') }}</NText>
+              <div class="avatar-cropper-wrapper">
                 <img
+                  ref="cropperImageRef"
                   :src="avatarPreviewUrl"
-                  :style="{
-                    transform: `translate(${avatarOffsetX / 8}px, ${avatarOffsetY / 8}px) scale(${avatarScale})`,
-                  }"
-                  alt="avatar preview"
+                  alt="avatar"
+                  style="max-width: 100%; display: block"
                 />
               </div>
-              <NSpace vertical style="min-width: 220px; flex: 1">
-                <NText depth="3">{{ $t('myInfo.avatarPreviewHelp') }}</NText>
-                <div>
-                  <NText depth="3">{{ $t('myInfo.avatarScale') }}</NText>
-                  <NSlider v-model:value="avatarScale" :min="1" :max="3" :step="0.05" />
-                </div>
-                <div>
-                  <NText depth="3">{{ $t('myInfo.avatarOffsetX') }}</NText>
-                  <NSlider v-model:value="avatarOffsetX" :min="-180" :max="180" :step="1" />
-                </div>
-                <div>
-                  <NText depth="3">{{ $t('myInfo.avatarOffsetY') }}</NText>
-                  <NSlider v-model:value="avatarOffsetY" :min="-180" :max="180" :step="1" />
-                </div>
-              </NSpace>
             </NSpace>
-            <NText v-else depth="3">{{ $t('myInfo.avatarEmptyHelp') }}</NText>
-            <canvas ref="avatarCanvasRef" style="display: none"></canvas>
+            <NText v-else-if="avatarMode === 'upload'" depth="3">{{ $t('myInfo.avatarEmptyHelp') }}</NText>
+          </NSpace>
+        </NFormItem>
+        <NFormItem :label="$t('myInfo.changePassword')">
+          <NSpace vertical style="width: 100%">
+            <NInput
+              v-model:value="pwdForm.old_password"
+              type="password"
+              show-password-on="click"
+              :placeholder="$t('myInfo.oldPassword')"
+            />
+            <NInput
+              v-model:value="pwdForm.new_password"
+              type="password"
+              show-password-on="click"
+              :placeholder="$t('myInfo.newPassword')"
+            />
+            <NInput
+              v-model:value="pwdForm.confirm_password"
+              type="password"
+              show-password-on="click"
+              :placeholder="$t('myInfo.confirmPassword')"
+            />
           </NSpace>
         </NFormItem>
       </NForm>
@@ -560,28 +499,17 @@ async function handleSaveProfile(): Promise<void> {
 </template>
 
 <style scoped>
-.avatar-crop-preview {
-  align-items: center;
-  background: linear-gradient(45deg, #eee 25%, transparent 25%),
-    linear-gradient(-45deg, #eee 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #eee 75%),
-    linear-gradient(-45deg, transparent 75%, #eee 75%);
-  background-color: #fff;
-  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
-  background-size: 16px 16px;
-  border: 1px solid rgba(128, 128, 128, 0.35);
-  border-radius: 50%;
-  display: flex;
-  height: 180px;
-  justify-content: center;
+.avatar-cropper-wrapper {
+  width: 100%;
+  max-width: 400px;
+  height: 300px;
+  border: 1px solid var(--n-border-color, #efeff5);
+  border-radius: 8px;
   overflow: hidden;
-  width: 180px;
 }
 
-.avatar-crop-preview img {
-  height: 100%;
-  object-fit: cover;
-  transform-origin: center;
-  width: 100%;
+.avatar-cropper-wrapper img {
+  display: block;
+  max-width: 100%;
 }
 </style>

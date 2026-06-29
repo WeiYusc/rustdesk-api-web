@@ -102,10 +102,6 @@
     "avatarUrlPlaceholder": "頭像圖片 URL",
     "avatarUpload": "上傳頭像",
     "avatarExternal": "外部連結",
-    "avatarPreviewHelp": "可調整裁切區域和大小，儲存時會自動生成適合頭像顯示的方形圖片。",
-    "avatarScale": "縮放",
-    "avatarOffsetX": "左右位置",
-    "avatarOffsetY": "上下位置",
     "avatarEmptyHelp": "請選擇圖片或輸入外部連結。",
     "avatarInvalidType": "僅支援 JPG、PNG、WebP 圖片",
     "avatarTooLarge": "頭像圖片不能超過 2MB",
@@ -114,7 +110,8 @@
     "nicknameRequired": "Please enter nickname",
     "clientConfigDesc": "用戶端匯入設定按鈕會複製 RustDesk 官方相容的匯入字串，可直接貼到用戶端伺服器設定匯入框。",
     "copyClientConfig": "複製用戶端匯入設定",
-    "clientConfigCopied": "用戶端匯入設定已複製"
+    "clientConfigCopied": "用戶端匯入設定已複製",
+    "avatarCropHelp": "拖曳圖片調整位置，滾輪縮放"
   },
   "myAddressBook": {
     "create": "新增",

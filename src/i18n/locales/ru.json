@@ -102,10 +102,6 @@
     "avatarUrlPlaceholder": "Avatar image URL",
     "avatarUpload": "Upload avatar",
     "avatarExternal": "External link",
-    "avatarPreviewHelp": "Adjust crop area and size. Saving generates a square image suitable for avatar display.",
-    "avatarScale": "Scale",
-    "avatarOffsetX": "Horizontal position",
-    "avatarOffsetY": "Vertical position",
     "avatarEmptyHelp": "Choose an image or enter an external link.",
     "avatarInvalidType": "Only JPG, PNG, and WebP images are supported",
     "avatarTooLarge": "Avatar image must be 2 MB or smaller",
@@ -114,7 +110,8 @@
     "nicknameRequired": "Please enter nickname",
     "clientConfigDesc": "Copy Client Import Config produces the official RustDesk-compatible import string for the client server configuration import box.",
     "copyClientConfig": "Copy Client Import Config",
-    "clientConfigCopied": "Client import config copied"
+    "clientConfigCopied": "Client import config copied",
+    "avatarCropHelp": "Перетаскивайте для перемещения, прокрутка для масштаба"
   },
   "myAddressBook": {
     "create": "Создать",
