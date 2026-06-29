@@ -101,7 +101,10 @@
     "editProfile": "Edit Profile",
     "avatarUrlPlaceholder": "Avatar image URL",
     "profileUpdated": "Profile updated successfully",
-    "nicknameRequired": "Please enter nickname"
+    "nicknameRequired": "Please enter nickname",
+    "clientConfigDesc": "Copy Client Import Config produces the official RustDesk-compatible import string for the client server configuration import box.",
+    "copyClientConfig": "Copy Client Import Config",
+    "clientConfigCopied": "Client import config copied"
   },
   "myAddressBook": {
     "create": "Create",

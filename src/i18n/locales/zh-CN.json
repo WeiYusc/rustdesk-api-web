@@ -101,7 +101,10 @@
     "editProfile": "编辑个人资料",
     "avatarUrlPlaceholder": "头像图片 URL",
     "profileUpdated": "个人资料更新成功",
-    "nicknameRequired": "请输入昵称"
+    "nicknameRequired": "请输入昵称",
+    "clientConfigDesc": "客户端导入配置按钮会复制 RustDesk 官方兼容的导入字符串，可直接粘贴到客户端服务器配置导入框。",
+    "copyClientConfig": "复制客户端导入配置",
+    "clientConfigCopied": "客户端导入配置已复制"
   },
   "myAddressBook": {
     "create": "新建",

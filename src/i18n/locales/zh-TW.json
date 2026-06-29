@@ -101,7 +101,10 @@
     "editProfile": "編輯個人資料",
     "avatarUrlPlaceholder": "頭像圖片 URL",
     "profileUpdated": "個人資料更新成功",
-    "nicknameRequired": "Please enter nickname"
+    "nicknameRequired": "Please enter nickname",
+    "clientConfigDesc": "用戶端匯入設定按鈕會複製 RustDesk 官方相容的匯入字串，可直接貼到用戶端伺服器設定匯入框。",
+    "copyClientConfig": "複製用戶端匯入設定",
+    "clientConfigCopied": "用戶端匯入設定已複製"
   },
   "myAddressBook": {
     "create": "新增",

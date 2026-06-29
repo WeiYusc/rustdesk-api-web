@@ -161,6 +161,32 @@ const serverConfigText = computed(() => {
   return lines.join('\n')
 })
 
+function base64UrlEncode(bytes: Uint8Array): string {
+  let binary = ''
+  bytes.forEach((byte) => {
+    binary += String.fromCharCode(byte)
+  })
+  return btoa(binary)
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+}
+
+const serverConfigImportText = computed(() => {
+  const cfg = appStore.serverConfig
+  if (!cfg) return ''
+  const config = {
+    host: cfg.id_server?.trim() || '',
+    relay: cfg.relay_server?.trim() || '',
+    api: cfg.api_server?.trim() || '',
+    key: cfg.key?.trim() || '',
+  }
+  if (!config.host) return ''
+  return base64UrlEncode(new TextEncoder().encode(JSON.stringify(config)))
+    .split('')
+    .reverse()
+    .join('')
+})
+
 function copyCredentials(): void {
   if (!serverConfigText.value) {
     message.warning(appStore.t('myInfo.noServerConfig'))
@@ -169,6 +195,19 @@ function copyCredentials(): void {
   try {
     clipboard.copy(serverConfigText.value)
     message.success(appStore.t('myInfo.copied'))
+  } catch {
+    message.error(appStore.t('myInfo.copyFailed'))
+  }
+}
+
+function copyClientImportConfig(): void {
+  if (!serverConfigImportText.value) {
+    message.warning(appStore.t('myInfo.noServerConfig'))
+    return
+  }
+  try {
+    clipboard.copy(serverConfigImportText.value)
+    message.success(appStore.t('myInfo.clientConfigCopied'))
   } catch {
     message.error(appStore.t('myInfo.copyFailed'))
   }
@@ -281,6 +320,7 @@ async function handleSaveProfile(): Promise<void> {
     <NCard :title="$t('myInfo.serverCredentials')" :bordered="false">
       <NSpace vertical :size="12">
         <NText depth="3" style="font-size: 13px">{{ $t('myInfo.credentialsDesc') }}</NText>
+        <NText depth="3" style="font-size: 13px">{{ $t('myInfo.clientConfigDesc') }}</NText>
         <NDescriptions v-if="appStore.serverConfig" label-placement="left" :column="1" bordered size="small">
           <NDescriptionsItem :label="$t('myInfo.idServer')">
             {{ appStore.serverConfig.id_server || '-' }}
@@ -295,9 +335,14 @@ async function handleSaveProfile(): Promise<void> {
             <NText code>{{ appStore.serverConfig.key ? appStore.serverConfig.key.slice(0, 8) + '••••' : '-' }}</NText>
           </NDescriptionsItem>
         </NDescriptions>
-        <NButton type="primary" @click="copyCredentials">
-          {{ $t('myInfo.copyCredentials') }}
-        </NButton>
+        <NSpace>
+          <NButton type="primary" @click="copyCredentials">
+            {{ $t('myInfo.copyCredentials') }}
+          </NButton>
+          <NButton type="success" @click="copyClientImportConfig">
+            {{ $t('myInfo.copyClientConfig') }}
+          </NButton>
+        </NSpace>
       </NSpace>
     </NCard>
 
