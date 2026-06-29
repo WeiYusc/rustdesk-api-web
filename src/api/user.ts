@@ -36,6 +36,7 @@ export function changeCurPwd(data: {
 
 export function changeCurInfo(data: {
   nickname: string
+  email: string
   avatar: string
 }): Promise<ApiResponse<null>> {
   return request.post('/user/changeCurInfo', data)

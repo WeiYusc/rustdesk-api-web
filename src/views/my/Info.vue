@@ -16,6 +16,9 @@ import {
   NSpin,
   NText,
   NModal,
+  NRadioButton,
+  NRadioGroup,
+  NSlider,
   type FormInst,
   type FormRules,
   useMessage,
@@ -24,6 +27,7 @@ import {
 import { useUserStore } from '@/stores/user'
 import { useAppStore } from '@/stores/app'
 import { changeCurInfo, changeCurPwd, myOauth } from '@/api/user'
+import { uploadFile } from '@/api/file'
 import { unbind } from '@/api/oauth'
 import type { UserOauthItem } from '@/types'
 import clipboard from 'clipboard'
@@ -216,14 +220,113 @@ function copyClientImportConfig(): void {
 const editModalShow = ref(false)
 const editForm = reactive({
   nickname: '',
+  email: '',
   avatar: '',
 })
 const editLoading = ref(false)
+const avatarMode = ref<'upload' | 'external'>('upload')
+const avatarPreviewUrl = ref('')
+const avatarScale = ref(1)
+const avatarOffsetX = ref(0)
+const avatarOffsetY = ref(0)
+const avatarCanvasRef = ref<HTMLCanvasElement | null>(null)
+let avatarObjectUrl = ''
+
+function revokeAvatarObjectUrl(): void {
+  if (avatarObjectUrl) {
+    URL.revokeObjectURL(avatarObjectUrl)
+    avatarObjectUrl = ''
+  }
+}
+
+function resetAvatarEditor(): void {
+  revokeAvatarObjectUrl()
+  avatarPreviewUrl.value = editForm.avatar || ''
+  avatarScale.value = 1
+  avatarOffsetX.value = 0
+  avatarOffsetY.value = 0
+}
 
 function openEditProfile(): void {
   editForm.nickname = userStore.nickname || ''
+  editForm.email = userStore.email || ''
   editForm.avatar = userStore.avatar || ''
+  avatarMode.value = editForm.avatar ? 'external' : 'upload'
+  resetAvatarEditor()
   editModalShow.value = true
+}
+
+function closeEditProfile(): void {
+  editModalShow.value = false
+  revokeAvatarObjectUrl()
+}
+
+function handleAvatarFileChange(event: Event): void {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  if (!file) return
+  if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+    message.error(appStore.t('myInfo.avatarInvalidType'))
+    input.value = ''
+    return
+  }
+  if (file.size > 2 * 1024 * 1024) {
+    message.error(appStore.t('myInfo.avatarTooLarge'))
+    input.value = ''
+    return
+  }
+  revokeAvatarObjectUrl()
+  avatarObjectUrl = URL.createObjectURL(file)
+  avatarPreviewUrl.value = avatarObjectUrl
+  avatarMode.value = 'upload'
+  avatarScale.value = 1
+  avatarOffsetX.value = 0
+  avatarOffsetY.value = 0
+}
+
+function handleExternalAvatarInput(value: string): void {
+  editForm.avatar = value.trim()
+  avatarPreviewUrl.value = editForm.avatar
+}
+
+async function renderCroppedAvatarBlob(): Promise<Blob | null> {
+  if (!avatarPreviewUrl.value) return null
+  const image = new Image()
+  image.crossOrigin = 'anonymous'
+  image.src = avatarPreviewUrl.value
+  try {
+    await image.decode()
+  } catch {
+    return null
+  }
+  const canvas = avatarCanvasRef.value || document.createElement('canvas')
+  const size = 512
+  canvas.width = size
+  canvas.height = size
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return null
+  ctx.clearRect(0, 0, size, size)
+  ctx.fillStyle = '#fff'
+  ctx.fillRect(0, 0, size, size)
+  const baseScale = Math.max(size / image.naturalWidth, size / image.naturalHeight)
+  const scale = baseScale * avatarScale.value
+  const width = image.naturalWidth * scale
+  const height = image.naturalHeight * scale
+  const x = (size - width) / 2 + avatarOffsetX.value
+  const y = (size - height) / 2 + avatarOffsetY.value
+  ctx.drawImage(image, x, y, width, height)
+  return new Promise((resolve) => canvas.toBlob(resolve, 'image/webp', 0.9))
+}
+
+async function uploadEditedAvatar(): Promise<string> {
+  const blob = await renderCroppedAvatarBlob()
+  if (!blob) {
+    if (avatarMode.value === 'external') return editForm.avatar
+    throw new Error(appStore.t('myInfo.avatarPreviewFailed'))
+  }
+  const file = new File([blob], 'avatar.webp', { type: 'image/webp' })
+  const res = await uploadFile(file)
+  return res.data.url
 }
 
 async function handleSaveProfile(): Promise<void> {
@@ -234,15 +337,20 @@ async function handleSaveProfile(): Promise<void> {
   }
   editLoading.value = true
   try {
+    const avatar = avatarPreviewUrl.value ? await uploadEditedAvatar() : ''
     await changeCurInfo({
       nickname: editForm.nickname,
-      avatar: editForm.avatar,
+      email: editForm.email,
+      avatar,
     })
     message.success(appStore.t('myInfo.profileUpdated'))
     editModalShow.value = false
+    revokeAvatarObjectUrl()
     await userStore.info()
-  } catch {
-    // handled by interceptor
+  } catch (error) {
+    if (error instanceof Error) {
+      message.error(error.message)
+    }
   } finally {
     editLoading.value = false
   }
@@ -377,19 +485,71 @@ async function handleSaveProfile(): Promise<void> {
       v-model:show="editModalShow"
       preset="card"
       :title="$t('myInfo.editProfile')"
-      style="width: 480px; max-width: 90vw"
+      style="width: 680px; max-width: 94vw"
     >
       <NForm ref="editFormRef" :model="editForm" :rules="editRules" label-placement="top">
         <NFormItem :label="$t('myInfo.nickname')" path="nickname">
           <NInput v-model:value="editForm.nickname" :placeholder="$t('myInfo.nickname')" />
         </NFormItem>
+        <NFormItem :label="$t('myInfo.email')" path="email">
+          <NInput v-model:value="editForm.email" :placeholder="$t('myInfo.email')" />
+        </NFormItem>
         <NFormItem :label="$t('myInfo.avatar')">
-          <NInput v-model:value="editForm.avatar" :placeholder="$t('myInfo.avatarUrlPlaceholder')" />
+          <NSpace vertical style="width: 100%">
+            <NRadioGroup v-model:value="avatarMode" size="small">
+              <NRadioButton value="upload">
+                {{ $t('myInfo.avatarUpload') }}
+              </NRadioButton>
+              <NRadioButton value="external">
+                {{ $t('myInfo.avatarExternal') }}
+              </NRadioButton>
+            </NRadioGroup>
+            <input
+              v-if="avatarMode === 'upload'"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              @change="handleAvatarFileChange"
+            />
+            <NInput
+              v-else
+              :value="editForm.avatar"
+              :placeholder="$t('myInfo.avatarUrlPlaceholder')"
+              @update:value="handleExternalAvatarInput"
+            />
+            <NSpace v-if="avatarPreviewUrl" align="start" :size="20" wrap>
+              <div class="avatar-crop-preview">
+                <img
+                  :src="avatarPreviewUrl"
+                  :style="{
+                    transform: `translate(${avatarOffsetX / 8}px, ${avatarOffsetY / 8}px) scale(${avatarScale})`,
+                  }"
+                  alt="avatar preview"
+                />
+              </div>
+              <NSpace vertical style="min-width: 220px; flex: 1">
+                <NText depth="3">{{ $t('myInfo.avatarPreviewHelp') }}</NText>
+                <div>
+                  <NText depth="3">{{ $t('myInfo.avatarScale') }}</NText>
+                  <NSlider v-model:value="avatarScale" :min="1" :max="3" :step="0.05" />
+                </div>
+                <div>
+                  <NText depth="3">{{ $t('myInfo.avatarOffsetX') }}</NText>
+                  <NSlider v-model:value="avatarOffsetX" :min="-180" :max="180" :step="1" />
+                </div>
+                <div>
+                  <NText depth="3">{{ $t('myInfo.avatarOffsetY') }}</NText>
+                  <NSlider v-model:value="avatarOffsetY" :min="-180" :max="180" :step="1" />
+                </div>
+              </NSpace>
+            </NSpace>
+            <NText v-else depth="3">{{ $t('myInfo.avatarEmptyHelp') }}</NText>
+            <canvas ref="avatarCanvasRef" style="display: none"></canvas>
+          </NSpace>
         </NFormItem>
       </NForm>
       <template #footer>
         <NSpace justify="end">
-          <NButton @click="editModalShow = false">{{ $t('common.cancel') }}</NButton>
+          <NButton @click="closeEditProfile">{{ $t('common.cancel') }}</NButton>
           <NButton type="primary" :loading="editLoading" @click="handleSaveProfile">
             {{ $t('common.save') }}
           </NButton>
@@ -398,3 +558,30 @@ async function handleSaveProfile(): Promise<void> {
     </NModal>
   </NSpace>
 </template>
+
+<style scoped>
+.avatar-crop-preview {
+  align-items: center;
+  background: linear-gradient(45deg, #eee 25%, transparent 25%),
+    linear-gradient(-45deg, #eee 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #eee 75%),
+    linear-gradient(-45deg, transparent 75%, #eee 75%);
+  background-color: #fff;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+  background-size: 16px 16px;
+  border: 1px solid rgba(128, 128, 128, 0.35);
+  border-radius: 50%;
+  display: flex;
+  height: 180px;
+  justify-content: center;
+  overflow: hidden;
+  width: 180px;
+}
+
+.avatar-crop-preview img {
+  height: 100%;
+  object-fit: cover;
+  transform-origin: center;
+  width: 100%;
+}
+</style>
