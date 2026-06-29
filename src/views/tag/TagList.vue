@@ -19,7 +19,7 @@ import {
   type FormRules,
   type SelectOption,
 } from 'naive-ui'
-import { create, deleteTag, list, update, type TagForm } from '@/api/tag'
+import { create, deleteTag, list, update, batchDelete, type TagForm } from '@/api/tag'
 import { list as listUsers } from '@/api/user'
 import type { Tag } from '@/types'
 import { formatTime } from '@/utils/format'
@@ -54,6 +54,7 @@ function swatchStyle(color: number): CSSProperties {
 const loading = ref(false)
 const saving = ref(false)
 const dataList = ref<Tag[]>([])
+const checkedRowKeys = ref<Array<string | number>>([])
 const pagination = reactive({
   page: 1,
   pageSize: 10,
@@ -78,6 +79,7 @@ async function loadUsers(): Promise<void> {
 }
 
 const columns = computed<DataTableColumns<Tag>>(() => [
+  { type: 'selection' },
   { title: t('adminTag.name'), key: 'name', ellipsis: { tooltip: true } },
   {
     title: t('adminTag.color'),
@@ -183,26 +185,38 @@ async function loadData(): Promise<void> {
   }
 }
 
+function resetSelection(): void {
+  checkedRowKeys.value = []
+}
+
 function handlePageChange(page: number): void {
+  resetSelection()
   pagination.page = page
   loadData()
 }
 
 function handlePageSizeChange(pageSize: number): void {
+  resetSelection()
   pagination.pageSize = pageSize
   pagination.page = 1
   loadData()
 }
 
 function handleSearch(): void {
+  resetSelection()
   pagination.page = 1
   loadData()
 }
 
 function handleReset(): void {
+  resetSelection()
   filterUserId.value = null
   pagination.page = 1
   loadData()
+}
+
+function rowKey(row: Tag): number {
+  return row.id
 }
 
 function resetForm(): void {
@@ -276,6 +290,32 @@ function handleDelete(row: Tag): void {
   })
 }
 
+function handleBatchDelete(): void {
+  if (checkedRowKeys.value.length === 0) {
+    message.warning(t('common.pleaseSelect'))
+    return
+  }
+  dialog.warning({
+    title: t('common.confirm'),
+    content: t('adminTag.batchDeleteConfirm'),
+    positiveText: t('common.delete'),
+    negativeText: t('common.cancel'),
+    onPositiveClick: async () => {
+      try {
+        const ids = checkedRowKeys.value
+          .map((key) => Number(key))
+          .filter((id) => Number.isInteger(id) && id > 0)
+        await batchDelete({ ids })
+        message.success(t('common.success'))
+        resetSelection()
+        loadData()
+      } catch {
+        // ignore
+      }
+    },
+  })
+}
+
 onMounted(() => {
   loadData()
   loadUsers()
@@ -305,8 +345,16 @@ onMounted(() => {
       <NButton @click="handleReset">
         {{ $t('adminTag.reset') }}
       </NButton>
+      <NButton
+        type="error"
+        :disabled="checkedRowKeys.length === 0"
+        @click="handleBatchDelete"
+      >
+        {{ $t('adminTag.batchDelete') }}
+      </NButton>
     </NSpace>
     <NDataTable
+      v-model:checked-row-keys="checkedRowKeys"
       remote
       :scroll-x="600"
       :bordered="false"
@@ -314,6 +362,7 @@ onMounted(() => {
       :data="dataList"
       :loading="loading"
       :pagination="pagination"
+      :row-key="rowKey"
       @update:page="handlePageChange"
       @update:page-size="handlePageSizeChange"
     />

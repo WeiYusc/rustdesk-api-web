@@ -304,6 +304,7 @@
     "create": "생성",
     "edit": "편집",
     "batchDelete": "일괄 삭제",
+    "batchDeleteConfirm": "선택한 태그를 삭제하시겠습니까?",
     "batchCreate": "일괄 생성",
     "batchCreateFromPeers": "피어에서 가져오기",
     "shareByWebClient": "웹 클라이언트로 공유",

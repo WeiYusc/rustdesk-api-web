@@ -304,6 +304,7 @@
     "create": "新建",
     "edit": "编辑",
     "batchDelete": "批量删除",
+    "batchDeleteConfirm": "确定要删除选中的标签吗？",
     "batchCreate": "批量创建",
     "batchCreateFromPeers": "从Peer导入",
     "shareByWebClient": "Web客户端分享",

@@ -304,6 +304,7 @@
     "create": "新增",
     "edit": "編輯",
     "batchDelete": "批次刪除",
+    "batchDeleteConfirm": "確定要刪除選中的標籤嗎？",
     "batchCreate": "批次建立",
     "batchCreateFromPeers": "從 Peer 匯入",
     "shareByWebClient": "Web 客戶端分享",

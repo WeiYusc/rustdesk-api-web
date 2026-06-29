@@ -304,6 +304,7 @@
     "create": "Crear",
     "edit": "Editar",
     "batchDelete": "Eliminación por lotes",
+    "batchDeleteConfirm": "¿Está seguro de eliminar las etiquetas seleccionadas?",
     "batchCreate": "Creación por lotes",
     "batchCreateFromPeers": "Importar de pares",
     "shareByWebClient": "Compartir por cliente web",

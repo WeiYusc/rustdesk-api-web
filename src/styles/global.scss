@@ -31,4 +31,20 @@ html {
   .app-content {
     padding: 12px !important;
   }
+
+  .n-card > .n-card-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .n-card > .n-card-header .n-card-header__main,
+  .n-card > .n-card-header .n-card-header__extra {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .n-card > .n-card-header .n-card-header__extra {
+    justify-content: flex-start;
+  }
 }

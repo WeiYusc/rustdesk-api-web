@@ -304,6 +304,7 @@
     "create": "Create",
     "edit": "Edit",
     "batchDelete": "Batch Delete",
+    "batchDeleteConfirm": "Are you sure you want to delete the selected tags?",
     "batchCreate": "Batch Create",
     "batchCreateFromPeers": "Import from Peers",
     "shareByWebClient": "Share by Web Client",

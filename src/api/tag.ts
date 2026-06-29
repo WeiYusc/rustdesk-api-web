@@ -36,3 +36,7 @@ export function update(data: TagForm): Promise<ApiResponse<null>> {
 export function deleteTag(data: { id: number }): Promise<ApiResponse<null>> {
   return adminRequest.post('/tag/delete', data)
 }
+
+export function batchDelete(data: { ids: number[] }): Promise<ApiResponse<null>> {
+  return adminRequest.post('/tag/batchDelete', data)
+}

@@ -304,6 +304,7 @@
     "create": "Создать",
     "edit": "Редактировать",
     "batchDelete": "Пакетное удаление",
+    "batchDeleteConfirm": "Вы уверены, что хотите удалить выбранные теги?",
     "batchCreate": "Пакетное создание",
     "batchCreateFromPeers": "Импорт из пиров",
     "shareByWebClient": "Поделиться через веб-клиент",
