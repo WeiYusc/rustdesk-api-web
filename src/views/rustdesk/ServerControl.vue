@@ -3,47 +3,61 @@ defineOptions({ name: 'ServerCmd' })
 import { computed, h, onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
-  NAlert,
   NButton,
   NCard,
   NCode,
   NDataTable,
-  NDescriptions,
-  NDescriptionsItem,
   NForm,
   NFormItem,
   NInput,
+  NInputNumber,
   NModal,
   NSpace,
+  NSwitch,
   NTag,
-  NTabs,
-  NTabPane,
   NText,
-  NCollapse,
-  NCollapseItem,
+  NDivider,
   useDialog,
   useMessage,
   type DataTableColumns,
   type FormInst,
   type FormRules,
 } from 'naive-ui'
-import { cmdCreate, cmdDelete, cmdList, cmdUpdate, sendCmd, type ServerCmdForm } from '@/api/rustdesk'
+import { cmdCreate, cmdDelete, cmdList, sendCmd, type ServerCmdForm } from '@/api/rustdesk'
 import type { ServerCmd } from '@/types'
 
 const { t } = useI18n()
 const message = useMessage()
 const dialog = useDialog()
 
-interface PresetCommand {
-  cmd: string
-  explainKey: string
+function formatResult(data: string): string {
+  if (!data) return ''
+  try {
+    return JSON.stringify(JSON.parse(data), null, 2)
+  } catch {
+    return data
+  }
 }
 
-const presetCommands: PresetCommand[] = [
-  { cmd: 'get_online_devices', explainKey: 'adminServerCmd.getOnlineDevices' },
-  { cmd: 'get_all_devices', explainKey: 'adminServerCmd.getAllDevices' },
-  { cmd: 'reload', explainKey: 'adminServerCmd.reloadService' },
-]
+async function executeCmd(cmd: string, option: string, target: string): Promise<string> {
+  const res = await sendCmd({ cmd, option, target })
+  return formatResult(res.data)
+}
+
+function targetName(target: string): string {
+  if (target === '21115') return t('adminServerCmd.targetIdServer')
+  if (target === '21117') return t('adminServerCmd.targetRelayServer')
+  return target || '-'
+}
+
+function translateExplain(explain: string): string {
+  const key = cmdExplainMap[explain]
+  if (key) {
+    const translated = t(key)
+    return translated === key ? explain : translated
+  }
+  return explain
+}
 
 const cmdExplainMap: Record<string, string> = {
   'show help': 'adminServerCmd.explainShowHelp',
@@ -66,27 +80,255 @@ const cmdExplainMap: Record<string, string> = {
   'ip-changes(ic) [<id>|<number>] [-]': 'adminServerCmd.explainIpChanges',
 }
 
-function translateExplain(explain: string): string {
-  const key = cmdExplainMap[explain]
-  if (key) {
-    const translated = t(key)
-    return translated === key ? explain : translated
-  }
-  return explain
-}
+const ID_SERVER = '21115'
+const RELAY_SERVER = '21117'
 
-function targetName(target: string): string {
-  if (target === '21115') return t('adminServerCmd.targetIdServer')
-  if (target === '21117') return t('adminServerCmd.targetRelayServer')
-  return target || '-'
-}
+const ipBlockResult = ref('')
+const ipBlockLoading = ref(false)
+const ipBlockInput = ref('')
 
-function formatResult(data: string): string {
-  if (!data) return ''
+async function doIpBlock(action: 'block' | 'unblock' | 'list'): Promise<void> {
+  ipBlockLoading.value = true
+  ipBlockResult.value = ''
   try {
-    return JSON.stringify(JSON.parse(data), null, 2)
+    let option = ''
+    if (action === 'block') {
+      option = ipBlockInput.value
+    } else if (action === 'unblock') {
+      option = `${ipBlockInput.value} -`
+    }
+    ipBlockResult.value = await executeCmd('ip-blocker', option, ID_SERVER)
+    if (action !== 'list') ipBlockInput.value = ''
   } catch {
-    return data
+    // ignore
+  } finally {
+    ipBlockLoading.value = false
+  }
+}
+
+const relayResult = ref('')
+const relayLoading = ref(false)
+const alwaysUseRelay = ref(false)
+const relayServersInput = ref('')
+
+async function checkAlwaysUseRelay(): Promise<void> {
+  relayLoading.value = true
+  try {
+    const res = await executeCmd('always-use-relay', '', ID_SERVER)
+    alwaysUseRelay.value = res.includes('true')
+  } catch {
+    // ignore
+  } finally {
+    relayLoading.value = false
+  }
+}
+
+async function toggleAlwaysUseRelay(val: boolean): Promise<void> {
+  relayLoading.value = true
+  try {
+    await executeCmd('always-use-relay', val ? 'y' : 'n', ID_SERVER)
+    alwaysUseRelay.value = val
+    relayResult.value = t('common.success')
+  } catch {
+    // ignore
+  } finally {
+    relayLoading.value = false
+  }
+}
+
+async function checkRelayServers(): Promise<void> {
+  relayLoading.value = true
+  try {
+    relayResult.value = await executeCmd('relay-servers', '', ID_SERVER)
+  } catch {
+    // ignore
+  } finally {
+    relayLoading.value = false
+  }
+}
+
+async function setRelayServers(): Promise<void> {
+  if (!relayServersInput.value) return
+  relayLoading.value = true
+  try {
+    relayResult.value = await executeCmd('relay-servers', relayServersInput.value, ID_SERVER)
+    relayServersInput.value = ''
+  } catch {
+    // ignore
+  } finally {
+    relayLoading.value = false
+  }
+}
+
+const ipChangesResult = ref('')
+const ipChangesLoading = ref(false)
+
+async function doIpChanges(action: 'list' | 'clear'): Promise<void> {
+  ipChangesLoading.value = true
+  ipChangesResult.value = ''
+  try {
+    const option = action === 'clear' ? '-' : ''
+    ipChangesResult.value = await executeCmd('ip-changes', option, ID_SERVER)
+  } catch {
+    // ignore
+  } finally {
+    ipChangesLoading.value = false
+  }
+}
+
+const punchResult = ref('')
+const punchLoading = ref(false)
+
+async function doPunch(action: 'list' | 'clear'): Promise<void> {
+  punchLoading.value = true
+  punchResult.value = ''
+  try {
+    const option = action === 'clear' ? '-' : ''
+    punchResult.value = await executeCmd('punch-requests', option, ID_SERVER)
+  } catch {
+    // ignore
+  } finally {
+    punchLoading.value = false
+  }
+}
+
+const geoResult = ref('')
+const geoLoading = ref(false)
+const geoIp1 = ref('')
+const geoIp2 = ref('')
+
+async function doTestGeo(): Promise<void> {
+  if (!geoIp1.value || !geoIp2.value) return
+  geoLoading.value = true
+  geoResult.value = ''
+  try {
+    geoResult.value = await executeCmd('test-geo', `${geoIp1.value} ${geoIp2.value}`, ID_SERVER)
+  } catch {
+    // ignore
+  } finally {
+    geoLoading.value = false
+  }
+}
+
+const blacklistResult = ref('')
+const blacklistLoading = ref(false)
+const blacklistInput = ref('')
+
+async function doBlacklist(action: 'add' | 'remove' | 'list' | 'clear'): Promise<void> {
+  blacklistLoading.value = true
+  blacklistResult.value = ''
+  try {
+    let cmd = 'blacklist'
+    let option = ''
+    if (action === 'add') { cmd = 'blacklist-add'; option = blacklistInput.value }
+    else if (action === 'remove') { cmd = 'blacklist-remove'; option = blacklistInput.value }
+    else if (action === 'clear') { cmd = 'blacklist-remove'; option = 'all' }
+    blacklistResult.value = await executeCmd(cmd, option, RELAY_SERVER)
+    if (action === 'add' || action === 'remove') blacklistInput.value = ''
+  } catch {
+    // ignore
+  } finally {
+    blacklistLoading.value = false
+  }
+}
+
+const blocklistResult = ref('')
+const blocklistLoading = ref(false)
+const blocklistInput = ref('')
+
+async function doBlocklist(action: 'add' | 'remove' | 'list' | 'clear'): Promise<void> {
+  blocklistLoading.value = true
+  blocklistResult.value = ''
+  try {
+    let cmd = 'blocklist'
+    let option = ''
+    if (action === 'add') { cmd = 'blocklist-add'; option = blocklistInput.value }
+    else if (action === 'remove') { cmd = 'blocklist-remove'; option = blocklistInput.value }
+    else if (action === 'clear') { cmd = 'blocklist-remove'; option = 'all' }
+    blocklistResult.value = await executeCmd(cmd, option, RELAY_SERVER)
+    if (action === 'add' || action === 'remove') blocklistInput.value = ''
+  } catch {
+    // ignore
+  } finally {
+    blocklistLoading.value = false
+  }
+}
+
+const bandwidthResult = ref('')
+const bandwidthLoading = ref(false)
+const speedLimitInput = ref<number | null>(null)
+const totalBandwidthInput = ref<number | null>(null)
+const singleBandwidthInput = ref<number | null>(null)
+
+async function doBandwidth(cmd: 'limit-speed' | 'total-bandwidth' | 'single-bandwidth', action: 'set' | 'view'): Promise<void> {
+  bandwidthLoading.value = true
+  bandwidthResult.value = ''
+  try {
+    let option = ''
+    if (action === 'set') {
+      if (cmd === 'limit-speed' && speedLimitInput.value !== null) option = String(speedLimitInput.value)
+      else if (cmd === 'total-bandwidth' && totalBandwidthInput.value !== null) option = String(totalBandwidthInput.value)
+      else if (cmd === 'single-bandwidth' && singleBandwidthInput.value !== null) option = String(singleBandwidthInput.value)
+    }
+    bandwidthResult.value = await executeCmd(cmd, option, RELAY_SERVER)
+  } catch {
+    // ignore
+  } finally {
+    bandwidthLoading.value = false
+  }
+}
+
+async function viewUsage(): Promise<void> {
+  bandwidthLoading.value = true
+  bandwidthResult.value = ''
+  try {
+    bandwidthResult.value = await executeCmd('usage', '', RELAY_SERVER)
+  } catch {
+    // ignore
+  } finally {
+    bandwidthLoading.value = false
+  }
+}
+
+const downgradeResult = ref('')
+const downgradeLoading = ref(false)
+const downgradeThresholdInput = ref<number | null>(null)
+const downgradeStartCheckInput = ref<number | null>(null)
+
+async function doDowngrade(cmd: 'downgrade-threshold' | 'downgrade-start-check', action: 'set' | 'view'): Promise<void> {
+  downgradeLoading.value = true
+  downgradeResult.value = ''
+  try {
+    let option = ''
+    if (action === 'set') {
+      if (cmd === 'downgrade-threshold' && downgradeThresholdInput.value !== null) option = String(downgradeThresholdInput.value)
+      else if (cmd === 'downgrade-start-check' && downgradeStartCheckInput.value !== null) option = String(downgradeStartCheckInput.value)
+    }
+    downgradeResult.value = await executeCmd(cmd, option, RELAY_SERVER)
+  } catch {
+    // ignore
+  } finally {
+    downgradeLoading.value = false
+  }
+}
+
+const customResult = ref('')
+const customLoading = ref(false)
+const customCmd = ref('')
+const customOption = ref('')
+const customTarget = ref(ID_SERVER)
+
+async function doCustomExec(): Promise<void> {
+  if (!customCmd.value) return
+  customLoading.value = true
+  customResult.value = ''
+  try {
+    customResult.value = await executeCmd(customCmd.value, customOption.value, customTarget.value)
+    message.success(t('common.success'))
+  } catch {
+    // ignore
+  } finally {
+    customLoading.value = false
   }
 }
 
@@ -99,6 +341,10 @@ const pagination = reactive({
   showSizePicker: true,
   pageSizes: [10, 20, 50],
 })
+
+function canModifyCommand(row: ServerCmd): boolean {
+  return Number(row.id) > 0
+}
 
 const columns = computed<DataTableColumns<ServerCmd>>(() => [
   { title: t('adminServerCmd.cmd'), key: 'cmd', ellipsis: { tooltip: true }, width: 160 },
@@ -124,24 +370,18 @@ const columns = computed<DataTableColumns<ServerCmd>>(() => [
   {
     title: t('common.actions'),
     key: 'actions',
-    width: 220,
+    width: 200,
     fixed: 'right',
     render: (row) => {
       const actions = [
         h(
           NButton,
-          { size: 'small', type: 'primary', onClick: () => openExec(row) },
+          { size: 'small', type: 'primary', onClick: () => execCustomFromList(row) },
           () => t('adminServerCmd.execute'),
         ),
       ]
-
       if (canModifyCommand(row)) {
         actions.push(
-          h(
-            NButton,
-            { size: 'small', type: 'info', ghost: true, onClick: () => openEdit(row) },
-            () => t('common.edit'),
-          ),
           h(
             NButton,
             { size: 'small', type: 'error', ghost: true, onClick: () => handleDelete(row) },
@@ -149,15 +389,10 @@ const columns = computed<DataTableColumns<ServerCmd>>(() => [
           ),
         )
       }
-
       return h(NSpace, { size: 8 }, () => actions)
     },
   },
 ])
-
-function canModifyCommand(row: ServerCmd): boolean {
-  return Number(row.id) > 0
-}
 
 let latestRequestId = 0
 
@@ -189,11 +424,16 @@ function handlePageSizeChange(pageSize: number): void {
   loadData()
 }
 
+function execCustomFromList(row: ServerCmd): void {
+  customCmd.value = row.cmd
+  customOption.value = row.option || ''
+  customTarget.value = row.target || ID_SERVER
+  doCustomExec()
+}
+
 const formRef = ref<FormInst | null>(null)
 const createModalShow = ref(false)
 const saving = ref(false)
-const editingId = ref<number | null>(null)
-const isEditing = computed(() => editingId.value !== null)
 const formModel = reactive<ServerCmdForm>({
   cmd: '',
   alias: '',
@@ -209,7 +449,6 @@ const rules = computed<FormRules>(() => ({
 }))
 
 function resetForm(): void {
-  editingId.value = null
   formModel.cmd = ''
   formModel.alias = ''
   formModel.option = ''
@@ -223,18 +462,6 @@ function openCreate(): void {
   createModalShow.value = true
 }
 
-function openEdit(row: ServerCmd): void {
-  if (!canModifyCommand(row)) return
-  editingId.value = row.id
-  formModel.cmd = row.cmd
-  formModel.alias = row.alias || ''
-  formModel.option = row.option || ''
-  formModel.explain = row.explain || ''
-  formModel.target = row.target || ''
-  formRef.value?.restoreValidation()
-  createModalShow.value = true
-}
-
 async function handleSave(): Promise<void> {
   try {
     await formRef.value?.validate()
@@ -243,51 +470,15 @@ async function handleSave(): Promise<void> {
   }
   saving.value = true
   try {
-    if (isEditing.value && editingId.value !== null) {
-      await cmdUpdate({ ...formModel, id: editingId.value })
-    } else {
-      await cmdCreate({ ...formModel })
-    }
+    await cmdCreate({ ...formModel })
     message.success(t('common.success'))
     createModalShow.value = false
     resetForm()
     loadData()
   } catch {
-    //ignore
+    // ignore
   } finally {
     saving.value = false
-  }
-}
-
-const execModalShow = ref(false)
-const execRow = ref<ServerCmd | null>(null)
-const execOption = ref('')
-const execResult = ref('')
-const execRunning = ref(false)
-
-function openExec(row: ServerCmd): void {
-  execRow.value = row
-  execOption.value = row.option || ''
-  execResult.value = ''
-  execModalShow.value = true
-}
-
-async function handleExec(): Promise<void> {
-  if (!execRow.value) return
-  execRunning.value = true
-  execResult.value = ''
-  try {
-    const res = await sendCmd({
-      cmd: execRow.value.cmd,
-      option: execOption.value,
-      target: execRow.value.target || '',
-    })
-    execResult.value = formatResult(res.data)
-    message.success(t('common.success'))
-  } catch {
-    //ignore
-  } finally {
-    execRunning.value = false
   }
 }
 
@@ -304,91 +495,243 @@ function handleDelete(row: ServerCmd): void {
         message.success(t('common.success'))
         loadData()
       } catch {
-        //ignore
+        // ignore
       }
     },
   })
 }
 
-onMounted(loadData)
-
-function handleTabChange(name: string | number): void {
-  if (name === 'advanced') {
-    loadData()
-  }
-}
-
-const referenceCommands = [
-  { cmd: 'relay-servers', alias: 'rs', option: 'server1:21117,server2:21117', explain: 'adminServerCmd.explainRelayServers', target: '21115' },
-  { cmd: 'ip-blocker', alias: 'ib', option: '192.168.1.100', explain: 'adminServerCmd.explainIpBlocker', target: '21115' },
-  { cmd: 'always-use-relay', alias: 'aur', option: 'y', explain: 'adminServerCmd.explainAlwaysUseRelay', target: '21115' },
-  { cmd: 'limit-speed', alias: 'ls', option: '10', explain: 'adminServerCmd.explainLimitSpeed', target: '21117' },
-  { cmd: 'total-bandwidth', alias: 'tb', option: '100', explain: 'adminServerCmd.explainTotalBandwidth', target: '21117' },
-  { cmd: 'usage', alias: 'u', option: '', explain: 'adminServerCmd.explainUsage', target: '21117' },
-]
+onMounted(() => {
+  loadData()
+  checkAlwaysUseRelay()
+})
 </script>
 
 <template>
-  <NCard>
-    <template #header>{{ $t('adminServerCmd.title') }}</template>
-    <NTabs type="line" @update:value="handleTabChange">
-      <NTabPane name="simple" :tab="$t('adminServerCmd.simpleMode')">
-        <NSpace vertical :size="12">
-          <NSpace :size="8" wrap>
-            <NButton
-              v-for="item in presetCommands"
-              :key="item.cmd"
-              disabled
-              :title="$t('adminServerCmd.unsupportedPresetNotice')"
-            >
-              {{ $t(item.explainKey) }}
-            </NButton>
-          </NSpace>
-          <NAlert type="warning" :show-icon="false">
-            {{ $t('adminServerCmd.unsupportedPresetNotice') }}
-          </NAlert>
-        </NSpace>
-      </NTabPane>
+  <NSpace vertical :size="16">
+    <NCard>
+      <template #header>{{ $t('adminServerCmd.title') }}</template>
+      <NSpace vertical :size="16">
+        <NCard size="small" :bordered="true">
+          <template #header>
+            <NTag type="info" size="small">{{ $t('adminServerCmd.targetIdServer') }}</NTag>
+            <NText style="margin-left: 8px">{{ $t('adminServerCmd.idServerPanel') }}</NText>
+          </template>
 
-      <NTabPane name="advanced" :tab="$t('adminServerCmd.advancedMode')">
-        <NSpace vertical :size="12">
-          <NSpace justify="space-between" wrap>
-            <NButton type="primary" @click="openCreate">{{ $t('adminServerCmd.createCmd') }}</NButton>
-            <NCollapse :default-expanded-names="[]">
-              <NCollapseItem :title="$t('adminServerCmd.referenceTitle')" name="ref">
-                <NDescriptions :column="1" bordered size="small">
-                  <NDescriptionsItem v-for="ref in referenceCommands" :key="ref.cmd" :label="ref.cmd">
-                    <NSpace align="center" :size="8" wrap>
-                      <NTag size="small" :type="ref.target === '21115' ? 'info' : 'success'">
-                        {{ targetName(ref.target) }}
-                      </NTag>
-                      <NText code>{{ ref.option || '-' }}</NText>
-                      <NText depth="3">{{ $t(ref.explain) }}</NText>
-                    </NSpace>
-                  </NDescriptionsItem>
-                </NDescriptions>
-              </NCollapseItem>
-            </NCollapse>
+          <NSpace vertical :size="16">
+            <div>
+              <NText strong style="display: block; margin-bottom: 8px">{{ $t('adminServerCmd.ipBlockTitle') }}</NText>
+              <NSpace :size="8" wrap align="center">
+                <NInput v-model:value="ipBlockInput" :placeholder="$t('adminServerCmd.ipPlaceholder')" style="width: 200px" />
+                <NButton size="small" type="error" :loading="ipBlockLoading" :disabled="!ipBlockInput" @click="doIpBlock('block')">{{ $t('adminServerCmd.blockIp') }}</NButton>
+                <NButton size="small" type="warning" ghost :loading="ipBlockLoading" :disabled="!ipBlockInput" @click="doIpBlock('unblock')">{{ $t('adminServerCmd.unblockIp') }}</NButton>
+                <NButton size="small" :loading="ipBlockLoading" @click="doIpBlock('list')">{{ $t('adminServerCmd.viewList') }}</NButton>
+              </NSpace>
+              <div v-if="ipBlockResult || ipBlockLoading" style="margin-top: 8px">
+                <NCode :code="ipBlockResult" word-wrap style="max-height: 200px; overflow-y: auto" />
+              </div>
+            </div>
+
+            <NDivider />
+
+            <div>
+              <NText strong style="display: block; margin-bottom: 8px">{{ $t('adminServerCmd.relayConfigTitle') }}</NText>
+              <NSpace vertical :size="12">
+                <NSpace :size="8" align="center">
+                  <NText>{{ $t('adminServerCmd.alwaysUseRelay') }}</NText>
+                  <NSwitch :value="alwaysUseRelay" :loading="relayLoading" @update:value="toggleAlwaysUseRelay" />
+                </NSpace>
+                <NSpace :size="8" align="center">
+                  <NButton size="small" :loading="relayLoading" @click="checkRelayServers">{{ $t('adminServerCmd.viewRelayServers') }}</NButton>
+                </NSpace>
+                <NSpace :size="8" align="center">
+                  <NInput v-model:value="relayServersInput" :placeholder="$t('adminServerCmd.relayServersPlaceholder')" style="width: 300px" />
+                  <NButton size="small" type="primary" :loading="relayLoading" :disabled="!relayServersInput" @click="setRelayServers">{{ $t('adminServerCmd.setRelayServers') }}</NButton>
+                </NSpace>
+              </NSpace>
+              <div v-if="relayResult || relayLoading" style="margin-top: 8px">
+                <NCode :code="relayResult" word-wrap style="max-height: 200px; overflow-y: auto" />
+              </div>
+            </div>
+
+            <NDivider />
+
+            <div>
+              <NText strong style="display: block; margin-bottom: 8px">{{ $t('adminServerCmd.ipChangesTitle') }}</NText>
+              <NSpace :size="8" wrap>
+                <NButton size="small" :loading="ipChangesLoading" @click="doIpChanges('list')">{{ $t('adminServerCmd.viewList') }}</NButton>
+                <NButton size="small" type="warning" ghost :loading="ipChangesLoading" @click="doIpChanges('clear')">{{ $t('adminServerCmd.clearRecords') }}</NButton>
+              </NSpace>
+              <div v-if="ipChangesResult || ipChangesLoading" style="margin-top: 8px">
+                <NCode :code="ipChangesResult" word-wrap style="max-height: 200px; overflow-y: auto" />
+              </div>
+            </div>
+
+            <NDivider />
+
+            <div>
+              <NText strong style="display: block; margin-bottom: 8px">{{ $t('adminServerCmd.punchTitle') }}</NText>
+              <NSpace :size="8" wrap>
+                <NButton size="small" :loading="punchLoading" @click="doPunch('list')">{{ $t('adminServerCmd.viewList') }}</NButton>
+                <NButton size="small" type="warning" ghost :loading="punchLoading" @click="doPunch('clear')">{{ $t('adminServerCmd.clearRecords') }}</NButton>
+              </NSpace>
+              <div v-if="punchResult || punchLoading" style="margin-top: 8px">
+                <NCode :code="punchResult" word-wrap style="max-height: 200px; overflow-y: auto" />
+              </div>
+            </div>
+
+            <NDivider />
+
+            <div>
+              <NText strong style="display: block; margin-bottom: 8px">{{ $t('adminServerCmd.testGeoTitle') }}</NText>
+              <NSpace :size="8" wrap align="center">
+                <NInput v-model:value="geoIp1" :placeholder="$t('adminServerCmd.ip1Placeholder')" style="width: 160px" />
+                <NInput v-model:value="geoIp2" :placeholder="$t('adminServerCmd.ip2Placeholder')" style="width: 160px" />
+                <NButton size="small" type="primary" :loading="geoLoading" :disabled="!geoIp1 || !geoIp2" @click="doTestGeo">{{ $t('adminServerCmd.testGeo') }}</NButton>
+              </NSpace>
+              <div v-if="geoResult || geoLoading" style="margin-top: 8px">
+                <NCode :code="geoResult" word-wrap style="max-height: 200px; overflow-y: auto" />
+              </div>
+            </div>
           </NSpace>
-          <NDataTable
-            remote
-            :scroll-x="1000"
-            :bordered="false"
-            :columns="columns"
-            :data="dataList"
-            :loading="loading"
-            :pagination="pagination"
-            @update:page="handlePageChange"
-            @update:page-size="handlePageSizeChange"
-          />
-        </NSpace>
-      </NTabPane>
-    </NTabs>
+        </NCard>
+
+        <NCard size="small" :bordered="true">
+          <template #header>
+            <NTag type="success" size="small">{{ $t('adminServerCmd.targetRelayServer') }}</NTag>
+            <NText style="margin-left: 8px">{{ $t('adminServerCmd.relayServerPanel') }}</NText>
+          </template>
+
+          <NSpace vertical :size="16">
+            <div>
+              <NText strong style="display: block; margin-bottom: 8px">{{ $t('adminServerCmd.blacklistTitle') }}</NText>
+              <NSpace :size="8" wrap align="center">
+                <NInput v-model:value="blacklistInput" :placeholder="$t('adminServerCmd.ipPlaceholder')" style="width: 200px" />
+                <NButton size="small" type="error" :loading="blacklistLoading" :disabled="!blacklistInput" @click="doBlacklist('add')">{{ $t('adminServerCmd.add') }}</NButton>
+                <NButton size="small" type="warning" ghost :loading="blacklistLoading" :disabled="!blacklistInput" @click="doBlacklist('remove')">{{ $t('adminServerCmd.remove') }}</NButton>
+                <NButton size="small" :loading="blacklistLoading" @click="doBlacklist('list')">{{ $t('adminServerCmd.viewList') }}</NButton>
+                <NButton size="small" type="error" ghost :loading="blacklistLoading" @click="doBlacklist('clear')">{{ $t('adminServerCmd.clearAll') }}</NButton>
+              </NSpace>
+              <div v-if="blacklistResult || blacklistLoading" style="margin-top: 8px">
+                <NCode :code="blacklistResult" word-wrap style="max-height: 200px; overflow-y: auto" />
+              </div>
+            </div>
+
+            <NDivider />
+
+            <div>
+              <NText strong style="display: block; margin-bottom: 8px">{{ $t('adminServerCmd.blocklistTitle') }}</NText>
+              <NSpace :size="8" wrap align="center">
+                <NInput v-model:value="blocklistInput" :placeholder="$t('adminServerCmd.ipPlaceholder')" style="width: 200px" />
+                <NButton size="small" type="error" :loading="blocklistLoading" :disabled="!blocklistInput" @click="doBlocklist('add')">{{ $t('adminServerCmd.add') }}</NButton>
+                <NButton size="small" type="warning" ghost :loading="blocklistLoading" :disabled="!blocklistInput" @click="doBlocklist('remove')">{{ $t('adminServerCmd.remove') }}</NButton>
+                <NButton size="small" :loading="blocklistLoading" @click="doBlocklist('list')">{{ $t('adminServerCmd.viewList') }}</NButton>
+                <NButton size="small" type="error" ghost :loading="blocklistLoading" @click="doBlocklist('clear')">{{ $t('adminServerCmd.clearAll') }}</NButton>
+              </NSpace>
+              <div v-if="blocklistResult || blocklistLoading" style="margin-top: 8px">
+                <NCode :code="blocklistResult" word-wrap style="max-height: 200px; overflow-y: auto" />
+              </div>
+            </div>
+
+            <NDivider />
+
+            <div>
+              <NText strong style="display: block; margin-bottom: 8px">{{ $t('adminServerCmd.bandwidthTitle') }}</NText>
+              <NSpace vertical :size="12">
+                <NSpace :size="8" align="center" wrap>
+                  <NText style="width: 100px">{{ $t('adminServerCmd.limitSpeed') }}</NText>
+                  <NInputNumber v-model:value="speedLimitInput" :placeholder="$t('adminServerCmd.mbPerSec')" style="width: 120px" />
+                  <NButton size="small" type="primary" :loading="bandwidthLoading" :disabled="speedLimitInput === null" @click="doBandwidth('limit-speed', 'set')">{{ $t('adminServerCmd.set') }}</NButton>
+                  <NButton size="small" :loading="bandwidthLoading" @click="doBandwidth('limit-speed', 'view')">{{ $t('adminServerCmd.view') }}</NButton>
+                </NSpace>
+                <NSpace :size="8" align="center" wrap>
+                  <NText style="width: 100px">{{ $t('adminServerCmd.totalBandwidth') }}</NText>
+                  <NInputNumber v-model:value="totalBandwidthInput" :placeholder="$t('adminServerCmd.mbPerSec')" style="width: 120px" />
+                  <NButton size="small" type="primary" :loading="bandwidthLoading" :disabled="totalBandwidthInput === null" @click="doBandwidth('total-bandwidth', 'set')">{{ $t('adminServerCmd.set') }}</NButton>
+                  <NButton size="small" :loading="bandwidthLoading" @click="doBandwidth('total-bandwidth', 'view')">{{ $t('adminServerCmd.view') }}</NButton>
+                </NSpace>
+                <NSpace :size="8" align="center" wrap>
+                  <NText style="width: 100px">{{ $t('adminServerCmd.singleBandwidth') }}</NText>
+                  <NInputNumber v-model:value="singleBandwidthInput" :placeholder="$t('adminServerCmd.mbPerSec')" style="width: 120px" />
+                  <NButton size="small" type="primary" :loading="bandwidthLoading" :disabled="singleBandwidthInput === null" @click="doBandwidth('single-bandwidth', 'set')">{{ $t('adminServerCmd.set') }}</NButton>
+                  <NButton size="small" :loading="bandwidthLoading" @click="doBandwidth('single-bandwidth', 'view')">{{ $t('adminServerCmd.view') }}</NButton>
+                </NSpace>
+                <NText depth="3" style="font-size: 12px">{{ $t('adminServerCmd.bandwidthHint') }}</NText>
+                <NButton size="small" :loading="bandwidthLoading" @click="viewUsage">{{ $t('adminServerCmd.viewUsage') }}</NButton>
+              </NSpace>
+              <div v-if="bandwidthResult || bandwidthLoading" style="margin-top: 8px">
+                <NCode :code="bandwidthResult" word-wrap style="max-height: 300px; overflow-y: auto" />
+              </div>
+            </div>
+
+            <NDivider />
+
+            <div>
+              <NText strong style="display: block; margin-bottom: 8px">{{ $t('adminServerCmd.downgradeTitle') }}</NText>
+              <NSpace vertical :size="12">
+                <NSpace :size="8" align="center" wrap>
+                  <NText style="width: 100px">{{ $t('adminServerCmd.downgradeThreshold') }}</NText>
+                  <NInputNumber v-model:value="downgradeThresholdInput" :placeholder="$t('adminServerCmd.thresholdPlaceholder')" style="width: 120px" />
+                  <NButton size="small" type="primary" :loading="downgradeLoading" :disabled="downgradeThresholdInput === null" @click="doDowngrade('downgrade-threshold', 'set')">{{ $t('adminServerCmd.set') }}</NButton>
+                  <NButton size="small" :loading="downgradeLoading" @click="doDowngrade('downgrade-threshold', 'view')">{{ $t('adminServerCmd.view') }}</NButton>
+                </NSpace>
+                <NSpace :size="8" align="center" wrap>
+                  <NText style="width: 100px">{{ $t('adminServerCmd.downgradeStartCheck') }}</NText>
+                  <NInputNumber v-model:value="downgradeStartCheckInput" :placeholder="$t('adminServerCmd.seconds')" style="width: 120px" />
+                  <NButton size="small" type="primary" :loading="downgradeLoading" :disabled="downgradeStartCheckInput === null" @click="doDowngrade('downgrade-start-check', 'set')">{{ $t('adminServerCmd.set') }}</NButton>
+                  <NButton size="small" :loading="downgradeLoading" @click="doDowngrade('downgrade-start-check', 'view')">{{ $t('adminServerCmd.view') }}</NButton>
+                </NSpace>
+              </NSpace>
+              <div v-if="downgradeResult || downgradeLoading" style="margin-top: 8px">
+                <NCode :code="downgradeResult" word-wrap style="max-height: 200px; overflow-y: auto" />
+              </div>
+            </div>
+          </NSpace>
+        </NCard>
+
+        <NCard size="small" :bordered="true">
+          <template #header>{{ $t('adminServerCmd.customCmdTitle') }}</template>
+          <NSpace vertical :size="12">
+            <NSpace :size="8" align="center" wrap>
+              <NText>{{ $t('adminServerCmd.target') }}</NText>
+              <NInput v-model:value="customTarget" style="width: 120px" :placeholder="$t('adminServerCmd.targetPlaceholder')" />
+              <NText>{{ $t('adminServerCmd.cmd') }}</NText>
+              <NInput v-model:value="customCmd" style="width: 200px" :placeholder="$t('adminServerCmd.cmdPlaceholder')" />
+              <NText>{{ $t('adminServerCmd.option') }}</NText>
+              <NInput v-model:value="customOption" style="width: 200px" :placeholder="$t('adminServerCmd.optionInput')" />
+              <NButton type="primary" :loading="customLoading" :disabled="!customCmd" @click="doCustomExec">{{ $t('adminServerCmd.execute') }}</NButton>
+            </NSpace>
+            <div v-if="customResult || customLoading">
+              <NText depth="3" style="font-size: 13px; margin-bottom: 6px; display: block">{{ $t('adminServerCmd.result') }}</NText>
+              <NCode :code="customResult" word-wrap style="max-height: 300px; overflow-y: auto" />
+            </div>
+
+            <NDivider />
+
+            <NSpace justify="space-between" align="center" wrap>
+              <NText strong>{{ $t('adminServerCmd.customCmdList') }}</NText>
+              <NButton type="primary" size="small" @click="openCreate">{{ $t('adminServerCmd.createCmd') }}</NButton>
+            </NSpace>
+            <NDataTable
+              remote
+              :scroll-x="1000"
+              :bordered="false"
+              :columns="columns"
+              :data="dataList"
+              :loading="loading"
+              :pagination="pagination"
+              @update:page="handlePageChange"
+              @update:page-size="handlePageSizeChange"
+            />
+          </NSpace>
+        </NCard>
+      </NSpace>
+    </NCard>
 
     <NModal
       v-model:show="createModalShow"
       preset="card"
-      :title="isEditing ? $t('adminServerCmd.editCmd') : $t('adminServerCmd.createCmd')"
+      :title="$t('adminServerCmd.createCmd')"
       style="width: 520px; max-width: 90vw"
     >
       <NForm ref="formRef" :model="formModel" :rules="rules" label-placement="top">
@@ -412,52 +755,10 @@ const referenceCommands = [
         <NSpace justify="end">
           <NButton @click="createModalShow = false">{{ $t('common.cancel') }}</NButton>
           <NButton type="primary" :loading="saving" @click="handleSave">
-            {{ isEditing ? $t('adminServerCmd.editCmd') : $t('adminServerCmd.createCmd') }}
+            {{ $t('common.save') }}
           </NButton>
         </NSpace>
       </template>
     </NModal>
-
-    <NModal
-      v-model:show="execModalShow"
-      preset="card"
-      :title="$t('adminServerCmd.executeCmd')"
-      style="width: 600px; max-width: 90vw"
-    >
-      <NSpace vertical :size="12">
-        <NDescriptions :column="2" size="small" bordered>
-          <NDescriptionsItem :label="$t('adminServerCmd.cmd')">
-            <NText strong>{{ execRow?.cmd }}</NText>
-          </NDescriptionsItem>
-          <NDescriptionsItem :label="$t('adminServerCmd.alias')">
-            {{ execRow?.alias || '-' }}
-          </NDescriptionsItem>
-          <NDescriptionsItem :label="$t('adminServerCmd.explain')">
-            {{ execRow ? translateExplain(execRow.explain) : '-' }}
-          </NDescriptionsItem>
-          <NDescriptionsItem :label="$t('adminServerCmd.target')">
-            <NTag size="small" :type="execRow?.target === '21115' ? 'info' : 'success'">
-              {{ execRow ? targetName(execRow.target) : '-' }}
-            </NTag>
-          </NDescriptionsItem>
-        </NDescriptions>
-        <div>
-          <NText depth="3" style="font-size: 13px; margin-bottom: 6px; display: block">{{ $t('adminServerCmd.option') }}</NText>
-          <NInput
-            v-model:value="execOption"
-            type="textarea"
-            :rows="2"
-            :placeholder="$t('adminServerCmd.optionInput')"
-          />
-        </div>
-        <NButton type="primary" :loading="execRunning" @click="handleExec">
-          {{ $t('adminServerCmd.execute') }}
-        </NButton>
-        <div v-if="execResult || execRunning">
-          <NText depth="3" style="font-size: 13px; margin-bottom: 6px; display: block">{{ $t('adminServerCmd.result') }}</NText>
-          <NCode :code="execResult" word-wrap style="max-height: 300px; overflow-y: auto" />
-        </div>
-      </NSpace>
-    </NModal>
-  </NCard>
+  </NSpace>
 </template>
