@@ -106,15 +106,31 @@ const serverConfigText = computed(() => {
   return lines.join('\n')
 })
 
+function base64UrlEncode(bytes: Uint8Array): string {
+  let binary = ''
+  bytes.forEach((byte) => {
+    binary += String.fromCharCode(byte)
+  })
+  return btoa(binary)
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '')
+}
+
 const serverConfigImportText = computed(() => {
   const cfg = appStore.serverConfig
   if (!cfg) return ''
-  const parts: string[] = []
-  if (cfg.id_server) parts.push(cfg.id_server)
-  if (cfg.relay_server) parts.push(cfg.relay_server)
-  if (cfg.api_server) parts.push(cfg.api_server)
-  if (cfg.key) parts.push(cfg.key)
-  return parts.join(',')
+  const config = {
+    host: cfg.id_server?.trim() || '',
+    relay: cfg.relay_server?.trim() || '',
+    api: cfg.api_server?.trim() || '',
+    key: cfg.key?.trim() || '',
+  }
+  if (!config.host) return ''
+  return base64UrlEncode(new TextEncoder().encode(JSON.stringify(config)))
+    .split('')
+    .reverse()
+    .join('')
 })
 
 function copyCredentials(): void {
