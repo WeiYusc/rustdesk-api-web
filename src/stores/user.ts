@@ -8,6 +8,15 @@ import { useAppStore } from '@/stores/app'
 import { useTagsStore } from '@/stores/tags'
 import type { UserInfo } from '@/types'
 
+function validateOidcUrl(rawUrl: string): boolean {
+  try {
+    const url = new URL(rawUrl)
+    return url.protocol === 'https:'
+  } catch {
+    return false
+  }
+}
+
 function detectPlatform(): string {
   const ua = navigator.userAgent
   if (/Win/.test(ua)) return 'windows'
@@ -84,6 +93,9 @@ export const useUserStore = defineStore('user', () => {
       },
     }
     const res = await oidcAuth(data)
+    if (!validateOidcUrl(res.data.url)) {
+      throw new Error('Invalid OIDC redirect URL')
+    }
     setCode(res.data.code)
     if (provider === 'webauth') {
       window.open(res.data.url, '_blank', 'noopener,noreferrer')

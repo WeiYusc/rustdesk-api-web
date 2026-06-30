@@ -40,7 +40,8 @@
     "usernameOrPasswordError": "使用者名稱或密碼錯誤。",
     "paramsError": "參數驗證失敗。",
     "loginBanned": "登入已被封禁。",
-    "noLoginMethod": "請聯繫管理員配置登入方式。"
+    "noLoginMethod": "請聯繫管理員配置登入方式。",
+    "oidcUrlInvalid": "OIDC 跳轉地址無效"
   },
   "menu": {
     "My": "我的",

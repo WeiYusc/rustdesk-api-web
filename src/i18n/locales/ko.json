@@ -40,7 +40,8 @@
     "usernameOrPasswordError": "사용자 이름이나 비밀번호가 올바르지 않습니다.",
     "paramsError": "매개변수 검증에 실패했습니다.",
     "loginBanned": "로그인이 금지되었습니다.",
-    "noLoginMethod": "관리자에게 로그인 방법 설정을 문의해 주세요."
+    "noLoginMethod": "관리자에게 로그인 방법 설정을 문의해 주세요.",
+    "oidcUrlInvalid": "잘못된 OIDC 리디렉트 URL"
   },
   "menu": {
     "My": "내",

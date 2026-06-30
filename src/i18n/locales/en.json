@@ -40,7 +40,8 @@
     "usernameOrPasswordError": "Username or password error.",
     "paramsError": "Params validation failed.",
     "loginBanned": "Login banned.",
-    "noLoginMethod": "Please contact the administrator to configure a login method."
+    "noLoginMethod": "Please contact the administrator to configure a login method.",
+    "oidcUrlInvalid": "Invalid OIDC redirect URL"
   },
   "menu": {
     "My": "My",

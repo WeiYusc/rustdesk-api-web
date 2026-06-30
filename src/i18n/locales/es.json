@@ -40,7 +40,8 @@
     "usernameOrPasswordError": "Error de usuario o contraseña.",
     "paramsError": "La validación de los parámetros falló.",
     "loginBanned": "Inicio de sesión prohibido.",
-    "noLoginMethod": "Póngase en contacto con el administrador para configurar un método de inicio de sesión."
+    "noLoginMethod": "Póngase en contacto con el administrador para configurar un método de inicio de sesión.",
+    "oidcUrlInvalid": "URL de redirección OIDC no válida"
   },
   "menu": {
     "My": "Mi",

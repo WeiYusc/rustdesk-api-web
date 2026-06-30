@@ -40,7 +40,8 @@
     "usernameOrPasswordError": "Nom d'utilisateur ou de mot de passe incorrect.",
     "paramsError": "La validation des paramètres a échoué.",
     "loginBanned": "Connexion bannie.",
-    "noLoginMethod": "Veuillez contacter l'administrateur pour configurer une méthode de connexion."
+    "noLoginMethod": "Veuillez contacter l'administrateur pour configurer une méthode de connexion.",
+    "oidcUrlInvalid": "URL de redirection OIDC invalide"
   },
   "menu": {
     "My": "Moi",
