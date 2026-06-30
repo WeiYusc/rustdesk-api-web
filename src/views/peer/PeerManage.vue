@@ -77,6 +77,16 @@ const columns = computed<DataTableColumns<Peer>>(() => [
   { title: t('adminPeer.alias'), key: 'alias', ellipsis: { tooltip: true } },
   { title: t('adminPeer.os'), key: 'os', ellipsis: { tooltip: true } },
   { title: t('adminPeer.username'), key: 'username', ellipsis: { tooltip: true } },
+  { title: t('adminPeer.userId'), key: 'user_id', width: 80, render: (row) => '#' + row.user_id },
+  {
+    title: t('adminPeer.groupId'),
+    key: 'group_id',
+    width: 120,
+    render: (row) => {
+      const g = groupOptions.value.find((opt) => opt.value === row.group_id)
+      return g ? g.label : '-'
+    },
+  },
   { title: t('adminPeer.lastOnlineIp'), key: 'last_online_ip', ellipsis: { tooltip: true } },
   {
     title: t('adminPeer.lastOnlineTime'),

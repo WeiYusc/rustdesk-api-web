@@ -59,11 +59,13 @@ const columns = computed<DataTableColumns<LoginLog>>(() => [
   { type: 'selection' },
   { title: appStore.t('myLoginLog.ip'), key: 'ip' },
   { title: appStore.t('myLoginLog.client'), key: 'client' },
+  { title: appStore.t('myLoginLog.deviceId'), key: 'device_id', ellipsis: { tooltip: true } },
+  { title: appStore.t('myLoginLog.uuid'), key: 'uuid', ellipsis: { tooltip: true } },
   {
     title: appStore.t('myLoginLog.type'),
     key: 'type',
     render: (row: LoginLog) =>
-      row.type === '1' ? appStore.t('myLoginLog.typeWebAdmin') : row.type === '2' ? appStore.t('myLoginLog.typeClient') : String(row.type),
+      row.type === 'account' ? appStore.t('myLoginLog.typeWebAdmin') : row.type === 'oauth' ? appStore.t('myLoginLog.typeClient') : String(row.type),
   },
   { title: appStore.t('myLoginLog.platform'), key: 'platform' },
   {

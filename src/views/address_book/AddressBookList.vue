@@ -36,6 +36,7 @@ import { list as listPeers } from '@/api/peer'
 import type { AddressBook, Peer } from '@/types'
 import { useIsMobile } from '@/composables/useIsMobile'
 import { connectByClient } from '@/utils/peer'
+import { formatTime } from '@/utils/format'
 
 const { t } = useI18n()
 const message = useMessage()
@@ -215,6 +216,12 @@ const columns = computed<DataTableColumns<AddressBook>>(() => [
     title: t('adminAddressBook.userId'),
     key: 'user_id',
     render: (row) => '#' + row.user_id,
+  },
+  { title: t('adminAddressBook.platform'), key: 'platform', ellipsis: { tooltip: true } },
+  {
+    title: t('adminAddressBook.createdAt'),
+    key: 'created_at',
+    render: (row) => formatTime(row.created_at),
   },
   {
     title: t('common.actions'),

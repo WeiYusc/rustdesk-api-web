@@ -148,7 +148,8 @@
     "required": "Это поле обязательно",
     "importFromPeers": "Импорт из пиров",
     "importFromPeersSuccess": "Успешно импортировано из пиров",
-    "noPeerSelection": "Пожалуйста, выберите хотя бы один пир"
+    "noPeerSelection": "Пожалуйста, выберите хотя бы один пир",
+    "createdAt": "Создано"
   },
   "myTag": {
     "title": "Мои теги",
@@ -204,7 +205,9 @@
     "batchDeleteConfirm": "Вы уверены, что хотите удалить выбранные журналы входов?",
     "deleteSuccess": "Успешно удалено",
     "typeWebAdmin": "Веб-админ",
-    "typeClient": "Клиент"
+    "typeClient": "Клиент",
+    "deviceId": "ID устройства",
+    "uuid": "UUID"
   },
   "myShareRecord": {
     "title": "Запись обмена",
@@ -217,7 +220,10 @@
     "batchDelete": "Пакетное удаление",
     "deleteConfirm": "Вы уверены, что хотите удалить эту запись обмена?",
     "batchDeleteConfirm": "Вы уверены, что хотите удалить выбранные записи обмена?",
-    "deleteSuccess": "Успешно удалено"
+    "deleteSuccess": "Успешно удалено",
+    "passwordType": "Тип пароля",
+    "typeOnce": "Одноразовый",
+    "typeFixed": "Фиксированный"
   },
   "myPeer": {
     "title": "Мои пиры",
@@ -254,7 +260,8 @@
     "searchUsername": "Поиск имени пользователя",
     "deleteConfirm": "Вы уверены, что хотите удалить этого пользователя?",
     "yes": "Да",
-    "no": "Нет"
+    "no": "Нет",
+    "id": "ID"
   },
   "adminUserToken": {
     "title": "Токены пользователей",
@@ -420,7 +427,8 @@
     "updateSuccess": "Успешно обновлено",
     "deleteSuccess": "Успешно удалено",
     "batchDeleteSuccess": "Пакетное удаление успешно",
-    "required": "Это поле обязательно"
+    "required": "Это поле обязательно",
+    "userId": "ID пользователя"
   },
   "adminLoginLog": {
     "title": "Журнал входов",

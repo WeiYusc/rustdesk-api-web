@@ -59,6 +59,7 @@ function groupName(id: number): string {
 }
 
 const columns = computed<DataTableColumns<AdminUser>>(() => [
+  { title: t('adminUser.id'), key: 'id', width: 70 },
   { title: t('adminUser.username'), key: 'username', ellipsis: { tooltip: true } },
   { title: t('adminUser.email'), key: 'email', ellipsis: { tooltip: true } },
   { title: t('adminUser.nickname'), key: 'nickname', ellipsis: { tooltip: true } },

@@ -35,6 +35,7 @@ const pagination = reactive({
 
 const columns = computed<DataTableColumns<UserToken>>(() => [
   { type: 'selection' },
+  { title: t('adminUserToken.userId'), key: 'user_id', width: 80, render: (row) => '#' + row.user_id },
   { title: t('adminUserToken.deviceUuid'), key: 'device_uuid', ellipsis: { tooltip: true } },
   { title: t('adminUserToken.deviceId'), key: 'device_id', ellipsis: { tooltip: true } },
   {

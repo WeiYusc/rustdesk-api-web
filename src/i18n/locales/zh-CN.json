@@ -148,7 +148,8 @@
     "required": "此项为必填",
     "importFromPeers": "从Peer导入",
     "importFromPeersSuccess": "从Peer导入成功",
-    "noPeerSelection": "请至少选择一个Peer"
+    "noPeerSelection": "请至少选择一个Peer",
+    "createdAt": "创建时间"
   },
   "myTag": {
     "title": "我的标签",
@@ -204,7 +205,9 @@
     "batchDeleteConfirm": "确定删除选中的登录日志吗？",
     "deleteSuccess": "删除成功",
     "typeWebAdmin": "Web 管理端",
-    "typeClient": "客户端"
+    "typeClient": "客户端",
+    "deviceId": "设备ID",
+    "uuid": "UUID"
   },
   "myShareRecord": {
     "title": "分享记录",
@@ -217,7 +220,10 @@
     "batchDelete": "批量删除",
     "deleteConfirm": "确定删除此分享记录吗？",
     "batchDeleteConfirm": "确定删除选中的分享记录吗？",
-    "deleteSuccess": "删除成功"
+    "deleteSuccess": "删除成功",
+    "passwordType": "密码类型",
+    "typeOnce": "一次性",
+    "typeFixed": "固定"
   },
   "myPeer": {
     "title": "我的设备",
@@ -254,7 +260,8 @@
     "searchUsername": "搜索用户名",
     "deleteConfirm": "确定要删除此用户吗？",
     "yes": "是",
-    "no": "否"
+    "no": "否",
+    "id": "ID"
   },
   "adminUserToken": {
     "title": "用户令牌",
@@ -420,7 +427,8 @@
     "updateSuccess": "更新成功",
     "deleteSuccess": "删除成功",
     "batchDeleteSuccess": "批量删除成功",
-    "required": "此项为必填"
+    "required": "此项为必填",
+    "userId": "用户ID"
   },
   "adminLoginLog": {
     "title": "登录日志",

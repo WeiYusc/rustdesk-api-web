@@ -32,6 +32,7 @@ import { list as listPeers } from '@/api/my/peer'
 import type { AddressBook, Peer } from '@/types'
 import { useIsMobile } from '@/composables/useIsMobile'
 import { connectByClient } from '@/utils/peer'
+import { formatTime } from '@/utils/format'
 
 interface AddressBookFormData {
   row_id?: number
@@ -172,6 +173,12 @@ const columns = computed<DataTableColumns<AddressBook>>(() => [
             : appStore.t('myAddressBook.offlineStatus'),
       )
     },
+  },
+  { title: appStore.t('myAddressBook.platform'), key: 'platform', ellipsis: { tooltip: true } },
+  {
+    title: appStore.t('myAddressBook.createdAt'),
+    key: 'created_at',
+    render: (row) => formatTime(row.created_at),
   },
   {
     title: appStore.t('common.actions'),

@@ -148,7 +148,8 @@
     "required": "Ce champ est obligatoire",
     "importFromPeers": "Importer depuis les pairs",
     "importFromPeersSuccess": "Importé depuis les pairs avec succès",
-    "noPeerSelection": "Veuillez sélectionner au moins un pair"
+    "noPeerSelection": "Veuillez sélectionner au moins un pair",
+    "createdAt": "Créé le"
   },
   "myTag": {
     "title": "Mes étiquettes",
@@ -204,7 +205,9 @@
     "batchDeleteConfirm": "Êtes-vous sûr de vouloir supprimer les journaux de connexion sélectionnés ?",
     "deleteSuccess": "Supprimé avec succès",
     "typeWebAdmin": "Admin Web",
-    "typeClient": "Client"
+    "typeClient": "Client",
+    "deviceId": "ID appareil",
+    "uuid": "UUID"
   },
   "myShareRecord": {
     "title": "Enregistrement de partage",
@@ -217,7 +220,10 @@
     "batchDelete": "Suppression par lot",
     "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cet enregistrement de partage ?",
     "batchDeleteConfirm": "Êtes-vous sûr de vouloir supprimer les enregistrements de partage sélectionnés ?",
-    "deleteSuccess": "Supprimé avec succès"
+    "deleteSuccess": "Supprimé avec succès",
+    "passwordType": "Type de mot de passe",
+    "typeOnce": "Unique",
+    "typeFixed": "Fixe"
   },
   "myPeer": {
     "title": "Mes pairs",
@@ -254,7 +260,8 @@
     "searchUsername": "Rechercher un nom d'utilisateur",
     "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cet utilisateur ?",
     "yes": "Oui",
-    "no": "Non"
+    "no": "Non",
+    "id": "ID"
   },
   "adminUserToken": {
     "title": "Jetons utilisateur",
@@ -420,7 +427,8 @@
     "updateSuccess": "Mis à jour avec succès",
     "deleteSuccess": "Supprimé avec succès",
     "batchDeleteSuccess": "Suppression par lot réussie",
-    "required": "Ce champ est obligatoire"
+    "required": "Ce champ est obligatoire",
+    "userId": "ID utilisateur"
   },
   "adminLoginLog": {
     "title": "Journal de connexion",

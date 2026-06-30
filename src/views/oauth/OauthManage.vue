@@ -56,6 +56,7 @@ const pagination = reactive({
 const columns = computed<DataTableColumns<Oauth>>(() => [
   { title: t('adminOauth.op'), key: 'op', ellipsis: { tooltip: true } },
   { title: t('adminOauth.oauthType'), key: 'oauth_type', ellipsis: { tooltip: true } },
+  { title: t('adminOauth.issuer'), key: 'issuer', ellipsis: { tooltip: true } },
   { title: t('adminOauth.clientId'), key: 'client_id', ellipsis: { tooltip: true } },
   {
     title: t('adminOauth.autoRegister'),

@@ -70,6 +70,17 @@ const columns = computed<DataTableColumns<ShareRecord>>(() => [
     render: () => '•••••',
   },
   {
+    title: appStore.t('myShareRecord.passwordType'),
+    key: 'password_type',
+    render: (row: ShareRecord) => {
+      const map: Record<string, string> = {
+        once: appStore.t('myShareRecord.typeOnce'),
+        fixed: appStore.t('myShareRecord.typeFixed'),
+      }
+      return map[row.password_type] || String(row.password_type)
+    },
+  },
+  {
     title: appStore.t('myShareRecord.expire'),
     key: 'expire',
     render: (row: ShareRecord) => formatExpire(row.expire),

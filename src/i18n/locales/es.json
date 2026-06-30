@@ -148,7 +148,8 @@
     "required": "Este campo es obligatorio",
     "importFromPeers": "Importar de pares",
     "importFromPeersSuccess": "Importado de pares con éxito",
-    "noPeerSelection": "Por favor seleccione al menos un par"
+    "noPeerSelection": "Por favor seleccione al menos un par",
+    "createdAt": "Creado"
   },
   "myTag": {
     "title": "Mis etiquetas",
@@ -204,7 +205,9 @@
     "batchDeleteConfirm": "¿Está seguro de eliminar los registros de inicio de sesión seleccionados?",
     "deleteSuccess": "Eliminado con éxito",
     "typeWebAdmin": "Admin Web",
-    "typeClient": "Cliente"
+    "typeClient": "Cliente",
+    "deviceId": "ID dispositivo",
+    "uuid": "UUID"
   },
   "myShareRecord": {
     "title": "Registro de compartición",
@@ -217,7 +220,10 @@
     "batchDelete": "Eliminación por lotes",
     "deleteConfirm": "¿Está seguro de eliminar este registro de compartición?",
     "batchDeleteConfirm": "¿Está seguro de eliminar los registros de compartición seleccionados?",
-    "deleteSuccess": "Eliminado con éxito"
+    "deleteSuccess": "Eliminado con éxito",
+    "passwordType": "Tipo de contraseña",
+    "typeOnce": "Único",
+    "typeFixed": "Fijo"
   },
   "myPeer": {
     "title": "Mis pares",
@@ -254,7 +260,8 @@
     "searchUsername": "Buscar nombre de usuario",
     "deleteConfirm": "¿Está seguro de que desea eliminar este usuario?",
     "yes": "Sí",
-    "no": "No"
+    "no": "No",
+    "id": "ID"
   },
   "adminUserToken": {
     "title": "Tokens de usuario",
@@ -420,7 +427,8 @@
     "updateSuccess": "Actualizado con éxito",
     "deleteSuccess": "Eliminado con éxito",
     "batchDeleteSuccess": "Eliminación por lotes exitosa",
-    "required": "Este campo es obligatorio"
+    "required": "Este campo es obligatorio",
+    "userId": "ID de usuario"
   },
   "adminLoginLog": {
     "title": "Registro de inicio de sesión",

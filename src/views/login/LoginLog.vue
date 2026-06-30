@@ -44,7 +44,7 @@ const columns = computed<DataTableColumns<LoginLog>>(() => [
     title: t('adminLoginLog.type'),
     key: 'type',
     render: (row) =>
-      row.type === '1' ? t('adminLoginLog.typeWebAdmin') : row.type === '2' ? t('adminLoginLog.typeClient') : String(row.type),
+      row.type === 'account' ? t('adminLoginLog.typeWebAdmin') : row.type === 'oauth' ? t('adminLoginLog.typeClient') : String(row.type),
   },
   { title: t('adminLoginLog.platform'), key: 'platform' },
   {

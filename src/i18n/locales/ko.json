@@ -148,7 +148,8 @@
     "required": "필수 입력 항목입니다",
     "importFromPeers": "피어에서 가져오기",
     "importFromPeersSuccess": "피어에서 가져오기 성공",
-    "noPeerSelection": "하나 이상의 피어를 선택해주세요"
+    "noPeerSelection": "하나 이상의 피어를 선택해주세요",
+    "createdAt": "생성 시간"
   },
   "myTag": {
     "title": "내 태그",
@@ -204,7 +205,9 @@
     "batchDeleteConfirm": "선택한 로그인 로그를 삭제하시겠습니까?",
     "deleteSuccess": "삭제되었습니다",
     "typeWebAdmin": "웹 관리자",
-    "typeClient": "클라이언트"
+    "typeClient": "클라이언트",
+    "deviceId": "장치 ID",
+    "uuid": "UUID"
   },
   "myShareRecord": {
     "title": "공유 기록",
@@ -217,7 +220,10 @@
     "batchDelete": "일괄 삭제",
     "deleteConfirm": "이 공유 기록을 삭제하시겠습니까?",
     "batchDeleteConfirm": "선택한 공유 기록을 삭제하시겠습니까?",
-    "deleteSuccess": "삭제되었습니다"
+    "deleteSuccess": "삭제되었습니다",
+    "passwordType": "비밀번호 유형",
+    "typeOnce": "일회용",
+    "typeFixed": "고정"
   },
   "myPeer": {
     "title": "내 피어",
@@ -254,7 +260,8 @@
     "searchUsername": "사용자 이름 검색",
     "deleteConfirm": "이 사용자를 삭제하시겠습니까?",
     "yes": "예",
-    "no": "아니오"
+    "no": "아니오",
+    "id": "ID"
   },
   "adminUserToken": {
     "title": "사용자 토큰",
@@ -420,7 +427,8 @@
     "updateSuccess": "업데이트되었습니다",
     "deleteSuccess": "삭제되었습니다",
     "batchDeleteSuccess": "일괄 삭제되었습니다",
-    "required": "필수 입력 항목입니다"
+    "required": "필수 입력 항목입니다",
+    "userId": "사용자 ID"
   },
   "adminLoginLog": {
     "title": "로그인 로그",
