@@ -151,17 +151,33 @@ const editForm = reactive({
 })
 const editLoading = ref(false)
 const editFormRef = ref<FormInst | null>(null)
+const editFormModel = computed(() => ({ ...editForm, ...pwdForm }))
 const avatarMode = ref<'upload' | 'external'>('upload')
 const avatarPreviewUrl = ref('')
 const cropperImageRef = ref<HTMLImageElement | null>(null)
 let cropperInstance: Cropper | null = null
 let avatarObjectUrl = ''
 
-const editRules = computed<FormRules>(() => ({
-  nickname: [
-    { required: true, message: appStore.t('myInfo.nicknameRequired'), trigger: ['blur', 'input'] },
-  ],
-}))
+const editRules = computed<FormRules>(() => {
+  const passwordValidator = (_rule: unknown, value: string): boolean | Error => {
+    const hasAnyPassword = Boolean(pwdForm.old_password || pwdForm.new_password || pwdForm.confirm_password)
+    if (!hasAnyPassword) return true
+    if (!value) return new Error(appStore.t('login.password'))
+    if (pwdForm.new_password && pwdForm.confirm_password && pwdForm.new_password !== pwdForm.confirm_password) {
+      return new Error(appStore.t('register.passwordMismatch'))
+    }
+    return true
+  }
+
+  return {
+    nickname: [
+      { required: true, message: appStore.t('myInfo.nicknameRequired'), trigger: ['blur', 'input'] },
+    ],
+    old_password: [{ validator: passwordValidator, trigger: ['blur', 'input'] }],
+    new_password: [{ validator: passwordValidator, trigger: ['blur', 'input'] }],
+    confirm_password: [{ validator: passwordValidator, trigger: ['blur', 'input'] }],
+  }
+})
 
 function revokeAvatarObjectUrl(): void {
   if (avatarObjectUrl) {
@@ -420,7 +436,7 @@ async function handleSaveProfile(): Promise<void> {
       style="width: 680px; max-width: 94vw"
       @after-leave="destroyCropper"
     >
-      <NForm ref="editFormRef" :model="editForm" :rules="editRules" label-placement="top">
+      <NForm ref="editFormRef" :model="editFormModel" :rules="editRules" label-placement="top">
         <NFormItem :label="$t('myInfo.nickname')" path="nickname">
           <NInput v-model:value="editForm.nickname" :placeholder="$t('myInfo.nickname')" />
         </NFormItem>
@@ -465,24 +481,30 @@ async function handleSaveProfile(): Promise<void> {
         </NFormItem>
         <NFormItem :label="$t('myInfo.changePassword')">
           <NSpace vertical style="width: 100%">
-            <NInput
-              v-model:value="pwdForm.old_password"
-              type="password"
-              show-password-on="click"
-              :placeholder="$t('myInfo.oldPassword')"
-            />
-            <NInput
-              v-model:value="pwdForm.new_password"
-              type="password"
-              show-password-on="click"
-              :placeholder="$t('myInfo.newPassword')"
-            />
-            <NInput
-              v-model:value="pwdForm.confirm_password"
-              type="password"
-              show-password-on="click"
-              :placeholder="$t('myInfo.confirmPassword')"
-            />
+            <NFormItem path="old_password" :show-label="false">
+              <NInput
+                v-model:value="pwdForm.old_password"
+                type="password"
+                show-password-on="click"
+                :placeholder="$t('myInfo.oldPassword')"
+              />
+            </NFormItem>
+            <NFormItem path="new_password" :show-label="false">
+              <NInput
+                v-model:value="pwdForm.new_password"
+                type="password"
+                show-password-on="click"
+                :placeholder="$t('myInfo.newPassword')"
+              />
+            </NFormItem>
+            <NFormItem path="confirm_password" :show-label="false">
+              <NInput
+                v-model:value="pwdForm.confirm_password"
+                type="password"
+                show-password-on="click"
+                :placeholder="$t('myInfo.confirmPassword')"
+              />
+            </NFormItem>
           </NSpace>
         </NFormItem>
       </NForm>
