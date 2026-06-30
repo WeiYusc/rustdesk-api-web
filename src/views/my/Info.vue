@@ -352,11 +352,8 @@ async function handleSaveProfile(): Promise<void> {
         <NButton size="small" type="primary" ghost @click="openEditProfile">{{ $t('common.edit') }}</NButton>
       </template>
       <NSpace align="center" :size="24">
-        <NAvatar
-          round
-          :size="80"
-          :src="userStore.avatar || undefined"
-        >
+        <NAvatar v-if="userStore.avatar" round :size="80" :src="userStore.avatar" />
+        <NAvatar v-else round :size="80">
           {{ userStore.nickname?.charAt(0) || userStore.username?.charAt(0) }}
         </NAvatar>
         <NDescriptions label-placement="left" :column="1" size="large">
