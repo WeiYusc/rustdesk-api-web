@@ -11,7 +11,7 @@ import type { UserInfo } from '@/types'
 function validateOidcUrl(rawUrl: string): boolean {
   try {
     const url = new URL(rawUrl)
-    return url.protocol === 'https:'
+    return url.protocol === 'https:' || url.protocol === 'http:'
   } catch {
     return false
   }
