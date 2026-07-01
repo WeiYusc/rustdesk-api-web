@@ -30,9 +30,9 @@ export function savePasskeySettings(data: PasskeySettings): Promise<ApiResponse<
 }
 
 export function getAuthPolicySettings(): Promise<ApiResponse<AuthPolicySettings>> {
-  return request.get('/settings/auth')
+  return request.get('/settings/auth-policy')
 }
 
 export function saveAuthPolicySettings(data: AuthPolicySettings): Promise<ApiResponse<null>> {
-  return request.post('/settings/auth', data)
+  return request.post('/settings/auth-policy', data)
 }

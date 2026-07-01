@@ -1,8 +1,10 @@
 <script setup lang="ts">
 defineOptions({ name: 'Settings' })
-import { NCard, NTabs, NTabPane, NText } from 'naive-ui'
+import { NCard, NTabs, NTabPane } from 'naive-ui'
 import SmtpSettings from './components/SmtpSettings.vue'
 import EmailVerificationSettings from './components/EmailVerificationSettings.vue'
+import PasskeySettings from './components/PasskeySettings.vue'
+import AuthPolicySettings from './components/AuthPolicySettings.vue'
 </script>
 
 <template>
@@ -16,10 +18,10 @@ import EmailVerificationSettings from './components/EmailVerificationSettings.vu
         <EmailVerificationSettings />
       </NTabPane>
       <NTabPane name="passkey" :tab="$t('adminSettings.passkey')">
-        <NText depth="3">{{ $t('adminSettings.passkeyPlaceholder') }}</NText>
+        <PasskeySettings />
       </NTabPane>
       <NTabPane name="auth" :tab="$t('adminSettings.auth')">
-        <NText depth="3">{{ $t('adminSettings.authPlaceholder') }}</NText>
+        <AuthPolicySettings />
       </NTabPane>
     </NTabs>
   </NCard>

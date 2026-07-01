@@ -362,7 +362,7 @@ export interface PasskeySettings {
 }
 
 export interface AuthPolicySettings {
-  disable_pwd_login: boolean
+  disable_password_login: boolean
 }
 
 declare module 'vue-router' {

@@ -703,6 +703,21 @@
     "emailVerificationCooldown": "Интервал отправки",
     "emailVerificationSeconds": "секунд",
     "emailVerificationDailyLimit": "Дневной лимит",
-    "emailVerificationSaveSuccess": "Настройки сохранены"
+    "emailVerificationSaveSuccess": "Настройки сохранены",
+    "passkeyTitle": "Passkey Settings",
+    "passkeyEnabled": "Enable Passkey",
+    "passkeyRpName": "RP Name",
+    "passkeyRpId": "RP ID / Domain",
+    "passkeyAllowedOrigins": "Allowed Origins",
+    "passkeyUserVerification": "User Verification",
+    "passkeyDiscoverableLogin": "Enable username-less login",
+    "passkeyDiscoverableLoginHint": "Allow the login page to use registered discoverable passkeys.",
+    "passkeyHttpsHint": "Passkeys require an HTTPS origin. RP ID is usually the current domain; allowed origins should include full https:// URLs.",
+    "passkeyUseCurrentOrigin": "Use current origin",
+    "passkeySaveSuccess": "Passkey settings saved",
+    "authTitle": "Login Policy",
+    "authDisablePasswordLogin": "Disable password login",
+    "authDisablePasswordWarning": "Before disabling password login, make sure at least one admin OAuth or Passkey login path is available.",
+    "authSaveSuccess": "Login policy saved"
   }
 }

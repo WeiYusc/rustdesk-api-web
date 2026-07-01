@@ -703,6 +703,21 @@
     "emailVerificationCooldown": "重发冷却",
     "emailVerificationSeconds": "秒",
     "emailVerificationDailyLimit": "每日发送上限",
-    "emailVerificationSaveSuccess": "邮箱验证设置已保存"
+    "emailVerificationSaveSuccess": "邮箱验证设置已保存",
+    "passkeyTitle": "通行密钥设置",
+    "passkeyEnabled": "启用通行密钥",
+    "passkeyRpName": "RP 名称",
+    "passkeyRpId": "RP ID / 域名",
+    "passkeyAllowedOrigins": "允许的 Origin",
+    "passkeyUserVerification": "用户验证要求",
+    "passkeyDiscoverableLogin": "启用无用户名登录",
+    "passkeyDiscoverableLoginHint": "允许登录页直接使用已注册的可发现通行密钥登录。",
+    "passkeyHttpsHint": "通行密钥需要 HTTPS 域名；RP ID 通常填写当前域名，允许的 Origin 填写完整 https:// 地址。",
+    "passkeyUseCurrentOrigin": "使用当前域名",
+    "passkeySaveSuccess": "通行密钥设置已保存",
+    "authTitle": "登录策略",
+    "authDisablePasswordLogin": "禁用密码登录",
+    "authDisablePasswordWarning": "禁用密码登录前，请确保至少存在一个可用的管理员 OAuth 或通行密钥登录方式。",
+    "authSaveSuccess": "登录策略已保存"
   }
 }
