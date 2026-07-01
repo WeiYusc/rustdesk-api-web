@@ -110,6 +110,37 @@ function renderIcon(icon: string): (() => VNodeChild) | undefined {
   return () => h(NIcon, null, { default: () => h(IconComp) })
 }
 
+function menuTitle(route: RouteRecordRaw): string {
+  return route.meta?.title ? appStore.t(`menu.${route.meta.title}`) || (route.meta.title as string) : (route.name as string)
+}
+
+function menuPath(parent: RouteRecordRaw, child?: RouteRecordRaw): string {
+  if (!child) return parent.path
+  return child.path?.startsWith('/') ? child.path : `${parent.path === '/' ? '' : parent.path}/${child.path}`.replace('//', '/')
+}
+
+function renderMenuLink(path: string, label: string): () => VNodeChild {
+  return () => h(
+    'a',
+    {
+      href: router.resolve(path).href,
+      class: 'menu-link',
+      onClick: (event: MouseEvent) => {
+        event.stopPropagation()
+        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+          return
+        }
+        event.preventDefault()
+        router.push(path)
+        if (isMobile.value) {
+          drawerVisible.value = false
+        }
+      },
+    },
+    label,
+  )
+}
+
 function buildMenuOptions(routes: RouteRecordRaw[]): MenuOption[] {
   return routes
     .filter((r) => !r.meta?.hide)
@@ -117,21 +148,25 @@ function buildMenuOptions(routes: RouteRecordRaw[]): MenuOption[] {
       const children = r.children
         ? r.children.filter((c) => !c.meta?.hide)
         : []
+      const parentPath = menuPath(r)
       if (children.length > 0) {
         return {
-          label: r.meta?.title ? appStore.t(`menu.${r.meta.title}`) || (r.meta.title as string) : (r.name as string),
-          key: r.path,
+          label: menuTitle(r),
+          key: parentPath,
           icon: renderIcon(r.meta?.icon as string),
-          children: children.map((c) => ({
-            label: c.meta?.title ? appStore.t(`menu.${c.meta.title}`) || (c.meta.title as string) : (c.name as string),
-            key: c.path?.startsWith('/') ? c.path : `${r.path === '/' ? '' : r.path}/${c.path}`.replace('//', '/'),
-            icon: renderIcon(c.meta?.icon as string),
-          })),
+          children: children.map((c) => {
+            const childPath = menuPath(r, c)
+            return {
+              label: renderMenuLink(childPath, menuTitle(c)),
+              key: childPath,
+              icon: renderIcon(c.meta?.icon as string),
+            }
+          }),
         }
       }
       return {
-        label: r.meta?.title ? appStore.t(`menu.${r.meta.title}`) || (r.meta.title as string) : (r.name as string),
-        key: r.path,
+        label: renderMenuLink(parentPath, menuTitle(r)),
+        key: parentPath,
         icon: renderIcon(r.meta?.icon as string),
       }
     })
@@ -296,17 +331,21 @@ watch(
 
       <div class="tags-bar">
         <NSpace :size="4">
-            <NButton
-              v-for="(tag, index) in tagsStore.tags"
-              :key="tag.path"
-              :type="tag.path === activeKey ? 'primary' : 'default'"
-              size="tiny"
-              round
-              @click="router.push(tag.path)"
-            >
-              {{ appStore.t(`menu.${tag.title}`) || tag.title }}
-              <span v-if="tagsStore.tags.length > 1" class="tag-close" @click.stop="handleCloseTag(tag.path, index)">×</span>
-            </NButton>
+          <a
+            v-for="(tag, index) in tagsStore.tags"
+            :key="tag.path"
+            class="tag-link"
+            :class="{ 'tag-link-active': tag.path === activeKey }"
+            :href="router.resolve(tag.path).href"
+            @click="(event: MouseEvent) => {
+              if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+              event.preventDefault()
+              router.push(tag.path)
+            }"
+          >
+            {{ appStore.t(`menu.${tag.title}`) || tag.title }}
+            <span v-if="tagsStore.tags.length > 1" class="tag-close" @click.prevent.stop="handleCloseTag(tag.path, index)">×</span>
+          </a>
         </NSpace>
       </div>
 
@@ -337,6 +376,15 @@ watch(
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+.menu-link {
+  display: block;
+  width: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+.menu-link:hover {
+  color: inherit;
+}
 .logo-area {
   height: 56px;
   display: flex;
@@ -357,6 +405,27 @@ watch(
   padding: 6px 16px;
   border-bottom: 1px solid var(--n-border-color, #efeff5);
   overflow-x: auto;
+}
+.tag-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 10px;
+  border: 1px solid var(--n-border-color, #efeff5);
+  border-radius: 999px;
+  color: inherit;
+  text-decoration: none;
+  font-size: 12px;
+  line-height: 22px;
+  background: var(--n-color, transparent);
+}
+.tag-link-active {
+  color: #fff;
+  border-color: var(--primary-color, #18a058);
+  background: var(--primary-color, #18a058);
+}
+.tag-link:hover {
+  text-decoration: none;
 }
 .tag-close {
   margin-left: 4px;

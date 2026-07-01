@@ -15,6 +15,7 @@ import {
 import { list, deleteUserToken, batchDelete } from '@/api/userToken'
 import type { UserToken } from '@/types'
 import { formatTime } from '@/utils/format'
+import { formatUserSummary } from '@/utils/user'
 
 const { t } = useI18n()
 const message = useMessage()
@@ -35,7 +36,13 @@ const pagination = reactive({
 
 const columns = computed<DataTableColumns<UserToken>>(() => [
   { type: 'selection' },
-  { title: t('adminUserToken.userId'), key: 'user_id', width: 80, render: (row) => '#' + row.user_id },
+  {
+    title: t('adminUserToken.user'),
+    key: 'user',
+    width: 180,
+    ellipsis: { tooltip: true },
+    render: (row) => formatUserSummary(row.user_id, row.user),
+  },
   { title: t('adminUserToken.deviceUuid'), key: 'device_uuid', ellipsis: { tooltip: true } },
   { title: t('adminUserToken.deviceId'), key: 'device_id', ellipsis: { tooltip: true } },
   {

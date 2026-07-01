@@ -12,6 +12,7 @@ export function passkeyLoginBegin(): Promise<ApiResponse<{ challenge_id: string;
 export function passkeyLoginFinish(data: {
   challenge_id: string
   credential: PublicKeyCredentialJSON
+  platform?: string
 }): Promise<ApiResponse<UserInfo>> {
   return request.post('/passkey/login/finish', data)
 }

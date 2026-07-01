@@ -212,9 +212,16 @@ export interface OauthCacheItem {
   nonce: string
 }
 
+export interface UserSummary {
+  id: number
+  username: string
+  nickname: string
+}
+
 export interface LoginLog {
   id: number
   user_id: number
+  user?: UserSummary
   client: string
   device_id: string
   uuid: string
@@ -274,6 +281,7 @@ export interface ShareRecord {
 export interface UserToken {
   id: number
   user_id: number
+  user?: UserSummary
   device_uuid: string
   device_id: string
   token: string

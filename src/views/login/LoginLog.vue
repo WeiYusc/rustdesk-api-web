@@ -15,6 +15,7 @@ import {
 import { list, deleteLoginLog, batchDelete } from '@/api/loginLog'
 import type { LoginLog } from '@/types'
 import { formatTime } from '@/utils/format'
+import { formatUserSummary } from '@/utils/user'
 
 const { t } = useI18n()
 const message = useMessage()
@@ -35,7 +36,13 @@ const pagination = reactive({
 
 const columns = computed<DataTableColumns<LoginLog>>(() => [
   { type: 'selection' },
-  { title: t('adminLoginLog.userId'), key: 'user_id' },
+  {
+    title: t('adminLoginLog.user'),
+    key: 'user',
+    width: 180,
+    ellipsis: { tooltip: true },
+    render: (row) => formatUserSummary(row.user_id, row.user),
+  },
   { title: t('adminLoginLog.client'), key: 'client' },
   { title: t('adminLoginLog.deviceId'), key: 'device_id' },
   { title: t('adminLoginLog.uuid'), key: 'uuid', ellipsis: { tooltip: true } },

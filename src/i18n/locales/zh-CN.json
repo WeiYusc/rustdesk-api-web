@@ -116,7 +116,8 @@
     "clientConfigDesc": "客户端导入配置按钮会复制 RustDesk 官方兼容的导入字符串，可直接粘贴到客户端服务器配置导入框。",
     "copyClientConfig": "复制客户端导入配置",
     "clientConfigCopied": "客户端导入配置已复制",
-    "avatarCropHelp": "拖拽图片调整位置，滚轮缩放"
+    "avatarCropHelp": "拖拽图片调整位置，滚轮缩放",
+    "downloadClient": "下载 RustDesk 客户端"
   },
   "myAddressBook": {
     "create": "新建",
@@ -278,7 +279,8 @@
     "deleteConfirm": "确定要删除此令牌吗？",
     "batchDeleteConfirm": "确定要删除选中的令牌吗？",
     "deleteSuccess": "删除成功",
-    "filterUserId": "按用户ID筛选"
+    "filterUserId": "按用户ID筛选",
+    "user": "用户"
   },
   "adminGroup": {
     "title": "用户组管理",
@@ -450,7 +452,8 @@
     "deleteSuccess": "删除成功",
     "reset": "重置",
     "typeWebAdmin": "Web 管理端",
-    "typeClient": "客户端"
+    "typeClient": "客户端",
+    "user": "用户"
   },
   "adminAuditConn": {
     "title": "连接审计",

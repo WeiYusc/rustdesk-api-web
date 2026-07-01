@@ -116,7 +116,8 @@
     "clientConfigDesc": "用戶端匯入設定按鈕會複製 RustDesk 官方相容的匯入字串，可直接貼到用戶端伺服器設定匯入框。",
     "copyClientConfig": "複製用戶端匯入設定",
     "clientConfigCopied": "用戶端匯入設定已複製",
-    "avatarCropHelp": "拖曳圖片調整位置，滾輪縮放"
+    "avatarCropHelp": "拖曳圖片調整位置，滾輪縮放",
+    "downloadClient": "下载 RustDesk 客户端"
   },
   "myAddressBook": {
     "create": "新增",
@@ -278,7 +279,8 @@
     "deleteConfirm": "確定要刪除此權杖嗎？",
     "batchDeleteConfirm": "確定要刪除選中的權杖嗎？",
     "deleteSuccess": "刪除成功",
-    "filterUserId": "按使用者ID篩選"
+    "filterUserId": "按使用者ID篩選",
+    "user": "用户"
   },
   "adminGroup": {
     "title": "使用者群組管理",
@@ -450,7 +452,8 @@
     "deleteSuccess": "刪除成功",
     "reset": "重設",
     "typeWebAdmin": "Web 管理端",
-    "typeClient": "客戶端"
+    "typeClient": "客戶端",
+    "user": "用户"
   },
   "adminAuditConn": {
     "title": "連線審計",

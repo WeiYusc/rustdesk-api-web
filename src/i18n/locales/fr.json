@@ -116,7 +116,8 @@
     "clientConfigDesc": "Copy Client Import Config produces the official RustDesk-compatible import string for the client server configuration import box.",
     "copyClientConfig": "Copy Client Import Config",
     "clientConfigCopied": "Client import config copied",
-    "avatarCropHelp": "Glisser pour déplacer, molette pour zoomer"
+    "avatarCropHelp": "Glisser pour déplacer, molette pour zoomer",
+    "downloadClient": "Download RustDesk Client"
   },
   "myAddressBook": {
     "create": "Créer",
@@ -278,7 +279,8 @@
     "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce jeton ?",
     "batchDeleteConfirm": "Êtes-vous sûr de vouloir supprimer les jetons sélectionnés ?",
     "deleteSuccess": "Supprimé avec succès",
-    "filterUserId": "Filtrer par ID utilisateur"
+    "filterUserId": "Filtrer par ID utilisateur",
+    "user": "User"
   },
   "adminGroup": {
     "title": "Groupes d'utilisateurs",
@@ -450,7 +452,8 @@
     "deleteSuccess": "Supprimé avec succès",
     "reset": "Réinitialiser",
     "typeWebAdmin": "Admin Web",
-    "typeClient": "Client"
+    "typeClient": "Client",
+    "user": "User"
   },
   "adminAuditConn": {
     "title": "Audit des connexions",

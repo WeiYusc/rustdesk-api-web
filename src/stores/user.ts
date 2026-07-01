@@ -7,6 +7,7 @@ import { useRouteStore } from '@/stores/router'
 import { useAppStore } from '@/stores/app'
 import { useTagsStore } from '@/stores/tags'
 import type { UserInfo } from '@/types'
+import { detectPlatform } from '@/utils/platform'
 
 function validateOidcUrl(rawUrl: string): boolean {
   try {
@@ -15,14 +16,6 @@ function validateOidcUrl(rawUrl: string): boolean {
   } catch {
     return false
   }
-}
-
-function detectPlatform(): string {
-  const ua = navigator.userAgent
-  if (/Win/.test(ua)) return 'windows'
-  if (/Mac/.test(ua)) return 'mac'
-  if (/Linux/.test(ua)) return 'linux'
-  return 'web'
 }
 
 export const useUserStore = defineStore('user', () => {
@@ -127,6 +120,7 @@ export const useUserStore = defineStore('user', () => {
       const res = await passkeyLoginFinish({
         challenge_id: beginRes.data.challenge_id,
         credential: serialized,
+        platform: detectPlatform(),
       })
       useAppStore().initConfig()
       saveUserData(res.data)

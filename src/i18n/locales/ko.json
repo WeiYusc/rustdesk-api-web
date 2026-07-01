@@ -116,7 +116,8 @@
     "clientConfigDesc": "Copy Client Import Config produces the official RustDesk-compatible import string for the client server configuration import box.",
     "copyClientConfig": "Copy Client Import Config",
     "clientConfigCopied": "Client import config copied",
-    "avatarCropHelp": "드래그로 이동, 스크롤로 확대/축소"
+    "avatarCropHelp": "드래그로 이동, 스크롤로 확대/축소",
+    "downloadClient": "Download RustDesk Client"
   },
   "myAddressBook": {
     "create": "생성",
@@ -278,7 +279,8 @@
     "deleteConfirm": "이 토큰을 삭제하시겠습니까?",
     "batchDeleteConfirm": "선택한 토큰을 삭제하시겠습니까?",
     "deleteSuccess": "삭제되었습니다",
-    "filterUserId": "사용자 ID로 필터"
+    "filterUserId": "사용자 ID로 필터",
+    "user": "User"
   },
   "adminGroup": {
     "title": "사용자 그룹",
@@ -450,7 +452,8 @@
     "deleteSuccess": "삭제되었습니다",
     "reset": "재설정",
     "typeWebAdmin": "웹 관리자",
-    "typeClient": "클라이언트"
+    "typeClient": "클라이언트",
+    "user": "User"
   },
   "adminAuditConn": {
     "title": "연결 감사",

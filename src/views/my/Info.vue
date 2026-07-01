@@ -411,6 +411,14 @@ async function handleSaveProfile(): Promise<void> {
           <NButton type="success" @click="copyClientImportConfig">
             {{ $t('myInfo.copyClientConfig') }}
           </NButton>
+          <NButton
+            tag="a"
+            href="https://rustdesk.com/download"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {{ $t('myInfo.downloadClient') }}
+          </NButton>
         </NSpace>
       </NSpace>
     </NCard>
