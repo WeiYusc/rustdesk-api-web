@@ -83,6 +83,12 @@ export const asyncRoutes: RouteRecordRaw[] = [
         meta: { title: 'LoginLog', icon: 'List', keepAlive: true },
         component: () => import('@/views/my/LoginLog.vue'),
       },
+      {
+        path: 'security',
+        name: 'MySecurity',
+        meta: { title: 'MySecurity', icon: 'Lock', keepAlive: true },
+        component: () => import('@/views/my/Security.vue'),
+      },
     ],
   },
   {
@@ -187,6 +193,12 @@ export const asyncRoutes: RouteRecordRaw[] = [
         name: 'ServerCmd',
         meta: { title: 'ServerCmd', icon: 'Tools', keepAlive: true },
         component: () => import('@/views/rustdesk/ServerControl.vue'),
+      },
+      {
+        path: 'settings',
+        name: 'Settings',
+        meta: { title: 'SettingsManage', icon: 'Settings', keepAlive: true },
+        component: () => import('@/views/settings/Settings.vue'),
       },
     ],
   },

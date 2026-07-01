@@ -24,6 +24,7 @@ export interface UserInfo {
   token: string
   route_names: string[]
   nickname: string
+  email_verified_at?: string
 }
 
 export interface LoginOptionsResponse {
@@ -32,6 +33,9 @@ export interface LoginOptionsResponse {
   need_captcha: boolean
   disable_pwd: boolean
   auto_oidc: boolean
+  passkey_enabled?: boolean
+  passkey_discoverable_login_enabled?: boolean
+  email_verification_enabled?: boolean
 }
 
 export interface ServerConfig {
@@ -296,6 +300,69 @@ export interface ShareByWebClientResult {
 export interface OauthBindResult {
   code: string
   url: string
+}
+
+export interface PasskeyItem {
+  id: number
+  name: string
+  credential_id: string
+  aaguid?: string
+  transports?: string[]
+  backup_eligible?: boolean
+  backup_state?: boolean
+  clone_warning?: boolean
+  last_used_at?: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface PasskeyLoginBeginResponse {
+  challenge_id: string
+  public_key: import('./webauthn').PublicKeyCredentialRequestOptionsJSON
+}
+
+export interface PasskeyRegisterBeginResponse {
+  challenge_id: string
+  public_key: import('./webauthn').PublicKeyCredentialCreationOptionsJSON
+}
+
+export interface SmtpSettings {
+  enabled: boolean
+  host: string
+  port: number
+  security: 'none' | 'starttls' | 'tls'
+  username: string
+  password?: string
+  has_password: boolean
+  from_email: string
+  from_name: string
+  reply_to?: string
+  timeout_seconds: number
+  insecure_skip_verify: boolean
+}
+
+export interface EmailVerificationSettings {
+  enabled: boolean
+  require_for_register: boolean
+  require_for_email_change: boolean
+  require_for_login: boolean
+  code_ttl_minutes: number
+  resend_cooldown_seconds: number
+  daily_send_limit_per_user: number
+}
+
+export interface PasskeySettings {
+  enabled: boolean
+  rp_name: string
+  rp_id: string
+  allowed_origins: string[]
+  user_verification: 'preferred' | 'required'
+  discoverable_login_enabled: boolean
+  resident_key_requirement: 'required'
+}
+
+export interface AuthPolicySettings {
+  disable_pwd_login: boolean
 }
 
 declare module 'vue-router' {

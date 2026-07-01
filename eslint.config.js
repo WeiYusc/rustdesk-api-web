@@ -20,6 +20,13 @@ export default [
         ...globals.browser,
         ...globals.node,
         ...autoImportGlobals.globals,
+        PublicKeyCredential: 'readonly',
+        PublicKeyCredentialCreationOptions: 'readonly',
+        PublicKeyCredentialRequestOptions: 'readonly',
+        AuthenticatorAttestationResponse: 'readonly',
+        AuthenticatorAssertionResponse: 'readonly',
+        AuthenticatorTransport: 'readonly',
+        AuthenticationExtensionsClientInputs: 'readonly',
       },
     },
     plugins: {

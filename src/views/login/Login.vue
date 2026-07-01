@@ -50,6 +50,23 @@ const rules = computed(() => ({
 const showPasswordForm = computed(() => !loginOptionsData.value?.disable_pwd)
 const showRegisterLink = computed(() => loginOptionsData.value?.register)
 const oidcProviders = computed(() => loginOptionsData.value?.ops || [])
+const showPasskeyLogin = computed(() => !!(loginOptionsData.value?.passkey_enabled && loginOptionsData.value?.passkey_discoverable_login_enabled))
+const passkeyLoading = ref(false)
+
+async function handlePasskeyLogin(): Promise<void> {
+  passkeyLoading.value = true
+  try {
+    const result = await userStore.passkeyLogin()
+    if (result) {
+      message.success(appStore.t('common.success'))
+      router.push('/')
+    }
+  } catch {
+    // error handled by interceptor
+  } finally {
+    passkeyLoading.value = false
+  }
+}
 
 async function loadLoginOptions(): Promise<void> {
   try {
@@ -196,12 +213,24 @@ onMounted(() => {
       </NForm>
 
       <NText
-        v-if="!showPasswordForm && oidcProviders.length === 0"
+        v-if="!showPasswordForm && oidcProviders.length === 0 && !showPasskeyLogin"
         type="warning"
         style="display: block; text-align: center; margin-top: 12px"
       >
         {{ appStore.t('login.noLoginMethod') }}
       </NText>
+
+      <template v-if="showPasskeyLogin">
+        <NDivider v-if="showPasswordForm || oidcProviders.length > 0">{{ appStore.t('login.loginOptions') }}</NDivider>
+        <NButton
+          block
+          size="large"
+          :loading="passkeyLoading"
+          @click="handlePasskeyLogin"
+        >
+          {{ appStore.t('login.passkeyLogin') }}
+        </NButton>
+      </template>
 
       <NButton
         v-if="showRegisterLink"

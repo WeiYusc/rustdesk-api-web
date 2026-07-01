@@ -32,6 +32,7 @@ export const useUserStore = defineStore('user', () => {
   const token = ref('')
   const nickname = ref('')
   const routeNames = ref<string[]>([])
+  const emailVerifiedAt = ref('')
 
   function saveUserData(userData: UserInfo): void {
     setToken(userData.token)
@@ -40,6 +41,7 @@ export const useUserStore = defineStore('user', () => {
     avatar.value = userData.avatar
     nickname.value = userData.nickname
     token.value = userData.token
+    emailVerifiedAt.value = userData.email_verified_at || ''
     routeNames.value = userData.route_names || []
     useRouteStore().addRoutes(routeNames.value)
   }
@@ -113,6 +115,27 @@ export const useUserStore = defineStore('user', () => {
     return res.data
   }
 
+  async function passkeyLogin(): Promise<UserInfo | false> {
+    try {
+      const { passkeyLoginBegin, passkeyLoginFinish } = await import('@/api/passkey')
+      const { parseRequestOptions, serializeCredential } = await import('@/utils/webauthn')
+      const beginRes = await passkeyLoginBegin()
+      const publicKey = parseRequestOptions(beginRes.data.public_key as never)
+      const credential = await navigator.credentials.get({ publicKey }) as PublicKeyCredential
+      if (!credential) return false
+      const serialized = serializeCredential(credential)
+      const res = await passkeyLoginFinish({
+        challenge_id: beginRes.data.challenge_id,
+        credential: serialized,
+      })
+      useAppStore().initConfig()
+      saveUserData(res.data)
+      return res.data
+    } catch {
+      return false
+    }
+  }
+
   function logout(): void {
     logoutApi().catch(() => {})
     removeToken()
@@ -142,11 +165,13 @@ export const useUserStore = defineStore('user', () => {
     token,
     nickname,
     routeNames,
+    emailVerifiedAt,
     saveUserData,
     login,
     info,
     oidc,
     queryOidc,
+    passkeyLogin,
     logout,
     getStoredOidcCode,
   }
