@@ -629,7 +629,13 @@
   "oauth": {
     "missingCode": "缺少 code",
     "codeMismatch": "code 不匹配",
-    "loginSuccess": "登录成功，正在跳转..."
+    "loginSuccess": "登录成功，正在跳转...",
+    "clientAuthTitle": "RustDesk 客户端授权",
+    "clientAuthDesc": "请先登录 Web 管理端，登录成功后将自动授权当前 RustDesk 客户端。",
+    "clientAuthConfirming": "正在确认客户端授权...",
+    "clientAuthPasswordLogin": "登录并授权客户端",
+    "clientAuthPasskeyLogin": "使用通行密钥登录并授权客户端",
+    "clientAuthSuccess": "客户端授权成功，请回到 RustDesk 客户端。"
   },
   "mySecurity": {
     "title": "我的安全",

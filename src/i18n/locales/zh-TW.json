@@ -629,7 +629,13 @@
   "oauth": {
     "missingCode": "缺少代碼",
     "codeMismatch": "代碼不匹配",
-    "loginSuccess": "登入成功，正在跳轉..."
+    "loginSuccess": "登入成功，正在跳轉...",
+    "clientAuthTitle": "RustDesk Client Authorization",
+    "clientAuthDesc": "Please sign in to the Web Admin. After sign-in, this RustDesk client will be authorized automatically.",
+    "clientAuthConfirming": "Confirming client authorization...",
+    "clientAuthPasswordLogin": "Sign in and authorize client",
+    "clientAuthPasskeyLogin": "Sign in with Passkey and authorize client",
+    "clientAuthSuccess": "Client authorization succeeded. Please return to the RustDesk client."
   },
   "mySecurity": {
     "title": "我的安全",

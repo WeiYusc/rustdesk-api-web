@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory, type RouteRecordRaw } from 'vue-router'
 import { constantRoutes } from './routes'
-import { getToken } from '@/utils/auth'
+import { getToken, removeToken } from '@/utils/auth'
 import { useUserStore } from '@/stores/user'
 import { useRouteStore } from '@/stores/router'
 
@@ -28,6 +28,11 @@ router.beforeEach(async (to, _from, next) => {
   if (!userStore.username) {
     const ok = await userStore.info()
     if (!ok) {
+      if (WHITE_LIST.some((p) => to.path.startsWith(p))) {
+        removeToken()
+        next()
+        return
+      }
       userStore.logout()
       next('/login')
       return

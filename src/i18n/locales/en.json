@@ -629,7 +629,13 @@
   "oauth": {
     "missingCode": "Missing code",
     "codeMismatch": "Code mismatch",
-    "loginSuccess": "Login successful, redirecting..."
+    "loginSuccess": "Login successful, redirecting...",
+    "clientAuthTitle": "RustDesk Client Authorization",
+    "clientAuthDesc": "Please sign in to the Web Admin. After sign-in, this RustDesk client will be authorized automatically.",
+    "clientAuthConfirming": "Confirming client authorization...",
+    "clientAuthPasswordLogin": "Sign in and authorize client",
+    "clientAuthPasskeyLogin": "Sign in with Passkey and authorize client",
+    "clientAuthSuccess": "Client authorization succeeded. Please return to the RustDesk client."
   },
   "mySecurity": {
     "title": "My Security",

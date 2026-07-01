@@ -629,7 +629,13 @@
   "oauth": {
     "missingCode": "코드가 없습니다",
     "codeMismatch": "코드가 일치하지 않습니다",
-    "loginSuccess": "로그인 성공, 이동 중..."
+    "loginSuccess": "로그인 성공, 이동 중...",
+    "clientAuthTitle": "RustDesk Client Authorization",
+    "clientAuthDesc": "Please sign in to the Web Admin. After sign-in, this RustDesk client will be authorized automatically.",
+    "clientAuthConfirming": "Confirming client authorization...",
+    "clientAuthPasswordLogin": "Sign in and authorize client",
+    "clientAuthPasskeyLogin": "Sign in with Passkey and authorize client",
+    "clientAuthSuccess": "Client authorization succeeded. Please return to the RustDesk client."
   },
   "mySecurity": {
     "title": "내 보안",
