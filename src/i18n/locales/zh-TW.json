@@ -68,7 +68,9 @@
     "UserToken": "使用者 Token",
     "ServerCmd": "服務端命令",
     "AuditConnLog": "連線日誌",
-    "AuditFileLog": "檔案日誌"
+    "AuditFileLog": "檔案日誌",
+    "MySecurity": "我的安全",
+    "SettingsManage": "系統設定"
   },
   "home": {
     "title": "首頁",

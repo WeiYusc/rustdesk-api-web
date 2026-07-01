@@ -68,7 +68,9 @@
     "UserToken": "Jeton Utilisateur",
     "ServerCmd": "Commande serveur",
     "AuditConnLog": "Journal de connexion",
-    "AuditFileLog": "Fichier Journal"
+    "AuditFileLog": "Fichier Journal",
+    "MySecurity": "Ma sécurité",
+    "SettingsManage": "Paramètres"
   },
   "home": {
     "title": "Accueil",

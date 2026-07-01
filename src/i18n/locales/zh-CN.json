@@ -68,7 +68,9 @@
     "UserToken": "用户Token",
     "ServerCmd": "服务端命令",
     "AuditConnLog": "连接日志",
-    "AuditFileLog": "文件日志"
+    "AuditFileLog": "文件日志",
+    "MySecurity": "我的安全",
+    "SettingsManage": "系统设置"
   },
   "home": {
     "title": "首页",

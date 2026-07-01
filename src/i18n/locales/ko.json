@@ -68,7 +68,9 @@
     "UserToken": "사용자 토큰",
     "ServerCmd": "서버 명령",
     "AuditConnLog": "연결 로그",
-    "AuditFileLog": "파일 로그"
+    "AuditFileLog": "파일 로그",
+    "MySecurity": "내 보안",
+    "SettingsManage": "설정"
   },
   "home": {
     "title": "홈",

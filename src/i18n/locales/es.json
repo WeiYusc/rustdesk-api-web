@@ -68,7 +68,9 @@
     "UserToken": "Token del usuario",
     "ServerCmd": "Comando del servidor",
     "AuditConnLog": "Registro de conexiones",
-    "AuditFileLog": "Registro de archivos"
+    "AuditFileLog": "Registro de archivos",
+    "MySecurity": "Mi seguridad",
+    "SettingsManage": "Configuración"
   },
   "home": {
     "title": "Inicio",

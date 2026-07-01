@@ -68,7 +68,9 @@
     "UserToken": "User Token",
     "ServerCmd": "Server Cmd",
     "AuditConnLog": "Connection Log",
-    "AuditFileLog": "File Log"
+    "AuditFileLog": "File Log",
+    "MySecurity": "My Security",
+    "SettingsManage": "Settings"
   },
   "home": {
     "title": "Home",

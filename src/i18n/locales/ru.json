@@ -68,7 +68,9 @@
     "UserToken": "Токен пользователя",
     "ServerCmd": "Команда сервера",
     "AuditConnLog": "Журнал соединений",
-    "AuditFileLog": "Журнал файлов"
+    "AuditFileLog": "Журнал файлов",
+    "MySecurity": "Моя безопасность",
+    "SettingsManage": "Настройки"
   },
   "home": {
     "title": "Главная",
