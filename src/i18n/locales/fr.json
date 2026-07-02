@@ -638,7 +638,12 @@
   "register": {
     "passwordMismatch": "Les mots de passe ne correspondent pas",
     "confirmPassword": "Confirmer le mot de passe",
-    "emailOptional": "Email (facultatif)"
+    "emailOptional": "Email (facultatif)",
+    "emailRequired": "Email (required)",
+    "emailRequiredMessage": "Enter your email",
+    "emailInvalid": "Enter a valid email address",
+    "usernameLength": "Username must be 2-32 characters",
+    "passwordLength": "Password must be 4-32 characters"
   },
   "oauth": {
     "missingCode": "Code manquant",

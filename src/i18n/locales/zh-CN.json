@@ -638,7 +638,12 @@
   "register": {
     "passwordMismatch": "两次输入的密码不一致",
     "confirmPassword": "确认密码",
-    "emailOptional": "邮箱（可选）"
+    "emailOptional": "邮箱（可选）",
+    "emailRequired": "邮箱（必填）",
+    "emailRequiredMessage": "请输入邮箱",
+    "emailInvalid": "请输入有效邮箱",
+    "usernameLength": "用户名长度必须为 2-32 个字符",
+    "passwordLength": "密码长度必须为 4-32 个字符"
   },
   "oauth": {
     "missingCode": "缺少 code",

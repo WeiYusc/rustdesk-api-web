@@ -638,7 +638,12 @@
   "register": {
     "passwordMismatch": "Las contraseñas no coinciden",
     "confirmPassword": "Confirmar contraseña",
-    "emailOptional": "Email (opcional)"
+    "emailOptional": "Email (opcional)",
+    "emailRequired": "Email (required)",
+    "emailRequiredMessage": "Enter your email",
+    "emailInvalid": "Enter a valid email address",
+    "usernameLength": "Username must be 2-32 characters",
+    "passwordLength": "Password must be 4-32 characters"
   },
   "oauth": {
     "missingCode": "Falta el código",

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import {
   NCard,
@@ -9,15 +9,18 @@ import {
   NButton,
   useMessage,
 } from 'naive-ui'
+import type { FormInst, FormRules } from 'naive-ui'
 import { useAppStore } from '@/stores/app'
 import { register as registerApi } from '@/api/user'
+import { loginOptions as fetchLoginOptions } from '@/api/login'
 
 const router = useRouter()
 const appStore = useAppStore()
 const message = useMessage()
 
-const formRef = ref()
+const formRef = ref<FormInst | null>(null)
 const loading = ref(false)
+const registerEmailRequired = ref(false)
 
 const form = reactive({
   username: '',
@@ -26,23 +29,84 @@ const form = reactive({
   email: '',
 })
 
-const rules = computed(() => ({
-  username: { required: true, message: appStore.t('login.username'), trigger: 'blur' },
-  password: { required: true, message: appStore.t('login.password'), trigger: 'blur' },
-  confirm_password: {
-    required: true,
-    trigger: 'blur',
-    validator: (_rule: unknown, value: string) => {
-      if (value !== form.password) {
-        return new Error(appStore.t('register.passwordMismatch'))
-      }
-      return true
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+const emailPlaceholder = computed(() =>
+  registerEmailRequired.value ? appStore.t('register.emailRequired') : appStore.t('register.emailOptional')
+)
+
+const rules = computed<FormRules>(() => ({
+  username: [
+    { required: true, message: appStore.t('login.username'), trigger: ['blur', 'input'] },
+    {
+      trigger: ['blur', 'input'],
+      validator: (_rule: unknown, value: string) => {
+        if (!value || value.length < 2 || value.length > 32) {
+          return new Error(appStore.t('register.usernameLength'))
+        }
+        return true
+      },
     },
-  },
+  ],
+  password: [
+    { required: true, message: appStore.t('login.password'), trigger: ['blur', 'input'] },
+    {
+      trigger: ['blur', 'input'],
+      validator: (_rule: unknown, value: string) => {
+        if (!value || value.length < 4 || value.length > 32) {
+          return new Error(appStore.t('register.passwordLength'))
+        }
+        return true
+      },
+    },
+  ],
+  confirm_password: [
+    { required: true, message: appStore.t('register.confirmPassword'), trigger: ['blur', 'input'] },
+    {
+      trigger: ['blur', 'input'],
+      validator: (_rule: unknown, value: string) => {
+        if (!value || value.length < 4 || value.length > 32) {
+          return new Error(appStore.t('register.passwordLength'))
+        }
+        if (value !== form.password) {
+          return new Error(appStore.t('register.passwordMismatch'))
+        }
+        return true
+      },
+    },
+  ],
+  email: [
+    {
+      trigger: ['blur', 'input'],
+      validator: (_rule: unknown, value: string) => {
+        if (!value) {
+          if (registerEmailRequired.value) {
+            return new Error(appStore.t('register.emailRequiredMessage'))
+          }
+          return true
+        }
+        if (!emailPattern.test(value)) {
+          return new Error(appStore.t('register.emailInvalid'))
+        }
+        return true
+      },
+    },
+  ],
 }))
 
-async function handleRegister(e: Event): Promise<void> {
-  e.preventDefault()
+onMounted(async () => {
+  try {
+    const res = await fetchLoginOptions()
+    registerEmailRequired.value = !!(
+      res.data.email_verification_enabled && res.data.email_verification_require_for_register
+    )
+  } catch {
+    registerEmailRequired.value = false
+  }
+})
+
+async function handleRegister(e?: Event): Promise<void> {
+  e?.preventDefault()
   try {
     await formRef.value?.validate()
   } catch {
@@ -83,10 +147,10 @@ async function handleRegister(e: Event): Promise<void> {
         <NFormItem path="confirm_password">
           <NInput v-model:value="form.confirm_password" type="password" show-password-on="click" :placeholder="appStore.t('register.confirmPassword')" />
         </NFormItem>
-        <NFormItem path="email">
-          <NInput v-model:value="form.email" :placeholder="appStore.t('register.emailOptional')" clearable />
+        <NFormItem path="email" :show-require-mark="registerEmailRequired">
+          <NInput v-model:value="form.email" :placeholder="emailPlaceholder" clearable />
         </NFormItem>
-        <NButton type="primary" block size="large" :loading="loading" native-type="submit">
+        <NButton type="primary" block size="large" :loading="loading" attr-type="submit">
           {{ appStore.t('login.register') }}
         </NButton>
         <NButton text block style="margin-top: 12px" @click="router.push('/login')">

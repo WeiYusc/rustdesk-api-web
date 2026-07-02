@@ -36,6 +36,7 @@ export interface LoginOptionsResponse {
   passkey_enabled?: boolean
   passkey_discoverable_login_enabled?: boolean
   email_verification_enabled?: boolean
+  email_verification_require_for_register?: boolean
 }
 
 export interface ServerConfig {

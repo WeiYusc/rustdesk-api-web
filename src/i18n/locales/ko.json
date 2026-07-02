@@ -638,7 +638,12 @@
   "register": {
     "passwordMismatch": "비밀번호가 일치하지 않습니다",
     "confirmPassword": "비밀번호 확인",
-    "emailOptional": "이메일 (선택사항)"
+    "emailOptional": "이메일 (선택사항)",
+    "emailRequired": "Email (required)",
+    "emailRequiredMessage": "Enter your email",
+    "emailInvalid": "Enter a valid email address",
+    "usernameLength": "Username must be 2-32 characters",
+    "passwordLength": "Password must be 4-32 characters"
   },
   "oauth": {
     "missingCode": "코드가 없습니다",
