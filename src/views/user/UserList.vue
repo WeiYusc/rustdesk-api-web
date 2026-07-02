@@ -51,7 +51,7 @@ const groupOptions = computed<SelectOption[]>(() =>
 
 const statusOptions = computed<SelectOption[]>(() => [
   { label: t('adminUser.statusActive'), value: 1 },
-  { label: t('adminUser.statusDisabled'), value: 0 },
+  { label: t('adminUser.statusDisabled'), value: 2 },
 ])
 
 function groupName(id: number): string {
