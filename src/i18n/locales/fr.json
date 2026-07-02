@@ -273,7 +273,11 @@
     "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cet utilisateur ?",
     "yes": "Oui",
     "no": "Non",
-    "id": "ID"
+    "id": "ID",
+    "emailVerification": "Email verification",
+    "emailVerified": "Verified",
+    "emailUnverified": "Unverified",
+    "emailNotSet": "Not set"
   },
   "adminUserToken": {
     "title": "Jetons utilisateur",

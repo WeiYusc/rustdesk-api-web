@@ -273,7 +273,11 @@
     "deleteConfirm": "Are you sure you want to delete this user?",
     "yes": "Yes",
     "no": "No",
-    "id": "ID"
+    "id": "ID",
+    "emailVerification": "Email verification",
+    "emailVerified": "Verified",
+    "emailUnverified": "Unverified",
+    "emailNotSet": "Not set"
   },
   "adminUserToken": {
     "title": "User Tokens",

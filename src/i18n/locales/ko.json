@@ -273,7 +273,11 @@
     "deleteConfirm": "이 사용자를 삭제하시겠습니까?",
     "yes": "예",
     "no": "아니오",
-    "id": "ID"
+    "id": "ID",
+    "emailVerification": "Email verification",
+    "emailVerified": "Verified",
+    "emailUnverified": "Unverified",
+    "emailNotSet": "Not set"
   },
   "adminUserToken": {
     "title": "사용자 토큰",

@@ -62,6 +62,29 @@ const columns = computed<DataTableColumns<AdminUser>>(() => [
   { title: t('adminUser.id'), key: 'id', width: 70 },
   { title: t('adminUser.username'), key: 'username', ellipsis: { tooltip: true } },
   { title: t('adminUser.email'), key: 'email', ellipsis: { tooltip: true } },
+  {
+    title: t('adminUser.emailVerification'),
+    key: 'email_verified_at',
+    width: 120,
+    render: (row) => {
+      if (!row.email) {
+        return h(
+          NTag,
+          { type: 'default', bordered: false, size: 'small' },
+          { default: () => t('adminUser.emailNotSet') },
+        )
+      }
+      return h(
+        NTag,
+        { type: row.email_verified_at ? 'success' : 'warning', bordered: false, size: 'small' },
+        {
+          default: () => row.email_verified_at
+            ? t('adminUser.emailVerified')
+            : t('adminUser.emailUnverified'),
+        },
+      )
+    },
+  },
   { title: t('adminUser.nickname'), key: 'nickname', ellipsis: { tooltip: true } },
   {
     title: t('adminUser.groupId'),

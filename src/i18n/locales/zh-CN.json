@@ -273,7 +273,11 @@
     "deleteConfirm": "确定要删除此用户吗？",
     "yes": "是",
     "no": "否",
-    "id": "ID"
+    "id": "ID",
+    "emailVerification": "邮箱验证",
+    "emailVerified": "已验证",
+    "emailUnverified": "未验证",
+    "emailNotSet": "未设置"
   },
   "adminUserToken": {
     "title": "用户令牌",

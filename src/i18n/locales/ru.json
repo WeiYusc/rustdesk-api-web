@@ -273,7 +273,11 @@
     "deleteConfirm": "Вы уверены, что хотите удалить этого пользователя?",
     "yes": "Да",
     "no": "Нет",
-    "id": "ID"
+    "id": "ID",
+    "emailVerification": "Email verification",
+    "emailVerified": "Verified",
+    "emailUnverified": "Unverified",
+    "emailNotSet": "Not set"
   },
   "adminUserToken": {
     "title": "Токены пользователей",

@@ -273,7 +273,11 @@
     "deleteConfirm": "確定要刪除此使用者嗎？",
     "yes": "是",
     "no": "否",
-    "id": "ID"
+    "id": "ID",
+    "emailVerification": "郵箱驗證",
+    "emailVerified": "已驗證",
+    "emailUnverified": "未驗證",
+    "emailNotSet": "未設定"
   },
   "adminUserToken": {
     "title": "使用者權杖",
