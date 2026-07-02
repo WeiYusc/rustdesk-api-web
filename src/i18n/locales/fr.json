@@ -22,7 +22,9 @@
     "logout": "Déconnexion",
     "pleaseSelect": "Veuillez d'abord sélectionner",
     "timeout": "Délai de requête dépassé",
-    "connect": "Connecter"
+    "connect": "Connecter",
+    "close": "Close",
+    "refresh": "Refresh"
   },
   "login": {
     "username": "Nom d'utilisateur",
@@ -42,7 +44,13 @@
     "loginBanned": "Connexion bannie.",
     "noLoginMethod": "Veuillez contacter l'administrateur pour configurer une méthode de connexion.",
     "oidcUrlInvalid": "URL de redirection OIDC invalide",
-    "passkeyLogin": "Se connecter avec Passkey"
+    "passkeyLogin": "Se connecter avec Passkey",
+    "email": "Email",
+    "forgotPassword": "Forgot password",
+    "forgotPasswordDesc": "Enter your account email. This version first checks SMTP configuration; if the administrator has not configured SMTP, it returns a clear error.",
+    "sendResetEmail": "Send reset email",
+    "forgotPasswordRequested": "Password reset email request submitted",
+    "emailRequired": "Enter your email"
   },
   "menu": {
     "My": "Moi",
@@ -622,7 +630,10 @@
     "customCmdList": "Custom Command List",
     "ip1Placeholder": "IP 1",
     "ip2Placeholder": "IP 2",
-    "thresholdPlaceholder": "0.0"
+    "thresholdPlaceholder": "0.0",
+    "executeResult": "Execution Result",
+    "executeAgain": "Run Again",
+    "executing": "Executing…"
   },
   "register": {
     "passwordMismatch": "Les mots de passe ne correspondent pas",
@@ -729,6 +740,22 @@
     "authTitle": "Login Policy",
     "authDisablePasswordLogin": "Disable password login",
     "authDisablePasswordWarning": "Before disabling password login, make sure at least one admin OAuth or Passkey login path is available.",
-    "authSaveSuccess": "Login policy saved"
+    "authSaveSuccess": "Login policy saved",
+    "register": "Registration",
+    "registerTitle": "Registration Settings",
+    "registerEnabled": "Enable user registration",
+    "registerDefaultStatus": "Default status for new users",
+    "registerStatusEnabled": "Enabled",
+    "registerStatusDisabled": "Disabled, pending administrator approval",
+    "registerHint": "When enabled, the login page shows a registration link. If the default status is disabled, new users must be approved by an administrator.",
+    "registerSaveSuccess": "Registration settings saved",
+    "serverSecurity": "Server Security",
+    "serverSecurityTitle": "Server Security Settings",
+    "serverSecurityHint": "This setting is applied through the hbbs runtime command must-login/ml. After container restart, it falls back to the MUST_LOGIN environment default. When enabled, RustDesk client connections require a login token.",
+    "mustLoginEnabled": "Require client login",
+    "mustLoginRuntimeState": "Current runtime state",
+    "serverSecuritySaveSuccess": "Server security settings applied to the current runtime",
+    "applyRuntime": "Apply to current runtime",
+    "serverSecurityApplyFailed": "Server returned a state different from the requested value. Refresh and try again."
   }
 }

@@ -22,7 +22,9 @@
     "logout": "退出登录",
     "pleaseSelect": "请先选择",
     "timeout": "请求超时",
-    "connect": "连接"
+    "connect": "连接",
+    "close": "关闭",
+    "refresh": "刷新"
   },
   "login": {
     "username": "用户名",
@@ -42,7 +44,13 @@
     "loginBanned": "登录已被封禁。",
     "noLoginMethod": "请联系管理员配置登录方式。",
     "oidcUrlInvalid": "OIDC 跳转地址无效",
-    "passkeyLogin": "使用通行密钥登录"
+    "passkeyLogin": "使用通行密钥登录",
+    "email": "邮箱",
+    "forgotPassword": "忘记密码",
+    "forgotPasswordDesc": "请输入账号邮箱。当前版本会先检查 SMTP 配置；如果管理员尚未配置 SMTP，将返回明确错误。",
+    "sendResetEmail": "发送重置邮件",
+    "forgotPasswordRequested": "重置邮件请求已提交",
+    "emailRequired": "请输入邮箱"
   },
   "menu": {
     "My": "我的",
@@ -622,7 +630,10 @@
     "customCmdList": "自定义命令列表",
     "ip1Placeholder": "IP 1",
     "ip2Placeholder": "IP 2",
-    "thresholdPlaceholder": "0.0"
+    "thresholdPlaceholder": "0.0",
+    "executeResult": "执行结果",
+    "executeAgain": "重新执行",
+    "executing": "执行中…"
   },
   "register": {
     "passwordMismatch": "两次输入的密码不一致",
@@ -729,6 +740,22 @@
     "authTitle": "登录策略",
     "authDisablePasswordLogin": "禁用密码登录",
     "authDisablePasswordWarning": "禁用密码登录前，请确保至少存在一个可用的管理员 OAuth 或通行密钥登录方式。",
-    "authSaveSuccess": "登录策略已保存"
+    "authSaveSuccess": "登录策略已保存",
+    "register": "注册",
+    "registerTitle": "注册设置",
+    "registerEnabled": "开启用户注册",
+    "registerDefaultStatus": "注册用户默认状态",
+    "registerStatusEnabled": "启用",
+    "registerStatusDisabled": "禁用，等待管理员审核",
+    "registerHint": "开启后登录页会显示注册入口；默认状态为禁用时，新用户注册后需要管理员审核启用。",
+    "registerSaveSuccess": "注册设置已保存",
+    "serverSecurity": "服务端安全",
+    "serverSecurityTitle": "服务端安全设置",
+    "serverSecurityHint": "该设置通过 hbbs 运行时命令 must-login/ml 生效；容器重启后会回到环境变量 MUST_LOGIN 的默认值。开启后客户端连接需要登录令牌。",
+    "mustLoginEnabled": "要求客户端登录",
+    "mustLoginRuntimeState": "当前运行时状态",
+    "serverSecuritySaveSuccess": "服务端安全设置已应用到当前运行实例",
+    "applyRuntime": "应用到当前运行实例",
+    "serverSecurityApplyFailed": "服务端返回状态与期望不一致，请刷新后重试"
   }
 }

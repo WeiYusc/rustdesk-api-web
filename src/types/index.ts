@@ -334,6 +334,11 @@ export interface PasskeyRegisterBeginResponse {
   public_key: import('./webauthn').PublicKeyCredentialCreationOptionsJSON
 }
 
+export interface RegisterPolicySettings {
+  enabled: boolean
+  default_status: 1 | 2
+}
+
 export interface SmtpSettings {
   enabled: boolean
   host: string

@@ -50,6 +50,12 @@ function targetName(target: string): string {
   return target || '-'
 }
 
+function targetTagType(target: string): 'default' | 'info' | 'success' {
+  if (target === '21115') return 'info'
+  if (target === '21117') return 'success'
+  return 'default'
+}
+
 function translateExplain(explain: string): string {
   const key = cmdExplainMap[explain]
   if (key) {
@@ -318,6 +324,13 @@ const customCmd = ref('')
 const customOption = ref('')
 const customTarget = ref(ID_SERVER)
 
+const resultModalShow = ref(false)
+const resultModalLoading = ref(false)
+const resultModalResult = ref('')
+const resultModalCmd = ref('')
+const resultModalOption = ref('')
+const resultModalTarget = ref(ID_SERVER)
+
 async function doCustomExec(): Promise<void> {
   if (!customCmd.value) return
   customLoading.value = true
@@ -363,7 +376,7 @@ const columns = computed<DataTableColumns<ServerCmd>>(() => [
     render: (row) =>
       h(
         NTag,
-        { size: 'small', type: row.target === '21115' ? 'info' : row.target === '21117' ? 'success' : 'default' },
+        { size: 'small', type: targetTagType(row.target) },
         () => targetName(row.target),
       ),
   },
@@ -425,10 +438,26 @@ function handlePageSizeChange(pageSize: number): void {
 }
 
 function execCustomFromList(row: ServerCmd): void {
-  customCmd.value = row.cmd
-  customOption.value = row.option || ''
-  customTarget.value = row.target || ID_SERVER
-  doCustomExec()
+  resultModalCmd.value = row.cmd
+  resultModalOption.value = row.option || ''
+  resultModalTarget.value = row.target || ID_SERVER
+  resultModalResult.value = ''
+  resultModalShow.value = true
+  runResultModalCommand()
+}
+
+async function runResultModalCommand(): Promise<void> {
+  if (!resultModalCmd.value) return
+  resultModalLoading.value = true
+  resultModalResult.value = ''
+  try {
+    resultModalResult.value = await executeCmd(resultModalCmd.value, resultModalOption.value, resultModalTarget.value)
+    message.success(t('common.success'))
+  } catch {
+    // handled by interceptor
+  } finally {
+    resultModalLoading.value = false
+  }
 }
 
 const formRef = ref<FormInst | null>(null)
@@ -727,6 +756,38 @@ onMounted(() => {
         </NCard>
       </NSpace>
     </NCard>
+
+    <NModal
+      v-model:show="resultModalShow"
+      preset="card"
+      :title="$t('adminServerCmd.executeResult')"
+      style="width: 760px; max-width: 90vw"
+    >
+      <NSpace vertical :size="12">
+        <NSpace :size="8" wrap>
+          <NTag size="small" :type="targetTagType(resultModalTarget)">{{ targetName(resultModalTarget) }}</NTag>
+          <NText strong>{{ resultModalCmd }}</NText>
+          <NText v-if="resultModalOption" depth="3">{{ resultModalOption }}</NText>
+        </NSpace>
+        <div>
+          <NText depth="3" style="font-size: 13px; margin-bottom: 6px; display: block">
+            {{ $t('adminServerCmd.result') }}
+          </NText>
+          <NText v-if="resultModalLoading && !resultModalResult" depth="3">
+            {{ $t('adminServerCmd.executing') }}
+          </NText>
+          <NCode v-else :code="resultModalResult" word-wrap style="max-height: 420px; overflow-y: auto" />
+        </div>
+      </NSpace>
+      <template #footer>
+        <NSpace justify="end">
+          <NButton :loading="resultModalLoading" @click="runResultModalCommand">
+            {{ $t('adminServerCmd.executeAgain') }}
+          </NButton>
+          <NButton @click="resultModalShow = false">{{ $t('common.close') }}</NButton>
+        </NSpace>
+      </template>
+    </NModal>
 
     <NModal
       v-model:show="createModalShow"

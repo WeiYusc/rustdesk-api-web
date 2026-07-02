@@ -25,6 +25,10 @@ export function captcha(): Promise<ApiResponse<CaptchaResponse>> {
   return request.get('/captcha')
 }
 
+export function requestForgotPassword(data: { email: string }): Promise<ApiResponse<null>> {
+  return request.post('/forgot-password/request', data)
+}
+
 export function logout(): Promise<ApiResponse<null>> {
   return request.post('/logout')
 }

@@ -22,7 +22,9 @@
     "logout": "退出登入",
     "pleaseSelect": "請先選擇",
     "timeout": "請求逾時",
-    "connect": "連接"
+    "connect": "連接",
+    "close": "Close",
+    "refresh": "重新整理"
   },
   "login": {
     "username": "使用者名稱",
@@ -42,7 +44,13 @@
     "loginBanned": "登入已被封禁。",
     "noLoginMethod": "請聯繫管理員配置登入方式。",
     "oidcUrlInvalid": "OIDC 跳轉地址無效",
-    "passkeyLogin": "使用通行密鑰登入"
+    "passkeyLogin": "使用通行密鑰登入",
+    "email": "信箱",
+    "forgotPassword": "忘記密碼",
+    "forgotPasswordDesc": "請輸入帳號信箱。目前版本會先檢查 SMTP 設定；如果管理員尚未設定 SMTP，將回傳明確錯誤。",
+    "sendResetEmail": "寄送重設郵件",
+    "forgotPasswordRequested": "重設郵件請求已送出",
+    "emailRequired": "請輸入信箱"
   },
   "menu": {
     "My": "我的",
@@ -622,7 +630,10 @@
     "customCmdList": "自訂命令列表",
     "ip1Placeholder": "IP 1",
     "ip2Placeholder": "IP 2",
-    "thresholdPlaceholder": "0.0"
+    "thresholdPlaceholder": "0.0",
+    "executeResult": "Execution Result",
+    "executeAgain": "Run Again",
+    "executing": "Executing…"
   },
   "register": {
     "passwordMismatch": "密碼不一致",
@@ -729,6 +740,22 @@
     "authTitle": "Login Policy",
     "authDisablePasswordLogin": "Disable password login",
     "authDisablePasswordWarning": "Before disabling password login, make sure at least one admin OAuth or Passkey login path is available.",
-    "authSaveSuccess": "Login policy saved"
+    "authSaveSuccess": "Login policy saved",
+    "register": "Registration",
+    "registerTitle": "Registration Settings",
+    "registerEnabled": "Enable user registration",
+    "registerDefaultStatus": "Default status for new users",
+    "registerStatusEnabled": "Enabled",
+    "registerStatusDisabled": "Disabled, pending administrator approval",
+    "registerHint": "When enabled, the login page shows a registration link. If the default status is disabled, new users must be approved by an administrator.",
+    "registerSaveSuccess": "Registration settings saved",
+    "serverSecurity": "服務端安全",
+    "serverSecurityTitle": "服務端安全設定",
+    "serverSecurityHint": "此設定透過 hbbs 執行階段命令 must-login/ml 生效；容器重啟後會回到環境變數 MUST_LOGIN 的預設值。啟用後客戶端連線需要登入令牌。",
+    "mustLoginEnabled": "要求客戶端登入",
+    "mustLoginRuntimeState": "目前執行階段狀態",
+    "serverSecuritySaveSuccess": "服務端安全設定已套用到目前執行個體",
+    "applyRuntime": "套用到目前執行個體",
+    "serverSecurityApplyFailed": "服務端回傳狀態與預期不一致，請重新整理後再試"
   }
 }

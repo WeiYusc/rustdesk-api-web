@@ -1,5 +1,20 @@
 import request from '@/utils/request'
-import type { ApiResponse, SmtpSettings, EmailVerificationSettings, PasskeySettings, AuthPolicySettings } from '@/types'
+import type {
+  ApiResponse,
+  SmtpSettings,
+  EmailVerificationSettings,
+  PasskeySettings,
+  AuthPolicySettings,
+  RegisterPolicySettings,
+} from '@/types'
+
+export function getRegisterPolicySettings(): Promise<ApiResponse<RegisterPolicySettings>> {
+  return request.get('/settings/register')
+}
+
+export function saveRegisterPolicySettings(data: RegisterPolicySettings): Promise<ApiResponse<RegisterPolicySettings>> {
+  return request.post('/settings/register', data)
+}
 
 export function getSmtpSettings(): Promise<ApiResponse<SmtpSettings>> {
   return request.get('/settings/smtp')
