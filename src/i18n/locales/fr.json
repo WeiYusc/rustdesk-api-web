@@ -765,6 +765,7 @@
     "mustLoginRuntimeState": "Current runtime state",
     "serverSecuritySaveSuccess": "Server security settings applied to the current runtime",
     "applyRuntime": "Apply to current runtime",
-    "serverSecurityApplyFailed": "Server returned a state different from the requested value. Refresh and try again."
+    "serverSecurityApplyFailed": "Server returned a state different from the requested value. Refresh and try again.",
+    "serverSecurityClientHint": "The official RustDesk client does not currently provide a dedicated “login required” connection error. Unauthenticated connections may show Broken pipe, LOGIN_REQUIRED, Key mismatch, or a generic connection failure. Sign in to the client first and confirm that API and hbbs share the same RUSTDESK_API_JWT_KEY."
   }
 }

@@ -765,6 +765,7 @@
     "mustLoginRuntimeState": "目前執行階段狀態",
     "serverSecuritySaveSuccess": "服務端安全設定已套用到目前執行個體",
     "applyRuntime": "套用到目前執行個體",
-    "serverSecurityApplyFailed": "服務端回傳狀態與預期不一致，請重新整理後再試"
+    "serverSecurityApplyFailed": "服務端回傳狀態與預期不一致，請重新整理後再試",
+    "serverSecurityClientHint": "目前官方 RustDesk 客戶端沒有「需要登入」的專用錯誤文案；未登入連線可能顯示 Broken pipe、LOGIN_REQUIRED、Key mismatch 或一般連線失敗。請先登入客戶端帳號後再連線，並確認 API 與 hbbs 使用相同的 RUSTDESK_API_JWT_KEY。"
   }
 }

@@ -66,6 +66,9 @@ onMounted(loadSettings)
       <NAlert type="warning" :show-icon="true">
         {{ t('adminSettings.serverSecurityHint') }}
       </NAlert>
+      <NAlert type="info" :show-icon="true">
+        {{ t('adminSettings.serverSecurityClientHint') }}
+      </NAlert>
       <NForm label-placement="left" :label-width="190" :disabled="loading">
         <NFormItem :label="t('adminSettings.mustLoginEnabled')">
           <NSwitch v-model:value="mustLogin" />
