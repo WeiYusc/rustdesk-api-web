@@ -6,6 +6,7 @@ import type {
   UserOauthItem,
   PageResult,
   AdminUser,
+  RegisterResponse,
 } from '@/types'
 
 const adminRequest = createAdminRequest()
@@ -51,7 +52,7 @@ export function register(data: {
   password: string
   confirm_password: string
   email?: string
-}): Promise<ApiResponse<UserInfo | null>> {
+}): Promise<ApiResponse<RegisterResponse | null>> {
   return request.post('/user/register', data)
 }
 

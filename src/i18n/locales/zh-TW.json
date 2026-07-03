@@ -647,7 +647,8 @@
     "emailRequiredMessage": "請輸入信箱",
     "emailInvalid": "請輸入有效信箱",
     "usernameLength": "使用者名稱長度必須為 2-32 個字元",
-    "passwordLength": "密碼長度必須為 4-32 個字元"
+    "passwordLength": "密碼長度必須為 4-32 個字元",
+    "pendingApprovalSuccess": "註冊申請已提交，請等待管理員審核。"
   },
   "oauth": {
     "missingCode": "缺少代碼",

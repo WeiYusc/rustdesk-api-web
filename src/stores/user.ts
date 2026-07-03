@@ -65,6 +65,7 @@ export const useUserStore = defineStore('user', () => {
         avatar.value = res.data.avatar
         nickname.value = res.data.nickname
         token.value = res.data.token
+        emailVerifiedAt.value = res.data.email_verified_at || ''
         routeNames.value = res.data.route_names || []
         useRouteStore().addRoutes(routeNames.value)
         return res.data

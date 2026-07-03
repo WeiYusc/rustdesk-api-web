@@ -27,6 +27,17 @@ export interface UserInfo {
   email_verified_at?: string
 }
 
+export interface RegisterResponse {
+  pending_approval?: boolean
+  username?: string
+  email?: string
+  avatar?: string
+  token?: string
+  route_names?: string[]
+  nickname?: string
+  email_verified_at?: string | null
+}
+
 export interface LoginOptionsResponse {
   ops: string[]
   register: boolean

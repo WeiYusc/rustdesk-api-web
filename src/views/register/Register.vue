@@ -114,13 +114,17 @@ async function handleRegister(e?: Event): Promise<void> {
   }
   loading.value = true
   try {
-    await registerApi({
+    const res = await registerApi({
       username: form.username,
       password: form.password,
       confirm_password: form.confirm_password,
       email: form.email || undefined,
     })
-    message.success(appStore.t('common.success'))
+    message.success(
+      res.data?.pending_approval
+        ? appStore.t('register.pendingApprovalSuccess')
+        : appStore.t('common.success')
+    )
     router.push('/login')
   } catch {
     // error handled by interceptor
