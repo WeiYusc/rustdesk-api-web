@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineOptions({ name: 'LoginLog' })
-import { computed, h, onMounted, reactive, ref } from 'vue'
+import { computed, h, onActivated, onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   NButton,
@@ -167,7 +167,17 @@ function handleBatchDelete(): void {
   })
 }
 
-onMounted(loadData)
+let hasLoaded = false
+
+async function refreshData(): Promise<void> {
+  await loadData()
+  hasLoaded = true
+}
+
+onMounted(refreshData)
+onActivated(() => {
+  if (hasLoaded) loadData()
+})
 </script>
 
 <template>

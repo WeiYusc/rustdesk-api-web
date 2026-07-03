@@ -488,7 +488,13 @@
     "actionConnect": "連線",
     "actionClose": "關閉",
     "typeConnect": "連線",
-    "typeDisconnect": "斷線"
+    "typeDisconnect": "斷線",
+    "status": "狀態",
+    "statusOpen": "進行中",
+    "statusClosed": "已關閉",
+    "actionNew": "新建",
+    "typeUnspecified": "未指定",
+    "typeValue": "類型 {type}"
   },
   "adminAuditFile": {
     "title": "檔案審計",
@@ -512,7 +518,9 @@
     "yes": "是",
     "no": "否",
     "typeUpload": "上傳",
-    "typeDownload": "下載"
+    "typeDownload": "下載",
+    "typeUnspecified": "未指定",
+    "typeValue": "類型 {type}"
   },
   "adminShareRecord": {
     "title": "分享記錄",

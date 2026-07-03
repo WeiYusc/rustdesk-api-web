@@ -488,7 +488,13 @@
     "actionConnect": "Connect",
     "actionClose": "Close",
     "typeConnect": "Connect",
-    "typeDisconnect": "Disconnect"
+    "typeDisconnect": "Disconnect",
+    "status": "Status",
+    "statusOpen": "Open",
+    "statusClosed": "Closed",
+    "actionNew": "New",
+    "typeUnspecified": "Unspecified",
+    "typeValue": "Type {type}"
   },
   "adminAuditFile": {
     "title": "File Audit",
@@ -512,7 +518,9 @@
     "yes": "Yes",
     "no": "No",
     "typeUpload": "Upload",
-    "typeDownload": "Download"
+    "typeDownload": "Download",
+    "typeUnspecified": "Unspecified",
+    "typeValue": "Type {type}"
   },
   "adminShareRecord": {
     "title": "Share Record",

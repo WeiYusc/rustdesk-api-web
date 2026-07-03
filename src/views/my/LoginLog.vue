@@ -138,8 +138,16 @@ function handleBatchDelete(): void {
   })
 }
 
-onMounted(() => {
-  fetchData()
+let hasLoaded = false
+
+async function refreshData(): Promise<void> {
+  await fetchData()
+  hasLoaded = true
+}
+
+onMounted(refreshData)
+onActivated(() => {
+  if (hasLoaded) fetchData()
 })
 </script>
 

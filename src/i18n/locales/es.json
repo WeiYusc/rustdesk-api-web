@@ -488,7 +488,13 @@
     "actionConnect": "Conectar",
     "actionClose": "Cerrar",
     "typeConnect": "Conexión",
-    "typeDisconnect": "Desconexión"
+    "typeDisconnect": "Desconexión",
+    "status": "Estado",
+    "statusOpen": "Abierta",
+    "statusClosed": "Cerrada",
+    "actionNew": "Nueva",
+    "typeUnspecified": "Sin especificar",
+    "typeValue": "Tipo {type}"
   },
   "adminAuditFile": {
     "title": "Auditoría de archivos",
@@ -512,7 +518,9 @@
     "yes": "Sí",
     "no": "No",
     "typeUpload": "Subir",
-    "typeDownload": "Descargar"
+    "typeDownload": "Descargar",
+    "typeUnspecified": "Sin especificar",
+    "typeValue": "Tipo {type}"
   },
   "adminShareRecord": {
     "title": "Registro de compartición",

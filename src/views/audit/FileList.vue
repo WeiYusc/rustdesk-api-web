@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineOptions({ name: 'AuditFile' })
-import { computed, h, onMounted, reactive, ref } from 'vue'
+import { computed, h, onActivated, onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   NButton,
@@ -56,7 +56,7 @@ const columns = computed<DataTableColumns<AuditFile>>(() => [
         1: t('adminAuditFile.typeUpload'),
         2: t('adminAuditFile.typeDownload'),
       }
-      return map[row.type] || String(row.type)
+      return map[row.type] || (row.type === 0 ? t('adminAuditFile.typeUnspecified') : t('adminAuditFile.typeValue', { type: row.type }))
     },
   },
   {
@@ -171,7 +171,17 @@ function handleBatchDelete(): void {
   })
 }
 
-onMounted(loadData)
+let hasLoaded = false
+
+async function refreshData(): Promise<void> {
+  await loadData()
+  hasLoaded = true
+}
+
+onMounted(refreshData)
+onActivated(() => {
+  if (hasLoaded) loadData()
+})
 </script>
 
 <template>

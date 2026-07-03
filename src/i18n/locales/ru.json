@@ -488,7 +488,13 @@
     "actionConnect": "Подключить",
     "actionClose": "Закрыть",
     "typeConnect": "Подключение",
-    "typeDisconnect": "Отключение"
+    "typeDisconnect": "Отключение",
+    "status": "Статус",
+    "statusOpen": "Открыто",
+    "statusClosed": "Закрыто",
+    "actionNew": "Новая",
+    "typeUnspecified": "Не указано",
+    "typeValue": "Тип {type}"
   },
   "adminAuditFile": {
     "title": "Аудит файлов",
@@ -512,7 +518,9 @@
     "yes": "Да",
     "no": "Нет",
     "typeUpload": "Загрузить",
-    "typeDownload": "Скачать"
+    "typeDownload": "Скачать",
+    "typeUnspecified": "Не указано",
+    "typeValue": "Тип {type}"
   },
   "adminShareRecord": {
     "title": "Запись обмена",

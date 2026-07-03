@@ -488,7 +488,13 @@
     "actionConnect": "连接",
     "actionClose": "关闭",
     "typeConnect": "连接",
-    "typeDisconnect": "断开"
+    "typeDisconnect": "断开",
+    "status": "状态",
+    "statusOpen": "进行中",
+    "statusClosed": "已关闭",
+    "actionNew": "新建",
+    "typeUnspecified": "未指定",
+    "typeValue": "类型 {type}"
   },
   "adminAuditFile": {
     "title": "文件审计",
@@ -512,7 +518,9 @@
     "yes": "是",
     "no": "否",
     "typeUpload": "上传",
-    "typeDownload": "下载"
+    "typeDownload": "下载",
+    "typeUnspecified": "未指定",
+    "typeValue": "类型 {type}"
   },
   "adminShareRecord": {
     "title": "分享记录",

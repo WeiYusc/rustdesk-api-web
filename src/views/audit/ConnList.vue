@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineOptions({ name: 'AuditConn' })
-import { computed, h, onMounted, reactive, ref } from 'vue'
+import { computed, h, onActivated, onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   NButton,
@@ -8,6 +8,7 @@ import {
   NDataTable,
   NInput,
   NSpace,
+  NTag,
   useDialog,
   useMessage,
   type DataTableColumns,
@@ -41,11 +42,28 @@ const columns = computed<DataTableColumns<AuditConn>>(() => [
     key: 'action',
     render: (row) => {
       const map: Record<string, string> = {
+        new: t('adminAuditConn.actionNew'),
         connect: t('adminAuditConn.actionConnect'),
         close: t('adminAuditConn.actionClose'),
       }
       return map[row.action] || String(row.action)
     },
+  },
+  {
+    title: t('adminAuditConn.status'),
+    key: 'status',
+    render: (row) =>
+      h(
+        NTag,
+        {
+          type: row.close_time > 0 ? 'default' : 'success',
+          bordered: false,
+          size: 'small',
+        },
+        {
+          default: () => row.close_time > 0 ? t('adminAuditConn.statusClosed') : t('adminAuditConn.statusOpen'),
+        },
+      ),
   },
   { title: t('adminAuditConn.connId'), key: 'conn_id', ellipsis: { tooltip: true } },
   { title: t('adminAuditConn.peerId'), key: 'peer_id', ellipsis: { tooltip: true } },
@@ -60,13 +78,7 @@ const columns = computed<DataTableColumns<AuditConn>>(() => [
   {
     title: t('adminAuditConn.type'),
     key: 'type',
-    render: (row) => {
-      const map: Record<number, string> = {
-        1: t('adminAuditConn.typeConnect'),
-        2: t('adminAuditConn.typeDisconnect'),
-      }
-      return map[row.type] || String(row.type)
-    },
+    render: (row) => row.type === 0 ? t('adminAuditConn.typeUnspecified') : t('adminAuditConn.typeValue', { type: row.type }),
   },
   {
     title: t('adminAuditConn.createdAt'),
@@ -180,7 +192,17 @@ function handleBatchDelete(): void {
   })
 }
 
-onMounted(loadData)
+let hasLoaded = false
+
+async function refreshData(): Promise<void> {
+  await loadData()
+  hasLoaded = true
+}
+
+onMounted(refreshData)
+onActivated(() => {
+  if (hasLoaded) loadData()
+})
 </script>
 
 <template>
@@ -216,7 +238,7 @@ onMounted(loadData)
     <NDataTable
       v-model:checked-row-keys="checkedRowKeys"
       remote
-      :scroll-x="1400"
+      :scroll-x="1500"
       :bordered="false"
       :columns="columns"
       :data="dataList"

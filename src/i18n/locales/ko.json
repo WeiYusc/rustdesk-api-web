@@ -488,7 +488,13 @@
     "actionConnect": "연결",
     "actionClose": "닫기",
     "typeConnect": "연결",
-    "typeDisconnect": "연결 해제"
+    "typeDisconnect": "연결 해제",
+    "status": "상태",
+    "statusOpen": "진행 중",
+    "statusClosed": "닫힘",
+    "actionNew": "새로 만들기",
+    "typeUnspecified": "미지정",
+    "typeValue": "유형 {type}"
   },
   "adminAuditFile": {
     "title": "파일 감사",
@@ -512,7 +518,9 @@
     "yes": "예",
     "no": "아니오",
     "typeUpload": "업로드",
-    "typeDownload": "다운로드"
+    "typeDownload": "다운로드",
+    "typeUnspecified": "미지정",
+    "typeValue": "유형 {type}"
   },
   "adminShareRecord": {
     "title": "공유 기록",
