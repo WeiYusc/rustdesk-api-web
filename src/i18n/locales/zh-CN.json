@@ -820,6 +820,18 @@
     "smtpLastTestFailed": "最近一次 SMTP 测试失败。请查看错误提示和服务端日志后调整配置。",
     "emailVerificationSmtpRequiredHint": "这些选项会发送邮箱验证码。保存要求前，请先配置 SMTP 并发送测试邮件。",
     "emailVerificationSmtpTestHint": "SMTP 看起来已配置。面向生产用户启用要求前，请在 SMTP 页发送测试邮件。",
-    "smtpTestUsesSavedSettingsHint": "SMTP 测试使用服务端已保存的配置发送。修改配置后请先保存，再测试。"
+    "smtpTestUsesSavedSettingsHint": "SMTP 测试使用服务端已保存的配置发送。修改配置后请先保存，再测试。",
+    "mustLoginVerifiedBehavior": "已验证：开启 must-login 后，未登录客户端会被拒绝并返回 LOGIN_REQUIRED；已登录客户端可以正常连接。不同客户端版本仍可能显示为普通连接失败，请以当前测试结果和服务端日志为准。",
+    "mustLoginReadinessTitle": "启用前检查清单",
+    "mustLoginReadinessIntro": "建议按以下顺序确认客户端登录链路可用后，再把“要求客户端登录”应用到当前运行实例。",
+    "mustLoginReadinessClientConfigTitle": "1. 客户端服务器配置",
+    "mustLoginReadinessClientConfig": "在“个人信息 / 服务器连接凭据”复制客户端导入配置，确认 API Server、ID Server、Relay Server 和 Key 正确。",
+    "mustLoginReadinessWebauthTitle": "2. 客户端账号登录",
+    "mustLoginReadinessWebauth": "RustDesk 客户端账号页应能看到 webauth 登录入口；点击后浏览器打开 Web Admin 授权页，登录并确认后客户端应获得登录态。",
+    "mustLoginReadinessConnectionTitle": "3. 连接验证",
+    "mustLoginReadinessConnection": "先用已登录客户端验证能连接，再用未登录客户端验证会被拒绝，避免生产开启后误判为 Key 或网络故障。",
+    "mustLoginExpectedBehaviorTitle": "预期结果",
+    "mustLoginUnauthedExpected": "未登录客户端：连接应被拒绝，当前验证路径错误码为 LOGIN_REQUIRED。",
+    "mustLoginAuthedExpected": "已登录客户端：带有效 token 连接应成功。"
   }
 }

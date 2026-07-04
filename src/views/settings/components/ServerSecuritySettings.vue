@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { NAlert, NButton, NCard, NForm, NFormItem, NSpace, NSwitch, NText, useMessage } from 'naive-ui'
+import { NAlert, NButton, NCard, NForm, NFormItem, NSpace, NSwitch, NText, NThing, useMessage } from 'naive-ui'
 import { sendCmd } from '@/api/rustdesk'
 
 const ID_SERVER = '21115'
@@ -69,6 +69,29 @@ onMounted(loadSettings)
       <NAlert type="info" :show-icon="true">
         {{ t('adminSettings.serverSecurityClientHint') }}
       </NAlert>
+      <NAlert type="success" :show-icon="true">
+        {{ t('adminSettings.mustLoginVerifiedBehavior') }}
+      </NAlert>
+      <NCard :title="t('adminSettings.mustLoginReadinessTitle')" :bordered="true" size="small">
+        <NSpace vertical :size="10">
+          <NText depth="3">{{ t('adminSettings.mustLoginReadinessIntro') }}</NText>
+          <NThing :title="t('adminSettings.mustLoginReadinessClientConfigTitle')">
+            {{ t('adminSettings.mustLoginReadinessClientConfig') }}
+          </NThing>
+          <NThing :title="t('adminSettings.mustLoginReadinessWebauthTitle')">
+            {{ t('adminSettings.mustLoginReadinessWebauth') }}
+          </NThing>
+          <NThing :title="t('adminSettings.mustLoginReadinessConnectionTitle')">
+            {{ t('adminSettings.mustLoginReadinessConnection') }}
+          </NThing>
+          <NThing :title="t('adminSettings.mustLoginExpectedBehaviorTitle')">
+            <NSpace vertical :size="4">
+              <NText>{{ t('adminSettings.mustLoginUnauthedExpected') }}</NText>
+              <NText>{{ t('adminSettings.mustLoginAuthedExpected') }}</NText>
+            </NSpace>
+          </NThing>
+        </NSpace>
+      </NCard>
       <NForm label-placement="left" :label-width="190" :disabled="loading">
         <NFormItem :label="t('adminSettings.mustLoginEnabled')">
           <NSwitch v-model:value="mustLogin" />
