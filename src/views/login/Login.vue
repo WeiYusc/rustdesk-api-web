@@ -12,13 +12,12 @@ import {
   NImage,
   NText,
   NSpin,
-  NModal,
   useMessage,
 } from 'naive-ui'
 import { useUserStore } from '@/stores/user'
 import { useAppStore } from '@/stores/app'
 import { useRouteStore } from '@/stores/router'
-import { loginOptions as fetchLoginOptions, captcha as fetchCaptcha, requestForgotPassword } from '@/api/login'
+import { loginOptions as fetchLoginOptions, captcha as fetchCaptcha } from '@/api/login'
 import type { LoginOptionsResponse } from '@/types'
 
 const router = useRouter()
@@ -53,9 +52,6 @@ const showRegisterLink = computed(() => loginOptionsData.value?.register)
 const oidcProviders = computed(() => loginOptionsData.value?.ops || [])
 const showPasskeyLogin = computed(() => !!(loginOptionsData.value?.passkey_enabled && loginOptionsData.value?.passkey_discoverable_login_enabled))
 const passkeyLoading = ref(false)
-const forgotModalShow = ref(false)
-const forgotLoading = ref(false)
-const forgotEmail = ref('')
 
 async function handlePasskeyLogin(): Promise<void> {
   passkeyLoading.value = true
@@ -141,28 +137,6 @@ function goToRegister(): void {
   router.push('/register')
 }
 
-function openForgotPassword(): void {
-  forgotEmail.value = ''
-  forgotModalShow.value = true
-}
-
-async function handleForgotPassword(): Promise<void> {
-  if (!forgotEmail.value) {
-    message.warning(appStore.t('login.emailRequired'))
-    return
-  }
-  forgotLoading.value = true
-  try {
-    await requestForgotPassword({ email: forgotEmail.value })
-    message.success(appStore.t('login.forgotPasswordRequested'))
-    forgotModalShow.value = false
-  } catch {
-    // error handled by interceptor
-  } finally {
-    forgotLoading.value = false
-  }
-}
-
 async function handleNeedCaptcha(): Promise<void> {
   needCaptcha.value = true
   await loadCaptcha()
@@ -236,9 +210,6 @@ onMounted(() => {
         >
           {{ appStore.t('login.login') }}
         </NButton>
-        <NButton text block style="margin-top: 12px" @click="openForgotPassword">
-          {{ appStore.t('login.forgotPassword') }}
-        </NButton>
       </NForm>
 
       <NText
@@ -286,28 +257,6 @@ onMounted(() => {
         </NSpace>
       </template>
     </NCard>
-    <NModal
-      v-model:show="forgotModalShow"
-      preset="card"
-      :title="appStore.t('login.forgotPassword')"
-      style="width: 420px; max-width: 90vw"
-    >
-      <NSpace vertical>
-        <NText depth="3">{{ appStore.t('login.forgotPasswordDesc') }}</NText>
-        <NInput
-          v-model:value="forgotEmail"
-          type="text"
-          :placeholder="appStore.t('login.email')"
-          @keyup.enter="handleForgotPassword"
-        />
-        <NSpace justify="end">
-          <NButton @click="forgotModalShow = false">{{ appStore.t('common.cancel') }}</NButton>
-          <NButton type="primary" :loading="forgotLoading" @click="handleForgotPassword">
-            {{ appStore.t('login.sendResetEmail') }}
-          </NButton>
-        </NSpace>
-      </NSpace>
-    </NModal>
     <NText class="login-footer" depth="3">
       RustDesk API Web · {{ appStore.locale }}
     </NText>
