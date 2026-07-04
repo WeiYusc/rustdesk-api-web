@@ -7,11 +7,13 @@ import EmailVerificationSettings from './components/EmailVerificationSettings.vu
 import PasskeySettings from './components/PasskeySettings.vue'
 import AuthPolicySettings from './components/AuthPolicySettings.vue'
 import ServerSecuritySettings from './components/ServerSecuritySettings.vue'
+import AuthStatusOverview from './components/AuthStatusOverview.vue'
 </script>
 
 <template>
   <NCard>
     <template #header>{{ $t('adminSettings.title') }}</template>
+    <AuthStatusOverview style="margin-bottom: 16px" />
     <NTabs type="line">
       <NTabPane name="register" :tab="$t('adminSettings.register')">
         <RegisterSettings />

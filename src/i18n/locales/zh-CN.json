@@ -24,7 +24,9 @@
     "timeout": "请求超时",
     "connect": "连接",
     "close": "关闭",
-    "refresh": "刷新"
+    "refresh": "刷新",
+    "enabled": "启用",
+    "disabled": "禁用"
   },
   "login": {
     "username": "用户名",
@@ -789,6 +791,21 @@
     "serverSecuritySaveSuccess": "服务端安全设置已应用到当前运行实例",
     "applyRuntime": "应用到当前运行实例",
     "serverSecurityApplyFailed": "服务端返回状态与期望不一致，请刷新后重试",
-    "serverSecurityClientHint": "当前官方 RustDesk 客户端没有“需要登录”的专用错误文案；未登录连接可能显示 Broken pipe、LOGIN_REQUIRED、Key mismatch 或普通连接失败。请先登录客户端账号后再连接，并确认 API 与 hbbs 使用相同的 RUSTDESK_API_JWT_KEY。"
+    "serverSecurityClientHint": "当前官方 RustDesk 客户端没有“需要登录”的专用错误文案；未登录连接可能显示 Broken pipe、LOGIN_REQUIRED、Key mismatch 或普通连接失败。请先登录客户端账号后再连接，并确认 API 与 hbbs 使用相同的 RUSTDESK_API_JWT_KEY。",
+    "authOverviewTitle": "认证状态概览",
+    "authOverviewRegister": "注册",
+    "authOverviewSmtp": "SMTP",
+    "authOverviewEmailVerification": "邮箱验证",
+    "authOverviewPasskey": "通行密钥",
+    "authOverviewPasswordLogin": "密码登录",
+    "authOverviewReady": "已就绪",
+    "authOverviewIncomplete": "配置不完整",
+    "authOverviewPasswordEnabled": "允许密码登录",
+    "authOverviewPasswordDisabled": "已禁用密码登录",
+    "authOverviewSmtpRequiredWarning": "当前注册邮箱验证已启用，但 SMTP 未启用或配置不完整。用户将无法收到注册验证码。",
+    "authOverviewPasswordLockoutWarning": "密码登录已禁用，但未启用可发现通行密钥登录。请确认仍有可用的管理员登录方式，避免锁定。",
+    "authOverviewConfigured": "已配置",
+    "authOverviewSmtpAnyRequiredWarning": "邮箱验证码功能已启用，但 SMTP 未启用或配置不完整。注册验证码、邮箱变更或登录验证可能不可用。",
+    "authOverviewSmtpTestHint": "配置完整不代表投递一定成功，建议在 SMTP 页发送测试邮件验证。"
   }
 }

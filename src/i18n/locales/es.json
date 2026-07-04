@@ -24,7 +24,9 @@
     "timeout": "Tiempo de solicitud agotado",
     "connect": "Conectar",
     "close": "Close",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "enabled": "Enabled",
+    "disabled": "Disabled"
   },
   "login": {
     "username": "Nombre de usuario",
@@ -789,6 +791,21 @@
     "serverSecuritySaveSuccess": "Server security settings applied to the current runtime",
     "applyRuntime": "Apply to current runtime",
     "serverSecurityApplyFailed": "Server returned a state different from the requested value. Refresh and try again.",
-    "serverSecurityClientHint": "The official RustDesk client does not currently provide a dedicated “login required” connection error. Unauthenticated connections may show Broken pipe, LOGIN_REQUIRED, Key mismatch, or a generic connection failure. Sign in to the client first and confirm that API and hbbs share the same RUSTDESK_API_JWT_KEY."
+    "serverSecurityClientHint": "The official RustDesk client does not currently provide a dedicated “login required” connection error. Unauthenticated connections may show Broken pipe, LOGIN_REQUIRED, Key mismatch, or a generic connection failure. Sign in to the client first and confirm that API and hbbs share the same RUSTDESK_API_JWT_KEY.",
+    "authOverviewTitle": "Authentication status overview",
+    "authOverviewRegister": "Registration",
+    "authOverviewSmtp": "SMTP",
+    "authOverviewEmailVerification": "Email verification",
+    "authOverviewPasskey": "Passkey",
+    "authOverviewPasswordLogin": "Password login",
+    "authOverviewReady": "Ready",
+    "authOverviewIncomplete": "Incomplete",
+    "authOverviewPasswordEnabled": "Password login allowed",
+    "authOverviewPasswordDisabled": "Password login disabled",
+    "authOverviewSmtpRequiredWarning": "Registration email verification is enabled, but SMTP is disabled or incomplete. Users will not be able to receive registration codes.",
+    "authOverviewPasswordLockoutWarning": "Password login is disabled, but discoverable passkey login is not enabled. Confirm that another administrator login method is available to avoid lockout.",
+    "authOverviewConfigured": "Configured",
+    "authOverviewSmtpAnyRequiredWarning": "Email-code features are enabled, but SMTP is disabled or incomplete. Registration codes, email-change verification, or login verification may not work.",
+    "authOverviewSmtpTestHint": "A complete configuration does not guarantee delivery. Use the SMTP tab to send a test email."
   }
 }
