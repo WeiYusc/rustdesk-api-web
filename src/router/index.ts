@@ -9,7 +9,7 @@ export const router = createRouter({
   routes: constantRoutes as RouteRecordRaw[],
 })
 
-const WHITE_LIST = ['/login', '/register', '/404', '/oauth']
+const WHITE_LIST = ['/login', '/register', '/reset-password', '/404', '/oauth']
 
 router.beforeEach(async (to, _from, next) => {
   const token = getToken()

@@ -47,10 +47,19 @@
     "passkeyLogin": "Sign in with Passkey",
     "email": "Email",
     "forgotPassword": "Forgot password",
-    "forgotPasswordDesc": "Enter your account email. This version first checks SMTP configuration; if the administrator has not configured SMTP, it returns a clear error.",
+    "forgotPasswordDesc": "Enter your account email. If the email exists, a password reset message will be sent.",
     "sendResetEmail": "Send reset email",
-    "forgotPasswordRequested": "Password reset email request submitted",
-    "emailRequired": "Enter your email"
+    "forgotPasswordRequested": "If that email exists, a password reset message has been sent.",
+    "emailRequired": "Enter your email",
+    "resetPassword": "Reset password",
+    "resetPasswordDesc": "Enter the reset token from your email and choose a new password.",
+    "resetToken": "Reset token",
+    "resetTokenRequired": "Enter the reset token",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "confirmPasswordRequired": "Confirm your password",
+    "passwordMismatch": "Passwords do not match",
+    "resetPasswordSuccess": "Password reset. Please log in again."
   },
   "menu": {
     "My": "My",

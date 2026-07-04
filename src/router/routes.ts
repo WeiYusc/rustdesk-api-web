@@ -14,6 +14,12 @@ export const constantRoutes: RouteRecordRaw[] = [
     component: () => import('@/views/register/Register.vue'),
   },
   {
+    path: '/reset-password',
+    name: 'ResetPassword',
+    meta: { title: 'ResetPassword' },
+    component: () => import('@/views/login/ResetPassword.vue'),
+  },
+  {
     path: '/404',
     name: 'NotFound',
     meta: { hide: true },

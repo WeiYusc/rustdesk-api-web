@@ -47,10 +47,19 @@
     "passkeyLogin": "使用通行密鑰登入",
     "email": "信箱",
     "forgotPassword": "忘記密碼",
-    "forgotPasswordDesc": "請輸入帳號信箱。目前版本會先檢查 SMTP 設定；如果管理員尚未設定 SMTP，將回傳明確錯誤。",
+    "forgotPasswordDesc": "請輸入帳號信箱。如果該信箱存在，系統會寄送密碼重設郵件。",
     "sendResetEmail": "寄送重設郵件",
-    "forgotPasswordRequested": "重設郵件請求已送出",
-    "emailRequired": "請輸入信箱"
+    "forgotPasswordRequested": "如果該信箱存在，重設郵件已寄出，請檢查信箱。",
+    "emailRequired": "請輸入信箱",
+    "resetPassword": "重設密碼",
+    "resetPasswordDesc": "請輸入郵件中的重設令牌並設定新密碼。",
+    "resetToken": "重設令牌",
+    "resetTokenRequired": "請輸入重設令牌",
+    "newPassword": "新密碼",
+    "confirmPassword": "確認密碼",
+    "confirmPasswordRequired": "請再次輸入密碼",
+    "passwordMismatch": "兩次輸入的密碼不一致",
+    "resetPasswordSuccess": "密碼已重設，請重新登入。"
   },
   "menu": {
     "My": "我的",
