@@ -665,7 +665,12 @@
     "emailInvalid": "Enter a valid email address",
     "usernameLength": "Username must be 2-32 characters",
     "passwordLength": "Password must be 4-32 characters",
-    "pendingApprovalSuccess": "Registration submitted successfully. Please wait for administrator approval."
+    "pendingApprovalSuccess": "Registration submitted successfully. Please wait for administrator approval.",
+    "emailCode": "Code de vérification e-mail",
+    "emailCodeRequired": "Entrez le code de vérification e-mail à 6 chiffres",
+    "sendVerificationCode": "Envoyer le code",
+    "verificationCodeSent": "Code envoyé",
+    "resendIn": "Renvoyer dans"
   },
   "oauth": {
     "missingCode": "Code manquant",

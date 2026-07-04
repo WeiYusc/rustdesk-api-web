@@ -52,8 +52,15 @@ export function register(data: {
   password: string
   confirm_password: string
   email?: string
+  email_code?: string
 }): Promise<ApiResponse<RegisterResponse | null>> {
   return request.post('/user/register', data)
+}
+
+export function sendRegisterEmailVerification(data: {
+  email: string
+}): Promise<ApiResponse<{ challenge_id: number; email: string; expires_at: string }>> {
+  return request.post('/user/register/email/send', data)
 }
 
 export function groupUsers(data: {

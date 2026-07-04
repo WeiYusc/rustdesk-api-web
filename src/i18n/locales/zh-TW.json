@@ -665,7 +665,12 @@
     "emailInvalid": "請輸入有效信箱",
     "usernameLength": "使用者名稱長度必須為 2-32 個字元",
     "passwordLength": "密碼長度必須為 4-32 個字元",
-    "pendingApprovalSuccess": "註冊申請已提交，請等待管理員審核。"
+    "pendingApprovalSuccess": "註冊申請已提交，請等待管理員審核。",
+    "emailCode": "郵箱驗證碼",
+    "emailCodeRequired": "請輸入 6 位郵箱驗證碼",
+    "sendVerificationCode": "發送驗證碼",
+    "verificationCodeSent": "驗證碼已發送",
+    "resendIn": "重新發送"
   },
   "oauth": {
     "missingCode": "缺少代碼",

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import {
   NCard,
@@ -7,11 +7,12 @@ import {
   NFormItem,
   NInput,
   NButton,
+  NInputGroup,
   useMessage,
 } from 'naive-ui'
 import type { FormInst, FormRules } from 'naive-ui'
 import { useAppStore } from '@/stores/app'
-import { register as registerApi } from '@/api/user'
+import { register as registerApi, sendRegisterEmailVerification } from '@/api/user'
 import { loginOptions as fetchLoginOptions } from '@/api/login'
 
 const router = useRouter()
@@ -20,6 +21,9 @@ const message = useMessage()
 
 const formRef = ref<FormInst | null>(null)
 const loading = ref(false)
+const sendCodeLoading = ref(false)
+const cooldownSeconds = ref(0)
+let cooldownTimer: number | undefined
 const registerEmailRequired = ref(false)
 
 const form = reactive({
@@ -27,12 +31,21 @@ const form = reactive({
   password: '',
   confirm_password: '',
   email: '',
+  email_code: '',
 })
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const emailPlaceholder = computed(() =>
   registerEmailRequired.value ? appStore.t('register.emailRequired') : appStore.t('register.emailOptional')
+)
+const canSendEmailCode = computed(() =>
+  registerEmailRequired.value && !!form.email && emailPattern.test(form.email) && cooldownSeconds.value === 0
+)
+const sendCodeText = computed(() =>
+  cooldownSeconds.value > 0
+    ? `${appStore.t('register.resendIn')} ${cooldownSeconds.value}s`
+    : appStore.t('register.sendVerificationCode')
 )
 
 const rules = computed<FormRules>(() => ({
@@ -92,6 +105,20 @@ const rules = computed<FormRules>(() => ({
       },
     },
   ],
+  email_code: [
+    {
+      trigger: ['blur', 'input'],
+      validator: (_rule: unknown, value: string) => {
+        if (!registerEmailRequired.value) {
+          return true
+        }
+        if (!value || !/^\d{6}$/.test(value)) {
+          return new Error(appStore.t('register.emailCodeRequired'))
+        }
+        return true
+      },
+    },
+  ],
 }))
 
 onMounted(async () => {
@@ -104,6 +131,51 @@ onMounted(async () => {
     registerEmailRequired.value = false
   }
 })
+
+onBeforeUnmount(() => {
+  if (cooldownTimer) {
+    window.clearInterval(cooldownTimer)
+  }
+})
+
+function startCooldown(): void {
+  cooldownSeconds.value = 60
+  if (cooldownTimer) {
+    window.clearInterval(cooldownTimer)
+  }
+  cooldownTimer = window.setInterval(() => {
+    cooldownSeconds.value -= 1
+    if (cooldownSeconds.value <= 0 && cooldownTimer) {
+      window.clearInterval(cooldownTimer)
+      cooldownTimer = undefined
+      cooldownSeconds.value = 0
+    }
+  }, 1000)
+}
+
+async function handleSendEmailCode(): Promise<void> {
+  if (!form.email || !emailPattern.test(form.email)) {
+    try {
+      await formRef.value?.validate(undefined, rule => rule?.key === 'email')
+    } catch {
+      // ignored: Naive UI may not provide rule keys for computed rules; canSendEmailCode still guards the request.
+    }
+    return
+  }
+  if (!canSendEmailCode.value) {
+    return
+  }
+  sendCodeLoading.value = true
+  try {
+    await sendRegisterEmailVerification({ email: form.email.trim() })
+    message.success(appStore.t('register.verificationCodeSent'))
+    startCooldown()
+  } catch {
+    // error handled by interceptor
+  } finally {
+    sendCodeLoading.value = false
+  }
+}
 
 async function handleRegister(e?: Event): Promise<void> {
   e?.preventDefault()
@@ -118,7 +190,8 @@ async function handleRegister(e?: Event): Promise<void> {
       username: form.username,
       password: form.password,
       confirm_password: form.confirm_password,
-      email: form.email || undefined,
+      email: form.email ? form.email.trim() : undefined,
+      email_code: registerEmailRequired.value ? form.email_code.trim() : undefined,
     })
     message.success(
       res.data?.pending_approval
@@ -152,7 +225,21 @@ async function handleRegister(e?: Event): Promise<void> {
           <NInput v-model:value="form.confirm_password" type="password" show-password-on="click" :placeholder="appStore.t('register.confirmPassword')" />
         </NFormItem>
         <NFormItem path="email" :show-require-mark="registerEmailRequired">
-          <NInput v-model:value="form.email" :placeholder="emailPlaceholder" clearable />
+          <NInputGroup>
+            <NInput v-model:value="form.email" :placeholder="emailPlaceholder" clearable />
+            <NButton
+              v-if="registerEmailRequired"
+              attr-type="button"
+              :loading="sendCodeLoading"
+              :disabled="!canSendEmailCode"
+              @click="handleSendEmailCode"
+            >
+              {{ sendCodeText }}
+            </NButton>
+          </NInputGroup>
+        </NFormItem>
+        <NFormItem v-if="registerEmailRequired" path="email_code" :show-require-mark="true">
+          <NInput v-model:value="form.email_code" :placeholder="appStore.t('register.emailCode')" clearable />
         </NFormItem>
         <NButton type="primary" block size="large" :loading="loading" attr-type="submit">
           {{ appStore.t('login.register') }}
