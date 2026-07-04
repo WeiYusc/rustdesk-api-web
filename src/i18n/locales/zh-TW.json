@@ -806,6 +806,15 @@
     "authOverviewPasswordLockoutWarning": "密碼登入已停用，但未啟用可發現通行密鑰登入。請確認仍有可用的管理員登入方式，避免被鎖定。",
     "authOverviewConfigured": "已設定",
     "authOverviewSmtpAnyRequiredWarning": "信箱驗證碼功能已啟用，但 SMTP 未啟用或設定不完整。註冊驗證碼、信箱變更或登入驗證可能不可用。",
-    "authOverviewSmtpTestHint": "設定完整不代表投遞一定成功，建議在 SMTP 頁傳送測試郵件驗證。"
+    "authOverviewSmtpTestHint": "設定完整不代表投遞一定成功，建議在 SMTP 頁傳送測試郵件驗證。",
+    "smtpReadyHint": "SMTP 設定已滿足信箱驗證碼功能的基本要求。啟用驗證流程前請先傳送測試郵件。",
+    "smtpRequiredHint": "信箱驗證碼功能要求啟用 SMTP，並設定伺服器位址、連接埠和寄件郵箱。",
+    "smtpPasswordRequiredHint": "已填寫使用者名稱但未儲存 SMTP 密碼。請儲存密碼，或清空使用者名稱。",
+    "smtpTestRequiredHint": "儲存 SMTP 只會校驗設定格式。請傳送測試郵件驗證實際投遞。",
+    "smtpLastTestSuccess": "本次瀏覽器工作階段中的最近一次 SMTP 測試已成功。",
+    "smtpLastTestFailed": "最近一次 SMTP 測試失敗。請查看錯誤提示和服務端日誌後調整設定。",
+    "emailVerificationSmtpRequiredHint": "這些選項會傳送信箱驗證碼。儲存要求前，請先設定 SMTP 並傳送測試郵件。",
+    "emailVerificationSmtpTestHint": "SMTP 看起來已設定。面向正式使用者啟用要求前，請在 SMTP 頁傳送測試郵件。",
+    "smtpTestUsesSavedSettingsHint": "SMTP 測試使用服務端已儲存的設定傳送。修改設定後請先儲存，再測試。"
   }
 }

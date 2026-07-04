@@ -806,6 +806,15 @@
     "authOverviewPasswordLockoutWarning": "密码登录已禁用，但未启用可发现通行密钥登录。请确认仍有可用的管理员登录方式，避免锁定。",
     "authOverviewConfigured": "已配置",
     "authOverviewSmtpAnyRequiredWarning": "邮箱验证码功能已启用，但 SMTP 未启用或配置不完整。注册验证码、邮箱变更或登录验证可能不可用。",
-    "authOverviewSmtpTestHint": "配置完整不代表投递一定成功，建议在 SMTP 页发送测试邮件验证。"
+    "authOverviewSmtpTestHint": "配置完整不代表投递一定成功，建议在 SMTP 页发送测试邮件验证。",
+    "smtpReadyHint": "SMTP 配置已满足邮箱验证码功能的基本要求。启用验证流程前请先发送测试邮件。",
+    "smtpRequiredHint": "邮箱验证码功能要求启用 SMTP，并配置服务器地址、端口和发件邮箱。",
+    "smtpPasswordRequiredHint": "已填写用户名但未保存 SMTP 密码。请保存密码，或清空用户名。",
+    "smtpTestRequiredHint": "保存 SMTP 只会校验配置格式。请发送测试邮件验证真实投递。",
+    "smtpLastTestSuccess": "本次浏览器会话中的最近一次 SMTP 测试已成功。",
+    "smtpLastTestFailed": "最近一次 SMTP 测试失败。请查看错误提示和服务端日志后调整配置。",
+    "emailVerificationSmtpRequiredHint": "这些选项会发送邮箱验证码。保存要求前，请先配置 SMTP 并发送测试邮件。",
+    "emailVerificationSmtpTestHint": "SMTP 看起来已配置。面向生产用户启用要求前，请在 SMTP 页发送测试邮件。",
+    "smtpTestUsesSavedSettingsHint": "SMTP 测试使用服务端已保存的配置发送。修改配置后请先保存，再测试。"
   }
 }

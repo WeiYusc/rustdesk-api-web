@@ -806,6 +806,15 @@
     "authOverviewPasswordLockoutWarning": "Password login is disabled, but discoverable passkey login is not enabled. Confirm that another administrator login method is available to avoid lockout.",
     "authOverviewConfigured": "Configured",
     "authOverviewSmtpAnyRequiredWarning": "Email-code features are enabled, but SMTP is disabled or incomplete. Registration codes, email-change verification, or login verification may not work.",
-    "authOverviewSmtpTestHint": "A complete configuration does not guarantee delivery. Use the SMTP tab to send a test email."
+    "authOverviewSmtpTestHint": "A complete configuration does not guarantee delivery. Use the SMTP tab to send a test email.",
+    "smtpReadyHint": "SMTP configuration is complete enough for email-code features. Send a test email before enabling verification flows.",
+    "smtpRequiredHint": "Email-code features require SMTP to be enabled with host, port, and from email configured.",
+    "smtpPasswordRequiredHint": "A username is set but no SMTP password is saved. Save a password or clear the username.",
+    "smtpTestRequiredHint": "Saving SMTP only validates configuration shape. Send a test email to verify real delivery.",
+    "smtpLastTestSuccess": "Last SMTP test succeeded in this browser session.",
+    "smtpLastTestFailed": "Last SMTP test failed. Check the message and server logs, then update the settings.",
+    "emailVerificationSmtpRequiredHint": "These options send email codes. Configure SMTP and send a test email before saving requirements.",
+    "emailVerificationSmtpTestHint": "SMTP appears configured. Send a test email on the SMTP tab before enabling requirements for production users.",
+    "smtpTestUsesSavedSettingsHint": "SMTP test sends with the saved server-side settings. Save changes before testing."
   }
 }

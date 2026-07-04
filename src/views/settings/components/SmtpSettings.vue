@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   NCard, NForm, NFormItem, NInput, NInputNumber, NSelect,
@@ -38,16 +38,29 @@ const securityOptions = computed(() => [
 
 const testModalShow = ref(false)
 const testEmail = ref('')
+const lastTestResult = ref<'success' | 'failed' | ''>('')
+const resettingFromServer = ref(false)
+
+const smtpReady = computed(() => (
+  settings.enabled
+  && !!settings.host
+  && !!settings.port
+  && !!settings.from_email
+  && (!settings.username || settings.has_password || !!settings.password)
+))
+const smtpMissingPassword = computed(() => settings.enabled && !!settings.username && !settings.has_password && !settings.password)
 
 async function loadSettings(): Promise<void> {
   loading.value = true
   try {
     const res = await getSmtpSettings()
+    resettingFromServer.value = true
     Object.assign(settings, res.data)
     settings.password = ''
   } catch {
     // ignore
   } finally {
+    resettingFromServer.value = false
     loading.value = false
   }
 }
@@ -87,15 +100,22 @@ async function handleTestSend(): Promise<void> {
   testing.value = true
   try {
     await testSmtpSend({ to: testEmail.value })
+    lastTestResult.value = 'success'
     message.success(t('adminSettings.smtpTestSuccess'))
     testModalShow.value = false
     testEmail.value = ''
   } catch {
-    // ignore
+    lastTestResult.value = 'failed'
   } finally {
     testing.value = false
   }
 }
+
+watch(settings, () => {
+  if (!resettingFromServer.value) {
+    lastTestResult.value = ''
+  }
+})
 
 onMounted(loadSettings)
 </script>
@@ -103,6 +123,18 @@ onMounted(loadSettings)
 <template>
   <NCard :title="t('adminSettings.smtpTitle')" :bordered="false" size="small">
     <NSpace vertical :size="16">
+      <NAlert :type="smtpReady ? 'success' : 'warning'" :show-icon="true">
+        {{ smtpReady ? t('adminSettings.smtpReadyHint') : t('adminSettings.smtpRequiredHint') }}
+      </NAlert>
+      <NAlert v-if="smtpMissingPassword" type="warning" :show-icon="true">
+        {{ t('adminSettings.smtpPasswordRequiredHint') }}
+      </NAlert>
+      <NAlert v-if="lastTestResult === 'success'" type="success" :show-icon="true">
+        {{ t('adminSettings.smtpLastTestSuccess') }}
+      </NAlert>
+      <NAlert v-else-if="lastTestResult === 'failed'" type="error" :show-icon="true">
+        {{ t('adminSettings.smtpLastTestFailed') }}
+      </NAlert>
       <NForm label-placement="left" :label-width="140">
         <NFormItem :label="t('adminSettings.smtpEnabled')">
           <NSwitch v-model:value="settings.enabled" />
@@ -154,10 +186,16 @@ onMounted(loadSettings)
       <NAlert v-if="settings.has_password" type="info" :show-icon="true">
         {{ t('adminSettings.smtpPasswordHint') }}
       </NAlert>
+      <NAlert v-if="smtpReady" type="info" :show-icon="true">
+        {{ t('adminSettings.smtpTestRequiredHint') }}
+      </NAlert>
+      <NAlert v-if="smtpReady" type="info" :show-icon="true">
+        {{ t('adminSettings.smtpTestUsesSavedSettingsHint') }}
+      </NAlert>
 
       <NSpace :size="8">
         <NButton type="primary" :loading="saving" @click="handleSave">{{ t('common.save') }}</NButton>
-        <NButton :loading="testing" :disabled="!settings.enabled" @click="testModalShow = true">{{ t('adminSettings.smtpTestSend') }}</NButton>
+        <NButton :loading="testing" :disabled="!smtpReady" @click="testModalShow = true">{{ t('adminSettings.smtpTestSend') }}</NButton>
       </NSpace>
     </NSpace>
 
