@@ -390,6 +390,7 @@ async function handleSaveProfile(): Promise<void> {
       <NSpace vertical :size="12">
         <NText depth="3" style="font-size: 13px">{{ $t('myInfo.credentialsDesc') }}</NText>
         <NText depth="3" style="font-size: 13px">{{ $t('myInfo.clientConfigDesc') }}</NText>
+        <NText depth="3" style="font-size: 13px">{{ $t('myInfo.clientTroubleshootingHint') }}</NText>
         <NDescriptions v-if="appStore.serverConfig" label-placement="left" :column="1" bordered size="small">
           <NDescriptionsItem :label="$t('myInfo.idServer')">
             {{ appStore.serverConfig.id_server || '-' }}

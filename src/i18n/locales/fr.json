@@ -136,7 +136,8 @@
     "copyClientConfig": "Copy Client Import Config",
     "clientConfigCopied": "Client import config copied",
     "avatarCropHelp": "Glisser pour déplacer, molette pour zoomer",
-    "downloadClient": "Download RustDesk Client"
+    "downloadClient": "Download RustDesk Client",
+    "clientTroubleshootingHint": "If the device list is empty, copy the client import config into RustDesk and confirm the client is signed in when server-side login is required."
   },
   "myAddressBook": {
     "create": "Créer",
@@ -456,7 +457,9 @@
     "deleteSuccess": "Supprimé avec succès",
     "batchDeleteSuccess": "Suppression par lot réussie",
     "required": "Ce champ est obligatoire",
-    "userId": "ID utilisateur"
+    "userId": "ID utilisateur",
+    "emptyDiagnostic": "No devices have reported yet. Import the server configuration below into the RustDesk client and confirm API Server, ID Server, and Key are correct. If client login is required, sign in from the client account page first.",
+    "emptyFilter": "No devices match the current filters. Adjust the filters or click Reset."
   },
   "adminLoginLog": {
     "title": "Journal de connexion",
@@ -505,7 +508,9 @@
     "statusClosed": "Fermé",
     "actionNew": "Nouveau",
     "typeUnspecified": "Non spécifié",
-    "typeValue": "Type {type}"
+    "typeValue": "Type {type}",
+    "emptyDiagnostic": "No connection logs yet. Confirm the client can report devices first; if the device list is also empty, check the client API Server, login state, and server Key.",
+    "emptyFilter": "No connection logs match the current filters. Adjust the filters or click Reset."
   },
   "adminAuditFile": {
     "title": "Audit des fichiers",

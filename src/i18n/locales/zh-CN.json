@@ -136,7 +136,8 @@
     "copyClientConfig": "复制客户端导入配置",
     "clientConfigCopied": "客户端导入配置已复制",
     "avatarCropHelp": "拖拽图片调整位置，滚轮缩放",
-    "downloadClient": "下载 RustDesk 客户端"
+    "downloadClient": "下载 RustDesk 客户端",
+    "clientTroubleshootingHint": "如果设备列表为空，请复制“客户端导入配置”到 RustDesk 客户端，并确认客户端已登录（当服务端要求登录时）。"
   },
   "myAddressBook": {
     "create": "新建",
@@ -456,7 +457,9 @@
     "deleteSuccess": "删除成功",
     "batchDeleteSuccess": "批量删除成功",
     "required": "此项为必填",
-    "userId": "用户ID"
+    "userId": "用户ID",
+    "emptyDiagnostic": "暂无设备上报。请先在 RustDesk 客户端导入下方服务器配置，确认 API Server、ID Server、Key 正确；若启用了“要求客户端登录”，还需要先在客户端账号页完成登录。",
+    "emptyFilter": "当前筛选条件没有匹配设备。请调整筛选条件或点击重置。"
   },
   "adminLoginLog": {
     "title": "登录日志",
@@ -505,7 +508,9 @@
     "statusClosed": "已关闭",
     "actionNew": "新建",
     "typeUnspecified": "未指定",
-    "typeValue": "类型 {type}"
+    "typeValue": "类型 {type}",
+    "emptyDiagnostic": "暂无连接日志。请先确认客户端能上报设备；如果设备列表也为空，优先检查客户端 API Server、登录状态和服务器 Key。",
+    "emptyFilter": "当前筛选条件没有匹配连接日志。请调整筛选条件或点击重置。"
   },
   "adminAuditFile": {
     "title": "文件审计",

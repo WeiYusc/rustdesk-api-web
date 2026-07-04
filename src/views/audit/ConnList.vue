@@ -9,6 +9,7 @@ import {
   NInput,
   NSpace,
   NTag,
+  NAlert,
   useDialog,
   useMessage,
   type DataTableColumns,
@@ -26,6 +27,7 @@ const dataList = ref<AuditConn[]>([])
 const checkedRowKeys = ref<Array<string | number>>([])
 const filterPeerId = ref('')
 const filterFromPeer = ref('')
+const hasActiveFilter = computed(() => !!(filterPeerId.value || filterFromPeer.value))
 
 const pagination = reactive({
   page: 1,
@@ -235,6 +237,9 @@ onActivated(() => {
         </NButton>
       </NSpace>
     </template>
+    <NAlert v-if="!loading && pagination.itemCount === 0" type="info" :show-icon="true" style="margin-bottom: 16px">
+      {{ $t(hasActiveFilter ? 'adminAuditConn.emptyFilter' : 'adminAuditConn.emptyDiagnostic') }}
+    </NAlert>
     <NDataTable
       v-model:checked-row-keys="checkedRowKeys"
       remote

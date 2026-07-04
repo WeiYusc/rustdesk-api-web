@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineOptions({ name: 'Peer' })
-import { computed, h, onMounted, reactive, ref } from 'vue'
+import { computed, h, onActivated, onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   NButton,
@@ -10,6 +10,7 @@ import {
   NFormItem,
   NInput,
   NModal,
+  NAlert,
   NSelect,
   NSpace,
   useDialog,
@@ -55,6 +56,9 @@ const searchUsername = ref('')
 const searchIp = ref('')
 
 const checkedRowKeys = ref<Array<string | number>>([])
+const hasActiveFilter = computed(() => !!(
+  searchId.value || searchHostname.value || searchAlias.value || searchUsername.value || searchIp.value
+))
 
 const groupOptions = ref<{ label: string; value: number }[]>([])
 
@@ -339,9 +343,19 @@ function handleBatchDelete(): void {
   })
 }
 
+let hasLoaded = false
+
+async function refreshData(): Promise<void> {
+  await loadData()
+  hasLoaded = true
+}
+
 onMounted(() => {
-  loadData()
+  refreshData()
   loadGroups()
+})
+onActivated(() => {
+  if (hasLoaded) loadData()
 })
 </script>
 
@@ -405,6 +419,9 @@ onMounted(() => {
         {{ $t('adminPeer.reset') }}
       </NButton>
     </NSpace>
+    <NAlert v-if="!loading && pagination.itemCount === 0" type="info" :show-icon="true" style="margin-bottom: 16px">
+      {{ $t(hasActiveFilter ? 'adminPeer.emptyFilter' : 'adminPeer.emptyDiagnostic') }}
+    </NAlert>
     <NDataTable
       remote
       :scroll-x="1200"

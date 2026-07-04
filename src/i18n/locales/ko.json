@@ -136,7 +136,8 @@
     "copyClientConfig": "Copy Client Import Config",
     "clientConfigCopied": "Client import config copied",
     "avatarCropHelp": "드래그로 이동, 스크롤로 확대/축소",
-    "downloadClient": "Download RustDesk Client"
+    "downloadClient": "Download RustDesk Client",
+    "clientTroubleshootingHint": "If the device list is empty, copy the client import config into RustDesk and confirm the client is signed in when server-side login is required."
   },
   "myAddressBook": {
     "create": "생성",
@@ -456,7 +457,9 @@
     "deleteSuccess": "삭제되었습니다",
     "batchDeleteSuccess": "일괄 삭제되었습니다",
     "required": "필수 입력 항목입니다",
-    "userId": "사용자 ID"
+    "userId": "사용자 ID",
+    "emptyDiagnostic": "No devices have reported yet. Import the server configuration below into the RustDesk client and confirm API Server, ID Server, and Key are correct. If client login is required, sign in from the client account page first.",
+    "emptyFilter": "No devices match the current filters. Adjust the filters or click Reset."
   },
   "adminLoginLog": {
     "title": "로그인 로그",
@@ -505,7 +508,9 @@
     "statusClosed": "닫힘",
     "actionNew": "새로 만들기",
     "typeUnspecified": "미지정",
-    "typeValue": "유형 {type}"
+    "typeValue": "유형 {type}",
+    "emptyDiagnostic": "No connection logs yet. Confirm the client can report devices first; if the device list is also empty, check the client API Server, login state, and server Key.",
+    "emptyFilter": "No connection logs match the current filters. Adjust the filters or click Reset."
   },
   "adminAuditFile": {
     "title": "파일 감사",
