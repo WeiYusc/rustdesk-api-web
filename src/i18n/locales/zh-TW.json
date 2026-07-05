@@ -796,7 +796,7 @@
     "serverSecuritySaveSuccess": "服務端安全設定已套用到目前執行個體",
     "applyRuntime": "套用到目前執行個體",
     "serverSecurityApplyFailed": "服務端回傳狀態與預期不一致，請重新整理後再試",
-    "serverSecurityClientHint": "目前官方 RustDesk 客戶端沒有「需要登入」的專用錯誤文案；未登入連線可能顯示 Broken pipe、LOGIN_REQUIRED、Key mismatch 或一般連線失敗。請先登入客戶端帳號後再連線，並確認 API 與 hbbs 使用相同的 RUSTDESK_API_JWT_KEY。",
+    "serverSecurityClientHint": "啟用前請確認客戶端 API Server、ID Server、Key 與登入狀態正確；完整排障流程見文件。",
     "authOverviewTitle": "認證狀態概覽",
     "authOverviewRegister": "註冊",
     "authOverviewSmtp": "SMTP",
@@ -821,17 +821,8 @@
     "emailVerificationSmtpRequiredHint": "這些選項會傳送信箱驗證碼。儲存要求前，請先設定 SMTP 並傳送測試郵件。",
     "emailVerificationSmtpTestHint": "SMTP 看起來已設定。面向正式使用者啟用要求前，請在 SMTP 頁傳送測試郵件。",
     "smtpTestUsesSavedSettingsHint": "SMTP 測試使用服務端已儲存的設定傳送。修改設定後請先儲存，再測試。",
-    "mustLoginVerifiedBehavior": "已驗證：開啟 must-login 後，未登入客戶端會被拒絕並返回 LOGIN_REQUIRED；已登入客戶端可以正常連線。不同客戶端版本仍可能顯示為一般連線失敗，請以目前測試結果和服務端日誌為準。",
-    "mustLoginReadinessTitle": "啟用前檢查清單",
-    "mustLoginReadinessIntro": "建議按以下順序確認客戶端登入鏈路可用後，再把「要求客戶端登入」套用到目前執行個體。",
-    "mustLoginReadinessClientConfigTitle": "1. 客戶端伺服器設定",
-    "mustLoginReadinessClientConfig": "在「個人資訊 / 伺服器連線憑證」複製客戶端匯入設定，確認 API Server、ID Server、Relay Server 和 Key 正確。",
-    "mustLoginReadinessWebauthTitle": "2. 客戶端帳號登入",
-    "mustLoginReadinessWebauth": "RustDesk 客戶端帳號頁應能看到 webauth 登入入口；點擊後瀏覽器會開啟 Web Admin 授權頁，登入並確認後客戶端應取得登入狀態。",
-    "mustLoginReadinessConnectionTitle": "3. 連線驗證",
-    "mustLoginReadinessConnection": "先用已登入客戶端驗證能連線，再用未登入客戶端驗證會被拒絕，避免生產環境啟用後誤判為 Key 或網路故障。",
-    "mustLoginExpectedBehaviorTitle": "預期結果",
-    "mustLoginUnauthedExpected": "未登入客戶端：連線應被拒絕，目前驗證路徑錯誤碼為 LOGIN_REQUIRED。",
-    "mustLoginAuthedExpected": "已登入客戶端：帶有效 token 連線應成功。"
+    "mustLoginVerifiedBehavior": "已驗證：未登入客戶端會被拒絕，已登入客戶端可正常連線。",
+    "mustLoginDocHint": "詳細的客戶端設定、錯誤矩陣和 Relay Server 特殊說明已移到專案文件，避免設定頁過於繁雜。",
+    "mustLoginDocsLink": "查看客戶端登入與伺服器設定排障文件"
   }
 }

@@ -28,6 +28,11 @@
 - 系统管理：用户、Token、群组、设备组、标签、地址簿、OAuth、登录日志、连接/文件审计、分享记录、服务端命令。
 - 安全边界：启用 CSP；避免不必要的 `v-html`；Markdown 输出经过清理。
 
+
+### 管理员文档
+
+- [客户端登录、MUST_LOGIN 与服务器配置排障指南](docs/client-login-and-server-config.zh-CN.md)：说明客户端 API Server / ID Server / Relay Server / Key 配置、`MUST_LOGIN` 启用前检查，以及常见错误矩阵。
+
 ### 开发
 
 要求：
@@ -118,6 +123,11 @@ The screenshots below are captured from a test environment and redacted. Replace
 - My pages: profile, avatar upload/crop, email, password, devices, address books, tags, share records, login logs.
 - Admin pages: users, tokens, groups, device groups, tags, address books, OAuth, login logs, connection/file audit logs, share records, server commands.
 - Security boundary: CSP enabled; unnecessary `v-html` avoided; Markdown output sanitized.
+
+
+### Administrator documentation
+
+- [Client Login, MUST_LOGIN, and Server Configuration Troubleshooting Guide](docs/client-login-and-server-config.en.md): explains client API Server / ID Server / Relay Server / Key configuration, checks before enabling `MUST_LOGIN`, and the common error matrix.
 
 ### Development
 

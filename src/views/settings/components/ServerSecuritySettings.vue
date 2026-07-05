@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { NAlert, NButton, NCard, NForm, NFormItem, NSpace, NSwitch, NText, NThing, useMessage } from 'naive-ui'
+import { NAlert, NButton, NCard, NForm, NFormItem, NSpace, NSwitch, NText, useMessage } from 'naive-ui'
 import { sendCmd } from '@/api/rustdesk'
 
 const ID_SERVER = '21115'
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const message = useMessage()
 const loading = ref(false)
 const saving = ref(false)
@@ -13,6 +13,12 @@ const mustLogin = ref(false)
 const lastResult = ref('')
 
 const resultText = computed(() => lastResult.value || '-')
+const docsUrl = computed(() => {
+  const currentLocale = String(locale.value || '')
+  const isChinese = currentLocale.startsWith('zh')
+  const docName = isChinese ? 'client-login-and-server-config.zh-CN.md' : 'client-login-and-server-config.en.md'
+  return `https://github.com/WeiYusc/rustdesk-api-web/blob/master/docs/${docName}`
+})
 
 function parseMustLoginResult(result: string): boolean | null {
   const match = result.match(/MUST_LOGIN:\s*(true|false)/i)
@@ -69,29 +75,21 @@ onMounted(loadSettings)
       <NAlert type="info" :show-icon="true">
         {{ t('adminSettings.serverSecurityClientHint') }}
       </NAlert>
-      <NAlert type="success" :show-icon="true">
-        {{ t('adminSettings.mustLoginVerifiedBehavior') }}
-      </NAlert>
-      <NCard :title="t('adminSettings.mustLoginReadinessTitle')" :bordered="true" size="small">
-        <NSpace vertical :size="10">
-          <NText depth="3">{{ t('adminSettings.mustLoginReadinessIntro') }}</NText>
-          <NThing :title="t('adminSettings.mustLoginReadinessClientConfigTitle')">
-            {{ t('adminSettings.mustLoginReadinessClientConfig') }}
-          </NThing>
-          <NThing :title="t('adminSettings.mustLoginReadinessWebauthTitle')">
-            {{ t('adminSettings.mustLoginReadinessWebauth') }}
-          </NThing>
-          <NThing :title="t('adminSettings.mustLoginReadinessConnectionTitle')">
-            {{ t('adminSettings.mustLoginReadinessConnection') }}
-          </NThing>
-          <NThing :title="t('adminSettings.mustLoginExpectedBehaviorTitle')">
-            <NSpace vertical :size="4">
-              <NText>{{ t('adminSettings.mustLoginUnauthedExpected') }}</NText>
-              <NText>{{ t('adminSettings.mustLoginAuthedExpected') }}</NText>
-            </NSpace>
-          </NThing>
+      <NAlert type="info" :show-icon="true">
+        <NSpace vertical :size="8">
+          <span>{{ t('adminSettings.mustLoginVerifiedBehavior') }}</span>
+          <span>{{ t('adminSettings.mustLoginDocHint') }}</span>
+          <NButton
+            text
+            tag="a"
+            :href="docsUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {{ t('adminSettings.mustLoginDocsLink') }}
+          </NButton>
         </NSpace>
-      </NCard>
+      </NAlert>
       <NForm label-placement="left" :label-width="190" :disabled="loading">
         <NFormItem :label="t('adminSettings.mustLoginEnabled')">
           <NSwitch v-model:value="mustLogin" />

@@ -796,7 +796,7 @@
     "serverSecuritySaveSuccess": "Server security settings applied to the current runtime",
     "applyRuntime": "Apply to current runtime",
     "serverSecurityApplyFailed": "Server returned a state different from the requested value. Refresh and try again.",
-    "serverSecurityClientHint": "The official RustDesk client does not currently provide a dedicated “login required” connection error. Unauthenticated connections may show Broken pipe, LOGIN_REQUIRED, Key mismatch, or a generic connection failure. Sign in to the client first and confirm that API and hbbs share the same RUSTDESK_API_JWT_KEY.",
+    "serverSecurityClientHint": "Antes de activar esta opción, confirme el API Server, ID Server, Key y el estado de inicio de sesión del cliente. Consulte la guía para la solución de problemas completa.",
     "authOverviewTitle": "Authentication status overview",
     "authOverviewRegister": "Registration",
     "authOverviewSmtp": "SMTP",
@@ -821,17 +821,8 @@
     "emailVerificationSmtpRequiredHint": "These options send email codes. Configure SMTP and send a test email before saving requirements.",
     "emailVerificationSmtpTestHint": "SMTP appears configured. Send a test email on the SMTP tab before enabling requirements for production users.",
     "smtpTestUsesSavedSettingsHint": "SMTP test sends with the saved server-side settings. Save changes before testing.",
-    "mustLoginVerifiedBehavior": "Verified: when must-login is enabled, an unauthenticated client is rejected with LOGIN_REQUIRED, while an authenticated client can connect successfully. Different client versions may still show a generic connection failure; use current test evidence and server logs as the source of truth.",
-    "mustLoginReadinessTitle": "Readiness checklist before enabling",
-    "mustLoginReadinessIntro": "Confirm the client login path in this order before applying “Require client login” to the current runtime.",
-    "mustLoginReadinessClientConfigTitle": "1. Client server configuration",
-    "mustLoginReadinessClientConfig": "Copy the client import configuration from Profile / Server Connection Credentials and confirm API Server, ID Server, Relay Server, and Key are correct.",
-    "mustLoginReadinessWebauthTitle": "2. Client account login",
-    "mustLoginReadinessWebauth": "The RustDesk client account page should show the webauth login option. Clicking it opens the Web Admin authorization page in a browser; after sign-in and confirmation, the client should receive a logged-in state.",
-    "mustLoginReadinessConnectionTitle": "3. Connection validation",
-    "mustLoginReadinessConnection": "First verify that an authenticated client can connect, then verify that an unauthenticated client is rejected, so production enablement is not confused with Key or network issues.",
-    "mustLoginExpectedBehaviorTitle": "Expected behavior",
-    "mustLoginUnauthedExpected": "Unauthenticated client: connection should be rejected; the currently verified path returns LOGIN_REQUIRED.",
-    "mustLoginAuthedExpected": "Authenticated client: connection with a valid token should succeed."
+    "mustLoginVerifiedBehavior": "Verificado: los clientes no autenticados son rechazados; los clientes autenticados pueden conectarse.",
+    "mustLoginDocHint": "La configuración detallada del cliente, la matriz de errores y las notas sobre Relay Server se mantienen en la documentación del proyecto para que esta página siga siendo clara.",
+    "mustLoginDocsLink": "Abrir la guía de inicio de sesión del cliente y configuración del servidor"
   }
 }
