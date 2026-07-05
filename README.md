@@ -87,7 +87,7 @@ API 后端会通过 `/_admin/` 提供前端静态资源。
 2. 执行 `pnpm install --frozen-lockfile` 和 `pnpm build`。
 3. 把 `dist/` 注入镜像的 `/app/resources/admin`。
 
-当前 full-s6 镜像仍是本地构建/保留方案，尚未发布 Docker Hub/GHCR 公共镜像。
+当前 full-s6 稳定镜像已由 server 仓库发布到 GHCR：`ghcr.io/weiyusc/rustdesk-server-full-s6:v0.1.0`（`linux/amd64`）。`latest` 跟随稳定版，`preview` 保持独立预览通道；普通部署请优先阅读 server 仓库 `docs/full-s6/` 下的部署、Compose、升级与发布说明。
 
 ### 验证命令
 
@@ -183,7 +183,7 @@ The `WeiYusc/rustdesk-server` full-s6 build consumes this repository as an exter
 2. Run `pnpm install --frozen-lockfile` and `pnpm build`.
 3. Inject `dist/` into the image at `/app/resources/admin`.
 
-The full-s6 image is currently still a local-build/reserved option and has not been published to Docker Hub/GHCR.
+The full-s6 stable image is now published by the server repository on GHCR: `ghcr.io/weiyusc/rustdesk-server-full-s6:v0.1.0` (`linux/amd64`). `latest` follows stable, while `preview` remains a separate preview channel. For normal deployments, prefer the server repository deployment, Compose, upgrade, and release documents under `docs/full-s6/`.
 
 ### Verification commands
 
