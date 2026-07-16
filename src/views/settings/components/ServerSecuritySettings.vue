@@ -10,9 +10,12 @@ const message = useMessage()
 const loading = ref(false)
 const saving = ref(false)
 const mustLogin = ref(false)
+const encryptedOnly = ref(false)
 const lastResult = ref('')
+const encryptedOnlyResult = ref('')
 
 const resultText = computed(() => lastResult.value || '-')
+const encryptedOnlyResultText = computed(() => encryptedOnlyResult.value || '-')
 const docsUrl = computed(() => {
   const currentLocale = String(locale.value || '')
   const isChinese = currentLocale.startsWith('zh')
@@ -26,19 +29,36 @@ function parseMustLoginResult(result: string): boolean | null {
   return match[1].toLowerCase() === 'true'
 }
 
-async function runMustLoginCommand(option = ''): Promise<void> {
+function parseEncryptedOnlyResult(result: string): boolean | null {
+  const match = result.match(/ENCRYPTED_ONLY:\s*(true|false)/i)
+  if (!match) return null
+  return match[1].toLowerCase() === 'true'
+}
+
+async function runMustLoginCommand(option = ''): Promise<boolean | null> {
   const res = await sendCmd({ cmd: 'ml', option, target: ID_SERVER })
   lastResult.value = String(res.data || '').trim()
   const parsed = parseMustLoginResult(lastResult.value)
   if (parsed !== null) {
     mustLogin.value = parsed
   }
+  return parsed
+}
+
+async function runEncryptedOnlyCommand(option = ''): Promise<boolean | null> {
+  const res = await sendCmd({ cmd: 'eo', option, target: ID_SERVER })
+  encryptedOnlyResult.value = String(res.data || '').trim()
+  const parsed = parseEncryptedOnlyResult(encryptedOnlyResult.value)
+  if (parsed !== null) {
+    encryptedOnly.value = parsed
+  }
+  return parsed
 }
 
 async function loadSettings(): Promise<void> {
   loading.value = true
   try {
-    await runMustLoginCommand()
+    await Promise.all([runMustLoginCommand(), runEncryptedOnlyCommand()])
   } catch {
     // handled by interceptor
   } finally {
@@ -48,10 +68,14 @@ async function loadSettings(): Promise<void> {
 
 async function handleSave(): Promise<void> {
   saving.value = true
-  const expected = mustLogin.value
+  const expectedMustLogin = mustLogin.value
+  const expectedEncryptedOnly = encryptedOnly.value
   try {
-    await runMustLoginCommand(expected ? 'Y' : 'N')
-    if (mustLogin.value !== expected) {
+    const [appliedMustLogin, appliedEncryptedOnly] = await Promise.all([
+      runMustLoginCommand(expectedMustLogin ? 'Y' : 'N'),
+      runEncryptedOnlyCommand(expectedEncryptedOnly ? 'Y' : 'N'),
+    ])
+    if (appliedMustLogin !== expectedMustLogin || appliedEncryptedOnly !== expectedEncryptedOnly) {
       message.error(t('adminSettings.serverSecurityApplyFailed'))
       return
     }
@@ -75,6 +99,9 @@ onMounted(loadSettings)
       <NAlert type="info" :show-icon="true">
         {{ t('adminSettings.serverSecurityClientHint') }}
       </NAlert>
+      <NAlert type="warning" :show-icon="true">
+        {{ t('adminSettings.encryptedOnlyHint') }}
+      </NAlert>
       <NAlert type="info" :show-icon="true">
         <NSpace vertical :size="8">
           <span>{{ t('adminSettings.mustLoginVerifiedBehavior') }}</span>
@@ -96,6 +123,12 @@ onMounted(loadSettings)
         </NFormItem>
         <NFormItem :label="t('adminSettings.mustLoginRuntimeState')">
           <NText code>{{ resultText }}</NText>
+        </NFormItem>
+        <NFormItem :label="t('adminSettings.encryptedOnlyEnabled')">
+          <NSwitch v-model:value="encryptedOnly" />
+        </NFormItem>
+        <NFormItem :label="t('adminSettings.encryptedOnlyRuntimeState')">
+          <NText code>{{ encryptedOnlyResultText }}</NText>
         </NFormItem>
       </NForm>
       <NSpace>
