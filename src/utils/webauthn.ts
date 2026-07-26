@@ -6,6 +6,23 @@ import type {
   AuthenticatorAssertionResponseJSON,
 } from '@/types/webauthn'
 
+export function getWebAuthnErrorKey(error: unknown): string {
+  let name: unknown
+  try {
+    name = typeof error === 'object' && error !== null ? (error as { name?: unknown }).name : undefined
+  } catch {
+    return 'mySecurity.passkeyUnknownError'
+  }
+  switch (name) {
+    case 'SecurityError': return 'mySecurity.passkeySecurityError'
+    case 'NotAllowedError':
+    case 'AbortError': return 'mySecurity.passkeyCancelled'
+    case 'InvalidStateError': return 'mySecurity.passkeyInvalidState'
+    case 'NotSupportedError': return 'mySecurity.passkeyNotSupported'
+    default: return 'mySecurity.passkeyUnknownError'
+  }
+}
+
 export function base64urlEncode(buffer: ArrayBuffer): string {
   const bytes = new Uint8Array(buffer)
   let binary = ''

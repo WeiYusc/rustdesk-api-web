@@ -112,10 +112,20 @@ export const useUserStore = defineStore('user', () => {
   async function passkeyLogin(): Promise<UserInfo | false> {
     try {
       const { passkeyLoginBegin, passkeyLoginFinish } = await import('@/api/passkey')
-      const { parseRequestOptions, serializeCredential } = await import('@/utils/webauthn')
+      const { getWebAuthnErrorKey, parseRequestOptions, serializeCredential } = await import('@/utils/webauthn')
       const beginRes = await passkeyLoginBegin()
-      const publicKey = parseRequestOptions(beginRes.data.public_key as never)
-      const credential = await navigator.credentials.get({ publicKey }) as PublicKeyCredential
+      let publicKey: ReturnType<typeof parseRequestOptions>
+      try {
+        publicKey = parseRequestOptions(beginRes.data.public_key as never)
+      } catch {
+        throw { webAuthnErrorKey: 'mySecurity.passkeyUnknownError' }
+      }
+      let credential: PublicKeyCredential | null
+      try {
+        credential = await navigator.credentials.get({ publicKey }) as PublicKeyCredential | null
+      } catch (error) {
+        throw { webAuthnErrorKey: getWebAuthnErrorKey(error) }
+      }
       if (!credential) return false
       const serialized = serializeCredential(credential)
       const res = await passkeyLoginFinish({
@@ -126,7 +136,8 @@ export const useUserStore = defineStore('user', () => {
       useAppStore().initConfig()
       saveUserData(res.data)
       return res.data
-    } catch {
+    } catch (error) {
+      if (typeof error === 'object' && error !== null && 'webAuthnErrorKey' in error) throw error
       return false
     }
   }

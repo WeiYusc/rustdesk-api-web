@@ -58,6 +58,7 @@ const forgotPasswordLoading = ref(false)
 const forgotEmail = ref('')
 
 async function handlePasskeyLogin(): Promise<void> {
+  if (passkeyLoading.value) return
   passkeyLoading.value = true
   try {
     const result = await userStore.passkeyLogin()
@@ -65,8 +66,11 @@ async function handlePasskeyLogin(): Promise<void> {
       message.success(appStore.t('common.success'))
       router.push('/')
     }
-  } catch {
-    // error handled by interceptor
+  } catch (error) {
+    if (typeof error === 'object' && error !== null && 'webAuthnErrorKey' in error) {
+      const key = String((error as { webAuthnErrorKey: unknown }).webAuthnErrorKey).replace(/^mySecurity\./, 'login.')
+      message.error(appStore.t(key))
+    }
   } finally {
     passkeyLoading.value = false
   }
@@ -260,6 +264,7 @@ onMounted(() => {
       <template v-if="showPasskeyLogin">
         <NDivider v-if="showPasswordForm || oidcProviders.length > 0">{{ appStore.t('login.loginOptions') }}</NDivider>
         <NButton
+          data-test="passkey-login"
           block
           size="large"
           :loading="passkeyLoading"

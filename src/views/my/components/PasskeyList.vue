@@ -8,7 +8,7 @@ import {
   type DataTableColumns,
 } from 'naive-ui'
 import { passkeyList, passkeyRegisterBegin, passkeyRegisterFinish, passkeyRename, passkeyDelete } from '@/api/passkey'
-import { getPasskeySupport, parseCreationOptions, serializeCredential, type PasskeySupport } from '@/utils/webauthn'
+import { getPasskeySupport, getWebAuthnErrorKey, parseCreationOptions, serializeCredential, type PasskeySupport } from '@/utils/webauthn'
 import type { PasskeyItem } from '@/types'
 import { formatTime } from '@/utils/format'
 import { h } from 'vue'
@@ -83,6 +83,7 @@ async function loadData(): Promise<void> {
 }
 
 async function handleAdd(): Promise<void> {
+  if (adding.value) return
   if (!newName.value) return
   if (!support.value.secure || !support.value.api) {
     message.error(t('mySecurity.passkeyUnsupported'))
@@ -91,8 +92,20 @@ async function handleAdd(): Promise<void> {
   adding.value = true
   try {
     const beginRes = await passkeyRegisterBegin({ name: newName.value })
-    const publicKey = parseCreationOptions(beginRes.data.public_key as never)
-    const credential = await navigator.credentials.create({ publicKey }) as PublicKeyCredential
+    let publicKey: ReturnType<typeof parseCreationOptions>
+    try {
+      publicKey = parseCreationOptions(beginRes.data.public_key as never)
+    } catch {
+      message.error(t('mySecurity.passkeyUnknownError'))
+      return
+    }
+    let credential: PublicKeyCredential | null
+    try {
+      credential = await navigator.credentials.create({ publicKey }) as PublicKeyCredential | null
+    } catch (error) {
+      message.error(t(getWebAuthnErrorKey(error)))
+      return
+    }
     if (!credential) {
       message.error(t('mySecurity.passkeyCancelled'))
       return
@@ -191,7 +204,7 @@ onMounted(() => {
       <template #footer>
         <NSpace justify="end">
           <NButton @click="addModalShow = false">{{ t('common.cancel') }}</NButton>
-          <NButton type="primary" :loading="adding" :disabled="!newName" @click="handleAdd">{{ t('common.confirm') }}</NButton>
+          <NButton type="primary" :loading="adding" :disabled="adding || !newName" @click="handleAdd">{{ t('common.confirm') }}</NButton>
         </NSpace>
       </template>
     </NModal>
