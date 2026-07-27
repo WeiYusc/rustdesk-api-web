@@ -9,7 +9,9 @@ import ru from '@/i18n/locales/ru.json'
 import es from '@/i18n/locales/es.json'
 
 const classify = (error: unknown): string => {
-  return (webauthn as unknown as { getWebAuthnErrorKey: (value: unknown) => string }).getWebAuthnErrorKey(error)
+  return (
+    webauthn as unknown as { getWebAuthnErrorKey: (value: unknown) => string }
+  ).getWebAuthnErrorKey(error)
 }
 
 describe('WebAuthn browser error classification', () => {
@@ -31,11 +33,55 @@ describe('WebAuthn browser error classification', () => {
   })
 
   it('falls back safely for null, primitives, and throwing name getters', () => {
-    const hostile = Object.defineProperty({}, 'name', { get: () => { throw new Error('cross-realm trap') } })
+    const hostile = Object.defineProperty({}, 'name', {
+      get: () => {
+        throw new Error('cross-realm trap')
+      },
+    })
     for (const value of [null, undefined, 1, 'SecurityError', hostile]) {
       expect(() => classify(value)).not.toThrow()
       expect(classify(value)).toBe('mySecurity.passkeyUnknownError')
     }
+  })
+})
+
+describe('WebAuthn browser error boundary', () => {
+  it('accepts only branded browser errors and returns an allowlisted key', () => {
+    const boundary = webauthn as unknown as {
+      WebAuthnBrowserError: new (key: string) => Error
+      getWebAuthnBrowserErrorKey: (error: unknown) => string | undefined
+    }
+    const branded = new boundary.WebAuthnBrowserError('mySecurity.passkeyCancelled')
+
+    expect(boundary.getWebAuthnBrowserErrorKey(branded)).toBe('mySecurity.passkeyCancelled')
+    expect(
+      boundary.getWebAuthnBrowserErrorKey({ webAuthnErrorKey: 'mySecurity.passkeySecurityError' })
+    ).toBeUndefined()
+  })
+
+  it('does not let hostile proxy traps escape the boundary', () => {
+    const getKey = (
+      webauthn as unknown as {
+        getWebAuthnBrowserErrorKey: (error: unknown) => string | undefined
+      }
+    ).getWebAuthnBrowserErrorKey
+    const hostile = new Proxy(
+      {},
+      {
+        getPrototypeOf: () => {
+          throw new Error('prototype trap')
+        },
+        get: () => {
+          throw new Error('get trap')
+        },
+        has: () => {
+          throw new Error('has trap')
+        },
+      }
+    )
+
+    expect(() => getKey(hostile)).not.toThrow()
+    expect(getKey(hostile)).toBeUndefined()
   })
 })
 

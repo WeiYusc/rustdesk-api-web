@@ -2,13 +2,33 @@
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
-  NCard, NButton, NSpace, NDataTable, NModal, NForm, NFormItem,
-  NInput, NAlert,
-  useDialog, useMessage,
+  NCard,
+  NButton,
+  NSpace,
+  NDataTable,
+  NModal,
+  NForm,
+  NFormItem,
+  NInput,
+  NAlert,
+  useDialog,
+  useMessage,
   type DataTableColumns,
 } from 'naive-ui'
-import { passkeyList, passkeyRegisterBegin, passkeyRegisterFinish, passkeyRename, passkeyDelete } from '@/api/passkey'
-import { getPasskeySupport, getWebAuthnErrorKey, parseCreationOptions, serializeCredential, type PasskeySupport } from '@/utils/webauthn'
+import {
+  passkeyList,
+  passkeyRegisterBegin,
+  passkeyRegisterFinish,
+  passkeyRename,
+  passkeyDelete,
+} from '@/api/passkey'
+import {
+  getPasskeySupport,
+  getWebAuthnErrorKey,
+  parseCreationOptions,
+  serializeCredential,
+  type PasskeySupport,
+} from '@/utils/webauthn'
 import type { PasskeyItem } from '@/types'
 import { formatTime } from '@/utils/format'
 import { h } from 'vue'
@@ -19,7 +39,12 @@ const dialog = useDialog()
 
 const loading = ref(false)
 const dataList = ref<PasskeyItem[]>([])
-const support = ref<PasskeySupport>({ secure: false, api: false, platformAuthenticator: false, conditionalMediation: false })
+const support = ref<PasskeySupport>({
+  secure: false,
+  api: false,
+  platformAuthenticator: false,
+  conditionalMediation: false,
+})
 
 const addModalShow = ref(false)
 const newName = ref('')
@@ -39,12 +64,12 @@ const columns: DataTableColumns<PasskeyItem> = [
   {
     title: t('mySecurity.passkeyLastUsed'),
     key: 'last_used_at',
-    render: (row) => row.last_used_at ? formatTime(row.last_used_at) : '-',
+    render: (row) => (row.last_used_at ? formatTime(row.last_used_at) : '-'),
   },
   {
     title: t('mySecurity.passkeyTransports'),
     key: 'transports',
-    render: (row) => row.transports ? row.transports.join(', ') : '-',
+    render: (row) => (row.transports ? row.transports.join(', ') : '-'),
   },
   {
     title: t('common.actions'),
@@ -52,15 +77,11 @@ const columns: DataTableColumns<PasskeyItem> = [
     width: 180,
     render: (row) =>
       h(NSpace, { size: 8 }, () => [
-        h(
-          NButton,
-          { size: 'small', onClick: () => openRename(row) },
-          () => t('common.edit'),
-        ),
+        h(NButton, { size: 'small', onClick: () => openRename(row) }, () => t('common.edit')),
         h(
           NButton,
           { size: 'small', type: 'error', ghost: true, onClick: () => handleDelete(row) },
-          () => t('common.delete'),
+          () => t('common.delete')
         ),
       ]),
   },
@@ -101,7 +122,7 @@ async function handleAdd(): Promise<void> {
     }
     let credential: PublicKeyCredential | null
     try {
-      credential = await navigator.credentials.create({ publicKey }) as PublicKeyCredential | null
+      credential = (await navigator.credentials.create({ publicKey })) as PublicKeyCredential | null
     } catch (error) {
       message.error(t(getWebAuthnErrorKey(error)))
       return
@@ -110,7 +131,13 @@ async function handleAdd(): Promise<void> {
       message.error(t('mySecurity.passkeyCancelled'))
       return
     }
-    const serialized = serializeCredential(credential)
+    let serialized: ReturnType<typeof serializeCredential>
+    try {
+      serialized = serializeCredential(credential)
+    } catch {
+      message.error(t('mySecurity.passkeyUnknownError'))
+      return
+    }
     await passkeyRegisterFinish({
       challenge_id: beginRes.data.challenge_id,
       name: newName.value,
@@ -183,7 +210,9 @@ onMounted(() => {
       </NAlert>
 
       <NSpace justify="space-between" align="center">
-        <NButton type="primary" size="small" @click="addModalShow = true">{{ t('mySecurity.passkeyAdd') }}</NButton>
+        <NButton type="primary" size="small" @click="addModalShow = true">{{
+          t('mySecurity.passkeyAdd')
+        }}</NButton>
       </NSpace>
 
       <NDataTable
@@ -195,7 +224,12 @@ onMounted(() => {
       />
     </NSpace>
 
-    <NModal v-model:show="addModalShow" preset="card" :title="t('mySecurity.passkeyAdd')" style="width: 420px; max-width: 90vw">
+    <NModal
+      v-model:show="addModalShow"
+      preset="card"
+      :title="t('mySecurity.passkeyAdd')"
+      style="width: 420px; max-width: 90vw"
+    >
       <NForm label-placement="top">
         <NFormItem :label="t('mySecurity.passkeyName')">
           <NInput v-model:value="newName" :placeholder="t('mySecurity.passkeyNamePlaceholder')" />
@@ -204,12 +238,23 @@ onMounted(() => {
       <template #footer>
         <NSpace justify="end">
           <NButton @click="addModalShow = false">{{ t('common.cancel') }}</NButton>
-          <NButton type="primary" :loading="adding" :disabled="adding || !newName" @click="handleAdd">{{ t('common.confirm') }}</NButton>
+          <NButton
+            type="primary"
+            :loading="adding"
+            :disabled="adding || !newName"
+            @click="handleAdd"
+            >{{ t('common.confirm') }}</NButton
+          >
         </NSpace>
       </template>
     </NModal>
 
-    <NModal v-model:show="renameModalShow" preset="card" :title="t('mySecurity.passkeyRename')" style="width: 420px; max-width: 90vw">
+    <NModal
+      v-model:show="renameModalShow"
+      preset="card"
+      :title="t('mySecurity.passkeyRename')"
+      style="width: 420px; max-width: 90vw"
+    >
       <NForm label-placement="top">
         <NFormItem :label="t('mySecurity.passkeyName')">
           <NInput v-model:value="renameName" />
@@ -218,7 +263,13 @@ onMounted(() => {
       <template #footer>
         <NSpace justify="end">
           <NButton @click="renameModalShow = false">{{ t('common.cancel') }}</NButton>
-          <NButton type="primary" :loading="renaming" :disabled="!renameName" @click="handleRename">{{ t('common.save') }}</NButton>
+          <NButton
+            type="primary"
+            :loading="renaming"
+            :disabled="!renameName"
+            @click="handleRename"
+            >{{ t('common.save') }}</NButton
+          >
         </NSpace>
       </template>
     </NModal>

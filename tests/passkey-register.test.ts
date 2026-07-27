@@ -10,6 +10,7 @@ const api = vi.hoisted(() => ({
   remove: vi.fn(),
 }))
 const message = vi.hoisted(() => ({ error: vi.fn(), success: vi.fn() }))
+const serialization = vi.hoisted(() => ({ serialize: vi.fn() }))
 
 vi.mock('@/api/passkey', () => ({
   passkeyList: api.list,
@@ -17,6 +18,10 @@ vi.mock('@/api/passkey', () => ({
   passkeyRegisterFinish: api.finish,
   passkeyRename: api.rename,
   passkeyDelete: api.remove,
+}))
+vi.mock('@/utils/webauthn', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/utils/webauthn')>()),
+  serializeCredential: serialization.serialize,
 }))
 vi.mock('naive-ui', async () => {
   const button = defineComponent({
@@ -30,10 +35,20 @@ vi.mock('naive-ui', async () => {
     template: '<input :value="value" @input="$emit(\'update:value\', $event.target.value)" />',
   })
   const passthrough = defineComponent({ template: '<div><slot /><slot name="footer" /></div>' })
+  const modal = defineComponent({
+    props: { show: Boolean },
+    template: '<div v-if="show"><slot /><slot name="footer" /></div>',
+  })
   return {
-    NButton: button, NInput: input, NCard: passthrough, NSpace: passthrough,
-    NDataTable: passthrough, NModal: passthrough, NForm: passthrough,
-    NFormItem: passthrough, NAlert: passthrough,
+    NButton: button,
+    NInput: input,
+    NCard: passthrough,
+    NSpace: passthrough,
+    NDataTable: passthrough,
+    NModal: modal,
+    NForm: passthrough,
+    NFormItem: passthrough,
+    NAlert: passthrough,
     useMessage: () => message,
     useDialog: () => ({ warning: vi.fn() }),
   }
@@ -54,7 +69,9 @@ const validCreationOptions = {
 
 function deferred<T>() {
   let resolve!: (value: T) => void
-  const promise = new Promise<T>((r) => { resolve = r })
+  const promise = new Promise<T>((r) => {
+    resolve = r
+  })
   return { promise, resolve }
 }
 
@@ -78,11 +95,21 @@ describe('PasskeyList registration real component path', () => {
       configurable: true,
       value: { isUserVerifyingPlatformAuthenticatorAvailable: vi.fn().mockResolvedValue(true) },
     })
-    api.begin.mockResolvedValue({ data: { challenge_id: 'challenge', public_key: validCreationOptions } })
+    api.begin.mockResolvedValue({
+      data: { challenge_id: 'challenge', public_key: validCreationOptions },
+    })
+    serialization.serialize.mockReturnValue({
+      id: 'serialized',
+      rawId: 'AQ',
+      type: 'public-key',
+      response: {},
+      clientExtensionResults: {},
+    })
   })
 
   afterEach(() => {
-    if (credentialsDescriptor) Object.defineProperty(navigator, 'credentials', credentialsDescriptor)
+    if (credentialsDescriptor)
+      Object.defineProperty(navigator, 'credentials', credentialsDescriptor)
     else delete (navigator as unknown as { credentials?: unknown }).credentials
     vi.restoreAllMocks()
   })
@@ -93,27 +120,33 @@ describe('PasskeyList registration real component path', () => {
     ['InvalidStateError', 'mySecurity.passkeyInvalidState'],
     ['NotSupportedError', 'mySecurity.passkeyNotSupported'],
     ['OtherError', 'mySecurity.passkeyUnknownError'],
-  ])('shows one classified browser error for %s and preserves registration state', async (name, key) => {
-    Object.defineProperty(navigator, 'credentials', {
-      configurable: true,
-      value: { create: vi.fn().mockRejectedValue({ name }) },
-    })
-    const wrapper = await mountAndOpen()
+  ])(
+    'shows one classified browser error for %s and preserves registration state',
+    async (name, key) => {
+      Object.defineProperty(navigator, 'credentials', {
+        configurable: true,
+        value: { create: vi.fn().mockRejectedValue({ name }) },
+      })
+      const wrapper = await mountAndOpen()
 
-    await wrapper.findAll('button')[2].trigger('click')
-    await nextTick()
+      await wrapper.findAll('button')[2].trigger('click')
+      await nextTick()
 
-    expect(message.error).toHaveBeenCalledOnce()
-    expect(message.error).toHaveBeenCalledWith(key)
-    expect(api.finish).not.toHaveBeenCalled()
-    expect(message.success).not.toHaveBeenCalled()
-    expect(api.list).toHaveBeenCalledOnce()
-    expect(wrapper.find('input').element.value).toBe('Laptop')
-  })
+      expect(message.error).toHaveBeenCalledOnce()
+      expect(message.error).toHaveBeenCalledWith(key)
+      expect(api.finish).not.toHaveBeenCalled()
+      expect(message.success).not.toHaveBeenCalled()
+      expect(api.list).toHaveBeenCalledOnce()
+      expect(wrapper.find('input').element.value).toBe('Laptop')
+    }
+  )
 
   it('leaves API begin errors to the interceptor without a duplicate page message', async () => {
     api.begin.mockRejectedValue(new Error('already displayed'))
-    Object.defineProperty(navigator, 'credentials', { configurable: true, value: { create: vi.fn() } })
+    Object.defineProperty(navigator, 'credentials', {
+      configurable: true,
+      value: { create: vi.fn() },
+    })
     const wrapper = await mountAndOpen()
 
     await wrapper.findAll('button')[2].trigger('click')
@@ -124,10 +157,17 @@ describe('PasskeyList registration real component path', () => {
 
   it('leaves API finish errors to the interceptor without a duplicate page message', async () => {
     const credential = {
-      id: 'credential', rawId: new ArrayBuffer(0), type: 'public-key', response: {},
-      authenticatorAttachment: null, getClientExtensionResults: () => ({}),
+      id: 'credential',
+      rawId: new ArrayBuffer(0),
+      type: 'public-key',
+      response: {},
+      authenticatorAttachment: null,
+      getClientExtensionResults: () => ({}),
     }
-    Object.defineProperty(navigator, 'credentials', { configurable: true, value: { create: vi.fn().mockResolvedValue(credential) } })
+    Object.defineProperty(navigator, 'credentials', {
+      configurable: true,
+      value: { create: vi.fn().mockResolvedValue(credential) },
+    })
     api.finish.mockRejectedValue(new Error('already displayed'))
     const wrapper = await mountAndOpen()
 
@@ -139,8 +179,13 @@ describe('PasskeyList registration real component path', () => {
   })
 
   it('shows a sanitized local error when creation option parsing fails', async () => {
-    api.begin.mockResolvedValue({ data: { challenge_id: 'challenge', public_key: { ...validCreationOptions, challenge: '%' } } })
-    Object.defineProperty(navigator, 'credentials', { configurable: true, value: { create: vi.fn() } })
+    api.begin.mockResolvedValue({
+      data: { challenge_id: 'challenge', public_key: { ...validCreationOptions, challenge: '%' } },
+    })
+    Object.defineProperty(navigator, 'credentials', {
+      configurable: true,
+      value: { create: vi.fn() },
+    })
     const wrapper = await mountAndOpen()
 
     await wrapper.findAll('button')[2].trigger('click')
@@ -165,5 +210,53 @@ describe('PasskeyList registration real component path', () => {
     await nextTick()
     expect(message.error).toHaveBeenCalledWith('mySecurity.passkeyCancelled')
     expect(api.finish).not.toHaveBeenCalled()
+  })
+
+  it('finishes a real successful registration and closes, clears, and refreshes', async () => {
+    const credential = { id: 'browser-credential' } as PublicKeyCredential
+    Object.defineProperty(navigator, 'credentials', {
+      configurable: true,
+      value: { create: vi.fn().mockResolvedValue(credential) },
+    })
+    api.finish.mockResolvedValue({ data: null })
+    const wrapper = await mountAndOpen()
+
+    await wrapper.findAll('button')[2].trigger('click')
+    await vi.waitFor(() => expect(message.success).toHaveBeenCalledWith('mySecurity.passkeyAdded'))
+
+    expect(serialization.serialize).toHaveBeenCalledWith(credential)
+    expect(api.finish).toHaveBeenCalledWith({
+      challenge_id: 'challenge',
+      name: 'Laptop',
+      credential: {
+        id: 'serialized',
+        rawId: 'AQ',
+        type: 'public-key',
+        response: {},
+        clientExtensionResults: {},
+      },
+    })
+    expect(api.list).toHaveBeenCalledTimes(2)
+    expect(wrapper.findAll('input').some((input) => input.element.value === 'Laptop')).toBe(false)
+  })
+
+  it('shows a sanitized local error when credential serialization fails', async () => {
+    Object.defineProperty(navigator, 'credentials', {
+      configurable: true,
+      value: { create: vi.fn().mockResolvedValue({ id: 'browser-credential' }) },
+    })
+    serialization.serialize.mockImplementationOnce(() => {
+      throw new Error('raw credential details')
+    })
+    const wrapper = await mountAndOpen()
+
+    await wrapper.findAll('button')[2].trigger('click')
+    await nextTick()
+
+    expect(message.error).toHaveBeenCalledOnce()
+    expect(message.error).toHaveBeenCalledWith('mySecurity.passkeyUnknownError')
+    expect(api.finish).not.toHaveBeenCalled()
+    expect(message.success).not.toHaveBeenCalled()
+    expect(wrapper.find('input').element.value).toBe('Laptop')
   })
 })

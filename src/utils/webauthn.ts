@@ -9,17 +9,57 @@ import type {
 export function getWebAuthnErrorKey(error: unknown): string {
   let name: unknown
   try {
-    name = typeof error === 'object' && error !== null ? (error as { name?: unknown }).name : undefined
+    name =
+      typeof error === 'object' && error !== null ? (error as { name?: unknown }).name : undefined
   } catch {
     return 'mySecurity.passkeyUnknownError'
   }
   switch (name) {
-    case 'SecurityError': return 'mySecurity.passkeySecurityError'
+    case 'SecurityError':
+      return 'mySecurity.passkeySecurityError'
     case 'NotAllowedError':
-    case 'AbortError': return 'mySecurity.passkeyCancelled'
-    case 'InvalidStateError': return 'mySecurity.passkeyInvalidState'
-    case 'NotSupportedError': return 'mySecurity.passkeyNotSupported'
-    default: return 'mySecurity.passkeyUnknownError'
+    case 'AbortError':
+      return 'mySecurity.passkeyCancelled'
+    case 'InvalidStateError':
+      return 'mySecurity.passkeyInvalidState'
+    case 'NotSupportedError':
+      return 'mySecurity.passkeyNotSupported'
+    default:
+      return 'mySecurity.passkeyUnknownError'
+  }
+}
+
+export type WebAuthnErrorKey =
+  | 'mySecurity.passkeySecurityError'
+  | 'mySecurity.passkeyCancelled'
+  | 'mySecurity.passkeyInvalidState'
+  | 'mySecurity.passkeyNotSupported'
+  | 'mySecurity.passkeyUnknownError'
+
+const webAuthnErrorKeys = new Set<WebAuthnErrorKey>([
+  'mySecurity.passkeySecurityError',
+  'mySecurity.passkeyCancelled',
+  'mySecurity.passkeyInvalidState',
+  'mySecurity.passkeyNotSupported',
+  'mySecurity.passkeyUnknownError',
+])
+
+export class WebAuthnBrowserError extends Error {
+  readonly key: WebAuthnErrorKey
+
+  constructor(key: WebAuthnErrorKey) {
+    super('WebAuthn browser ceremony failed')
+    this.name = 'WebAuthnBrowserError'
+    this.key = key
+  }
+}
+
+export function getWebAuthnBrowserErrorKey(error: unknown): WebAuthnErrorKey | undefined {
+  try {
+    if (!(error instanceof WebAuthnBrowserError)) return undefined
+    return webAuthnErrorKeys.has(error.key) ? error.key : undefined
+  } catch {
+    return undefined
   }
 }
 
@@ -29,10 +69,7 @@ export function base64urlEncode(buffer: ArrayBuffer): string {
   for (let i = 0; i < bytes.length; i++) {
     binary += String.fromCharCode(bytes[i])
   }
-  return btoa(binary)
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=+$/, '')
+  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
 }
 
 export function base64urlDecode(str: string): ArrayBuffer {
@@ -47,7 +84,7 @@ export function base64urlDecode(str: string): ArrayBuffer {
 }
 
 export function parseCreationOptions(
-  json: PublicKeyCredentialCreationOptionsJSON,
+  json: PublicKeyCredentialCreationOptionsJSON
 ): PublicKeyCredentialCreationOptions {
   const options: PublicKeyCredentialCreationOptions = {
     challenge: base64urlDecode(json.challenge),
@@ -73,7 +110,7 @@ export function parseCreationOptions(
 }
 
 export function parseRequestOptions(
-  json: PublicKeyCredentialRequestOptionsJSON,
+  json: PublicKeyCredentialRequestOptionsJSON
 ): PublicKeyCredentialRequestOptions {
   const options: PublicKeyCredentialRequestOptions = {
     challenge: base64urlDecode(json.challenge),
@@ -92,9 +129,7 @@ export function parseRequestOptions(
   return options
 }
 
-export function serializeCredential(
-  credential: PublicKeyCredential,
-): PublicKeyCredentialJSON {
+export function serializeCredential(credential: PublicKeyCredential): PublicKeyCredentialJSON {
   const rawId = base64urlEncode(credential.rawId)
   const response = credential.response
 
@@ -113,7 +148,10 @@ export function serializeCredential(
       rawId,
       type: 'public-key',
       response: serialized,
-      authenticatorAttachment: (credential.authenticatorAttachment ?? undefined) as 'platform' | 'cross-platform' | undefined,
+      authenticatorAttachment: (credential.authenticatorAttachment ?? undefined) as
+        | 'platform'
+        | 'cross-platform'
+        | undefined,
       clientExtensionResults: credential.getClientExtensionResults() as Record<string, unknown>,
     }
   }
@@ -134,7 +172,10 @@ export function serializeCredential(
     rawId,
     type: 'public-key',
     response: serialized,
-    authenticatorAttachment: (credential.authenticatorAttachment ?? undefined) as 'platform' | 'cross-platform' | undefined,
+    authenticatorAttachment: (credential.authenticatorAttachment ?? undefined) as
+      | 'platform'
+      | 'cross-platform'
+      | undefined,
     clientExtensionResults: credential.getClientExtensionResults() as Record<string, unknown>,
   }
 }
@@ -152,7 +193,8 @@ export async function getPasskeySupport(): Promise<PasskeySupport> {
   if (!api) {
     return { secure, api: false, platformAuthenticator: false, conditionalMediation: false }
   }
-  const platformAuthenticator = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().catch(() => false)
+  const platformAuthenticator =
+    await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().catch(() => false)
   const conditionalMediation =
     'isConditionalMediationAvailable' in PublicKeyCredential
       ? await PublicKeyCredential.isConditionalMediationAvailable().catch(() => false)

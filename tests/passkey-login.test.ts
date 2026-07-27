@@ -4,15 +4,19 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick } from 'vue'
 
 const passkeyApi = vi.hoisted(() => ({ begin: vi.fn(), finish: vi.fn() }))
+const serialization = vi.hoisted(() => ({ serialize: vi.fn() }))
 const auth = vi.hoisted(() => ({ setToken: vi.fn() }))
 const router = vi.hoisted(() => ({ push: vi.fn() }))
 const message = vi.hoisted(() => ({ error: vi.fn(), success: vi.fn(), warning: vi.fn() }))
 const loginApi = vi.hoisted(() => ({ options: vi.fn(), captcha: vi.fn() }))
 
-vi.mock('@/api/passkey', () => ({ passkeyLoginBegin: passkeyApi.begin, passkeyLoginFinish: passkeyApi.finish }))
+vi.mock('@/api/passkey', () => ({
+  passkeyLoginBegin: passkeyApi.begin,
+  passkeyLoginFinish: passkeyApi.finish,
+}))
 vi.mock('@/utils/webauthn', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/utils/webauthn')>()),
-  serializeCredential: vi.fn(() => ({ id: 'credential', rawId: '', type: 'public-key', response: {}, clientExtensionResults: {} })),
+  serializeCredential: serialization.serialize,
 }))
 vi.mock('@/utils/auth', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/utils/auth')>()),
@@ -32,13 +36,22 @@ vi.mock('naive-ui', () => {
     inheritAttrs: false,
     props: { loading: Boolean },
     emits: ['click'],
-    template: '<button v-bind="$attrs" :disabled="loading" @click="$emit(\'click\')"><slot /></button>',
+    template:
+      '<button v-bind="$attrs" :disabled="loading" @click="$emit(\'click\')"><slot /></button>',
   })
   const passthrough = defineComponent({ template: '<div><slot /><slot name="footer" /></div>' })
   return {
-    NButton: button, NCard: passthrough, NForm: passthrough, NFormItem: passthrough,
-    NInput: passthrough, NSpace: passthrough, NDivider: passthrough, NImage: passthrough,
-    NText: passthrough, NSpin: passthrough, NModal: passthrough,
+    NButton: button,
+    NCard: passthrough,
+    NForm: passthrough,
+    NFormItem: passthrough,
+    NInput: passthrough,
+    NSpace: passthrough,
+    NDivider: passthrough,
+    NImage: passthrough,
+    NText: passthrough,
+    NSpin: passthrough,
+    NModal: passthrough,
     useMessage: () => message,
   }
 })
@@ -48,8 +61,18 @@ import Login from '@/views/login/Login.vue'
 
 const requestOptions = { challenge: 'AQ', userVerification: 'preferred' }
 const user = {
-  id: 1, username: 'alice', email: '', avatar: '', nickname: 'Alice', token: 'token',
-  status: 1, is_admin: true, created_at: '', updated_at: '', route_names: [], email_verified_at: '',
+  id: 1,
+  username: 'alice',
+  email: '',
+  avatar: '',
+  nickname: 'Alice',
+  token: 'token',
+  status: 1,
+  is_admin: true,
+  created_at: '',
+  updated_at: '',
+  route_names: [],
+  email_verified_at: '',
 }
 
 function mountLogin() {
@@ -68,14 +91,30 @@ describe('passkey login Store to Login page path', () => {
     vi.clearAllMocks()
     localStorage.setItem('app_dark_mode', 'false')
     setActivePinia(createPinia())
-    passkeyApi.begin.mockResolvedValue({ data: { challenge_id: 'challenge', public_key: requestOptions } })
+    passkeyApi.begin.mockResolvedValue({
+      data: { challenge_id: 'challenge', public_key: requestOptions },
+    })
+    serialization.serialize.mockReturnValue({
+      id: 'credential',
+      rawId: '',
+      type: 'public-key',
+      response: {},
+      clientExtensionResults: {},
+    })
     loginApi.options.mockResolvedValue({
-      data: { disable_pwd: true, register: false, ops: [], passkey_enabled: true, passkey_discoverable_login_enabled: true },
+      data: {
+        disable_pwd: true,
+        register: false,
+        ops: [],
+        passkey_enabled: true,
+        passkey_discoverable_login_enabled: true,
+      },
     })
   })
 
   afterEach(() => {
-    if (credentialsDescriptor) Object.defineProperty(navigator, 'credentials', credentialsDescriptor)
+    if (credentialsDescriptor)
+      Object.defineProperty(navigator, 'credentials', credentialsDescriptor)
     else delete (navigator as unknown as { credentials?: unknown }).credentials
     vi.restoreAllMocks()
   })
@@ -104,7 +143,10 @@ describe('passkey login Store to Login page path', () => {
   })
 
   it('keeps credential=null silent and false without finish/save/redirect', async () => {
-    Object.defineProperty(navigator, 'credentials', { configurable: true, value: { get: vi.fn().mockResolvedValue(null) } })
+    Object.defineProperty(navigator, 'credentials', {
+      configurable: true,
+      value: { get: vi.fn().mockResolvedValue(null) },
+    })
     const store = useUserStore()
 
     await expect(store.passkeyLogin()).resolves.toBe(false)
@@ -115,7 +157,10 @@ describe('passkey login Store to Login page path', () => {
   })
 
   it('leaves begin and finish API errors to the interceptor without page messages or side effects', async () => {
-    Object.defineProperty(navigator, 'credentials', { configurable: true, value: { get: vi.fn().mockResolvedValue({}) } })
+    Object.defineProperty(navigator, 'credentials', {
+      configurable: true,
+      value: { get: vi.fn().mockResolvedValue({}) },
+    })
     const store = useUserStore()
     passkeyApi.begin.mockRejectedValueOnce(new Error('begin displayed'))
     await expect(store.passkeyLogin()).resolves.toBe(false)
@@ -128,7 +173,10 @@ describe('passkey login Store to Login page path', () => {
   })
 
   it('preserves successful Store to page save, success message, and redirect', async () => {
-    Object.defineProperty(navigator, 'credentials', { configurable: true, value: { get: vi.fn().mockResolvedValue({}) } })
+    Object.defineProperty(navigator, 'credentials', {
+      configurable: true,
+      value: { get: vi.fn().mockResolvedValue({}) },
+    })
     passkeyApi.finish.mockResolvedValue({ data: user })
     const { wrapper } = mountLogin()
     await flushPromises()
@@ -145,7 +193,9 @@ describe('passkey login Store to Login page path', () => {
 
   it('ignores a concurrent login click while a ceremony is active', async () => {
     let resolveCredential!: (value: PublicKeyCredential | null) => void
-    const credentialPromise = new Promise<PublicKeyCredential | null>((resolve) => { resolveCredential = resolve })
+    const credentialPromise = new Promise<PublicKeyCredential | null>((resolve) => {
+      resolveCredential = resolve
+    })
     Object.defineProperty(navigator, 'credentials', {
       configurable: true,
       value: { get: vi.fn(() => credentialPromise) },
@@ -164,7 +214,9 @@ describe('passkey login Store to Login page path', () => {
   })
 
   it('shows a sanitized local error when request option parsing fails', async () => {
-    passkeyApi.begin.mockResolvedValue({ data: { challenge_id: 'challenge', public_key: { challenge: '*' } } })
+    passkeyApi.begin.mockResolvedValue({
+      data: { challenge_id: 'challenge', public_key: { challenge: '*' } },
+    })
     const { wrapper } = mountLogin()
     await flushPromises()
 
@@ -174,5 +226,26 @@ describe('passkey login Store to Login page path', () => {
     expect(message.error).toHaveBeenCalledOnce()
     expect(message.error).toHaveBeenCalledWith('通行密钥登录失败')
     expect(passkeyApi.finish).not.toHaveBeenCalled()
+  })
+
+  it('shows a sanitized local error when credential serialization fails', async () => {
+    Object.defineProperty(navigator, 'credentials', {
+      configurable: true,
+      value: { get: vi.fn().mockResolvedValue({}) },
+    })
+    serialization.serialize.mockImplementationOnce(() => {
+      throw new Error('raw credential details')
+    })
+    const { wrapper } = mountLogin()
+    await flushPromises()
+
+    await wrapper.get('[data-test="passkey-login"]').trigger('click')
+    await flushPromises()
+
+    expect(message.error).toHaveBeenCalledOnce()
+    expect(message.error).toHaveBeenCalledWith('通行密钥登录失败')
+    expect(passkeyApi.finish).not.toHaveBeenCalled()
+    expect(auth.setToken).not.toHaveBeenCalled()
+    expect(router.push).not.toHaveBeenCalled()
   })
 })

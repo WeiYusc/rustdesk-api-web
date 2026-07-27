@@ -1,13 +1,25 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { NCard, NSpin, NText, NButton, NSpace, NForm, NFormItem, NInput, NAlert, NImage } from 'naive-ui'
+import {
+  NCard,
+  NSpin,
+  NText,
+  NButton,
+  NSpace,
+  NForm,
+  NFormItem,
+  NInput,
+  NAlert,
+  NImage,
+} from 'naive-ui'
 import { useUserStore } from '@/stores/user'
 import { useAppStore } from '@/stores/app'
 import { confirm as confirmOauth } from '@/api/oauth'
 import { loginOptions as fetchLoginOptions, captcha as fetchCaptcha } from '@/api/login'
 import type { LoginOptionsResponse } from '@/types'
 import { getToken } from '@/utils/auth'
+import { getWebAuthnBrowserErrorKey } from '@/utils/webauthn'
 
 const route = useRoute()
 const router = useRouter()
@@ -29,7 +41,13 @@ const confirmLoading = ref(false)
 
 const code = computed(() => route.params.code as string)
 const showPasswordForm = computed(() => !loginOptionsData.value?.disable_pwd)
-const showPasskeyLogin = computed(() => !!(loginOptionsData.value?.passkey_enabled && loginOptionsData.value?.passkey_discoverable_login_enabled))
+const showPasskeyLogin = computed(
+  () =>
+    !!(
+      loginOptionsData.value?.passkey_enabled &&
+      loginOptionsData.value?.passkey_discoverable_login_enabled
+    )
+)
 const hasLoginMethod = computed(() => showPasswordForm.value || showPasskeyLogin.value)
 
 async function loadCaptcha(): Promise<void> {
@@ -133,6 +151,7 @@ async function handlePasswordLogin(): Promise<void> {
 }
 
 async function handlePasskeyLogin(): Promise<void> {
+  if (passkeyLoading.value) return
   if (!showPasskeyLogin.value) {
     errorMsg.value = appStore.t('login.noLoginMethod')
     return
@@ -141,13 +160,11 @@ async function handlePasskeyLogin(): Promise<void> {
   errorMsg.value = ''
   try {
     const user = await userStore.passkeyLogin()
-    if (!user) {
-      errorMsg.value = appStore.t('login.noAccess')
-      return
-    }
+    if (!user) return
     await confirmClientAuth()
-  } catch {
-    errorMsg.value = appStore.t('login.noAccess')
+  } catch (error) {
+    const key = getWebAuthnBrowserErrorKey(error)
+    if (key) errorMsg.value = appStore.t(key.replace('mySecurity.', 'login.'))
   } finally {
     passkeyLoading.value = false
   }
@@ -175,7 +192,11 @@ onMounted(() => {
       <div v-if="status === 'loading' || status === 'confirming'" class="oauth-content">
         <NSpin size="large" />
         <NText style="margin-top: 16px">
-          {{ status === 'confirming' ? appStore.t('oauth.clientAuthConfirming') : appStore.t('common.loading') }}
+          {{
+            status === 'confirming'
+              ? appStore.t('oauth.clientAuthConfirming')
+              : appStore.t('common.loading')
+          }}
         </NText>
       </div>
 
@@ -190,7 +211,12 @@ onMounted(() => {
         <NAlert v-if="!hasLoginMethod" type="warning" :show-icon="false" class="oauth-alert">
           {{ appStore.t('login.noLoginMethod') }}
         </NAlert>
-        <NForm v-if="showPasswordForm" class="oauth-form" label-placement="top" @submit.prevent="handlePasswordLogin">
+        <NForm
+          v-if="showPasswordForm"
+          class="oauth-form"
+          label-placement="top"
+          @submit.prevent="handlePasswordLogin"
+        >
           <NFormItem :label="appStore.t('login.username')">
             <NInput v-model:value="username" :placeholder="appStore.t('login.username')" />
           </NFormItem>
@@ -205,10 +231,20 @@ onMounted(() => {
           </NFormItem>
           <NFormItem v-if="needCaptcha">
             <NSpace align="center">
-              <NInput v-model:value="captcha" :placeholder="appStore.t('login.captcha')" @keyup.enter="handlePasswordLogin" />
+              <NInput
+                v-model:value="captcha"
+                :placeholder="appStore.t('login.captcha')"
+                @keyup.enter="handlePasswordLogin"
+              />
               <div v-if="captchaLoading" class="captcha-img captcha-img-loading">...</div>
               <div v-else-if="captchaData.b64" class="captcha-img" @click="loadCaptcha">
-                <NImage :src="captchaData.b64" width="120" height="40" object-fit="fill" preview-disabled />
+                <NImage
+                  :src="captchaData.b64"
+                  width="120"
+                  height="40"
+                  object-fit="fill"
+                  preview-disabled
+                />
               </div>
             </NSpace>
           </NFormItem>
@@ -217,7 +253,12 @@ onMounted(() => {
           </NButton>
         </NForm>
         <NSpace v-if="showPasskeyLogin" vertical class="oauth-actions">
-          <NButton block :loading="passkeyLoading" @click="handlePasskeyLogin">
+          <NButton
+            data-test="oauth-passkey-login"
+            block
+            :loading="passkeyLoading"
+            @click="handlePasskeyLogin"
+          >
             {{ appStore.t('oauth.clientAuthPasskeyLogin') }}
           </NButton>
         </NSpace>

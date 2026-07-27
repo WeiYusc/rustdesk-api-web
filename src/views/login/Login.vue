@@ -18,8 +18,13 @@ import {
 import { useUserStore } from '@/stores/user'
 import { useAppStore } from '@/stores/app'
 import { useRouteStore } from '@/stores/router'
-import { loginOptions as fetchLoginOptions, captcha as fetchCaptcha, requestForgotPassword } from '@/api/login'
+import {
+  loginOptions as fetchLoginOptions,
+  captcha as fetchCaptcha,
+  requestForgotPassword,
+} from '@/api/login'
 import type { LoginOptionsResponse } from '@/types'
+import { getWebAuthnBrowserErrorKey } from '@/utils/webauthn'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -51,7 +56,13 @@ const rules = computed(() => ({
 const showPasswordForm = computed(() => !loginOptionsData.value?.disable_pwd)
 const showRegisterLink = computed(() => loginOptionsData.value?.register)
 const oidcProviders = computed(() => loginOptionsData.value?.ops || [])
-const showPasskeyLogin = computed(() => !!(loginOptionsData.value?.passkey_enabled && loginOptionsData.value?.passkey_discoverable_login_enabled))
+const showPasskeyLogin = computed(
+  () =>
+    !!(
+      loginOptionsData.value?.passkey_enabled &&
+      loginOptionsData.value?.passkey_discoverable_login_enabled
+    )
+)
 const passkeyLoading = ref(false)
 const forgotPasswordVisible = ref(false)
 const forgotPasswordLoading = ref(false)
@@ -67,10 +78,8 @@ async function handlePasskeyLogin(): Promise<void> {
       router.push('/')
     }
   } catch (error) {
-    if (typeof error === 'object' && error !== null && 'webAuthnErrorKey' in error) {
-      const key = String((error as { webAuthnErrorKey: unknown }).webAuthnErrorKey).replace(/^mySecurity\./, 'login.')
-      message.error(appStore.t(key))
-    }
+    const key = getWebAuthnBrowserErrorKey(error)
+    if (key) message.error(appStore.t(key.replace('mySecurity.', 'login.')))
   } finally {
     passkeyLoading.value = false
   }
@@ -228,17 +237,17 @@ onMounted(() => {
               <NSpin size="small" />
             </div>
             <div v-else-if="captchaData.b64" class="captcha-img" @click="loadCaptcha">
-              <NImage :src="captchaData.b64" width="120" height="40" object-fit="fill" preview-disabled />
+              <NImage
+                :src="captchaData.b64"
+                width="120"
+                height="40"
+                object-fit="fill"
+                preview-disabled
+              />
             </div>
           </NSpace>
         </NFormItem>
-        <NButton
-          type="primary"
-          block
-          size="large"
-          :loading="loading"
-          @click="handleLogin"
-        >
+        <NButton type="primary" block size="large" :loading="loading" @click="handleLogin">
           {{ appStore.t('login.login') }}
         </NButton>
       </NForm>
@@ -262,7 +271,9 @@ onMounted(() => {
       </NText>
 
       <template v-if="showPasskeyLogin">
-        <NDivider v-if="showPasswordForm || oidcProviders.length > 0">{{ appStore.t('login.loginOptions') }}</NDivider>
+        <NDivider v-if="showPasswordForm || oidcProviders.length > 0">{{
+          appStore.t('login.loginOptions')
+        }}</NDivider>
         <NButton
           data-test="passkey-login"
           block
@@ -274,13 +285,7 @@ onMounted(() => {
         </NButton>
       </template>
 
-      <NButton
-        v-if="showRegisterLink"
-        text
-        block
-        style="margin-top: 12px"
-        @click="goToRegister"
-      >
+      <NButton v-if="showRegisterLink" text block style="margin-top: 12px" @click="goToRegister">
         {{ appStore.t('login.register') }}
       </NButton>
 
@@ -325,9 +330,7 @@ onMounted(() => {
       </NSpace>
     </NModal>
 
-    <NText class="login-footer" depth="3">
-      RustDesk API Web · {{ appStore.locale }}
-    </NText>
+    <NText class="login-footer" depth="3"> RustDesk API Web · {{ appStore.locale }} </NText>
   </div>
 </template>
 

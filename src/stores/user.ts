@@ -110,24 +110,47 @@ export const useUserStore = defineStore('user', () => {
   }
 
   async function passkeyLogin(): Promise<UserInfo | false> {
+    const { passkeyLoginBegin, passkeyLoginFinish } = await import('@/api/passkey')
+    const {
+      getWebAuthnErrorKey,
+      parseRequestOptions,
+      serializeCredential,
+      WebAuthnBrowserError,
+      getWebAuthnBrowserErrorKey,
+    } = await import('@/utils/webauthn')
+    let beginRes
     try {
-      const { passkeyLoginBegin, passkeyLoginFinish } = await import('@/api/passkey')
-      const { getWebAuthnErrorKey, parseRequestOptions, serializeCredential } = await import('@/utils/webauthn')
-      const beginRes = await passkeyLoginBegin()
+      beginRes = await passkeyLoginBegin()
+    } catch {
+      return false
+    }
+
+    let serialized
+    try {
       let publicKey: ReturnType<typeof parseRequestOptions>
       try {
         publicKey = parseRequestOptions(beginRes.data.public_key as never)
       } catch {
-        throw { webAuthnErrorKey: 'mySecurity.passkeyUnknownError' }
+        throw new WebAuthnBrowserError('mySecurity.passkeyUnknownError')
       }
       let credential: PublicKeyCredential | null
       try {
-        credential = await navigator.credentials.get({ publicKey }) as PublicKeyCredential | null
+        credential = (await navigator.credentials.get({ publicKey })) as PublicKeyCredential | null
       } catch (error) {
-        throw { webAuthnErrorKey: getWebAuthnErrorKey(error) }
+        throw new WebAuthnBrowserError(getWebAuthnErrorKey(error) as never)
       }
       if (!credential) return false
-      const serialized = serializeCredential(credential)
+      try {
+        serialized = serializeCredential(credential)
+      } catch {
+        throw new WebAuthnBrowserError('mySecurity.passkeyUnknownError')
+      }
+    } catch (error) {
+      if (getWebAuthnBrowserErrorKey(error)) throw error
+      throw new WebAuthnBrowserError('mySecurity.passkeyUnknownError')
+    }
+
+    try {
       const res = await passkeyLoginFinish({
         challenge_id: beginRes.data.challenge_id,
         credential: serialized,
@@ -136,8 +159,7 @@ export const useUserStore = defineStore('user', () => {
       useAppStore().initConfig()
       saveUserData(res.data)
       return res.data
-    } catch (error) {
-      if (typeof error === 'object' && error !== null && 'webAuthnErrorKey' in error) throw error
+    } catch {
       return false
     }
   }
