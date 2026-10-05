@@ -1,5 +1,8 @@
 # Client Login, MUST_LOGIN, and Server Configuration Troubleshooting Guide
 
+> Startup environment compatibility: use `MUST_LOGIN=1` or `true` to enable existing old GHCR images (`N` disables); they do not accept environment `Y/y`. Only new builds containing Server `76ffa5354600073ee51b8fc3d3632828e050dd3e` accept `Y/y`. Runtime `ml Y` is a different path and does not prove startup environment `Y` works; restart restores the environment default.
+
+
 This guide is for administrators of RustDesk full-s6 / Web Admin deployments. It covers client login setup, checks before enabling `MUST_LOGIN`, and troubleshooting API Server, ID Server, Relay Server, and Key misconfiguration.
 
 > Replace all example domains and addresses with your own deployment values. Do not commit private keys, JWT keys, admin passwords, or unredacted screenshots to a public repository.
@@ -47,12 +50,12 @@ Before enabling it, complete these checks in order:
 
 ## 3. Verified behavior
 
-The currently verified behavior is:
+The following historical runtime-toggle observations do not verify startup environment Y on old GHCR images or the full official 1.4.9/1.5.0 client matrix:
 
 | Scenario | Client-visible result | Meaning |
 | --- | --- | --- |
-| `MUST_LOGIN=Y` + unauthenticated client | `LOGIN_REQUIRED` | hbbs rejects a connection without a valid login token. |
-| `MUST_LOGIN=Y` + authenticated client | Connection succeeds | The token obtained through WebAuth / browser authorization is accepted by hbbs. |
+| Runtime `ml Y` +  unauthenticated client | `LOGIN_REQUIRED` | hbbs rejects a connection without a valid login token. |
+| Runtime `ml Y` +  authenticated client | Connection succeeds | The token obtained through WebAuth / browser authorization is accepted by hbbs. |
 | Wrong Key | invalid public key / public-key handshake failure | Server public key mismatch. |
 | Wrong API Server | `webauth` disappears, or login fails with DNS/connect/parse errors | Client login and API discovery fail before hbbs connection gating. |
 | Wrong ID Server | Account login may succeed, but devices appear offline or connection to ID Server fails | API login and hbbs rendezvous are separate paths. |
@@ -104,6 +107,6 @@ Do not casually modify server-side relay configuration on a shared test host or 
 ## 5. Administration guidance
 
 - Keep the Web Admin panel focused on current state, key risk warnings, and links to documentation. Treat this document as the detailed operating guide.
-- Do not change the default to `MUST_LOGIN=Y` just because one validation passed. Defaults and persistence policy should be designed separately.
+- Do not change the default to forced login just because one validation passed. Defaults and persistence policy should be designed separately.
 - After changing `MUST_LOGIN`, record the runtime state and restore it according to the shared test-environment agreement.
 - Redact domains, IP addresses, keys, tokens, passwords, and personal account identifiers before sharing screenshots or public documentation.

@@ -1,5 +1,8 @@
 # 客户端登录、MUST_LOGIN 与服务器配置排障指南
 
+> 启动环境兼容：现有旧 GHCR 镜像请用 `MUST_LOGIN=1` 或 `true` 开启（`N` 关闭）；旧镜像不接受环境 `Y/y`。含 Server `76ffa5354600073ee51b8fc3d3632828e050dd3e` 修复的新构建才接受 `Y/y`。运行时 `ml Y` 是不同路径，不证明启动环境 `Y` 生效；重启恢复环境默认值。
+
+
 本文面向 RustDesk full-s6 / Web Admin 部署的管理员，用于配置客户端登录、启用 `MUST_LOGIN` 前检查，以及排查 API Server、ID Server、Relay Server、Key 配置错误。
 
 > 示例中的域名和地址请替换为你的实际部署值。不要把私钥、JWT Key、管理员密码或未打码截图提交到公开仓库。
@@ -47,12 +50,12 @@ Key 必须与服务端公钥匹配。Key 错误通常表现为 public key / rend
 
 ## 3. 已验证行为
 
-当前实测链路的结论：
+以下是历史运行时开关链路的观察，不是旧 GHCR 启动环境 Y 或官方 1.4.9/1.5.0 完整矩阵的验证：
 
 | 场景 | 客户端表现 | 说明 |
 | --- | --- | --- |
-| `MUST_LOGIN=Y` + 未登录客户端 | `LOGIN_REQUIRED` | hbbs 拒绝缺少有效登录 token 的连接。 |
-| `MUST_LOGIN=Y` + 已登录客户端 | 连接成功 | WebAuth / 浏览器授权拿到的 token 可被 hbbs 接受。 |
+| 运行时 `ml Y` +  未登录客户端 | `LOGIN_REQUIRED` | hbbs 拒绝缺少有效登录 token 的连接。 |
+| 运行时 `ml Y` +  已登录客户端 | 连接成功 | WebAuth / 浏览器授权拿到的 token 可被 hbbs 接受。 |
 | Key 错误 | invalid public key / public key 握手失败 | 服务端公钥不匹配。 |
 | API Server 错误 | `webauth` 不出现，或登录 DNS/连接/解析响应失败 | 客户端登录和 API 发现阶段失败。 |
 | ID Server 错误 | 账号登录可成功，但设备离线或连接到 ID Server 失败 | API 登录与 hbbs 发现/连接是两条链路。 |
@@ -104,6 +107,6 @@ Key 必须与服务端公钥匹配。Key 错误通常表现为 public key / rend
 ## 5. 管理建议
 
 - Web Admin 面板只保留当前状态、关键风险提示和文档入口；完整操作说明以本文档为准。
-- 不要因为单次测试成功就把默认值改为 `MUST_LOGIN=Y`。默认值和持久化策略应单独设计。
+- 不要因为单次测试成功就把默认值改为强制登录。默认值和持久化策略应单独设计。
 - 调整 `MUST_LOGIN` 后，记录当前运行时状态，并在共享测试环境中按约定恢复。
 - 对外截图和文档应打码域名、IP、Key、token、密码和个人账号信息。
