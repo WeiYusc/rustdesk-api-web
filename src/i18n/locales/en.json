@@ -509,13 +509,21 @@
     "typeConnect": "Connect",
     "typeDisconnect": "Disconnect",
     "status": "Status",
-    "statusOpen": "Open",
-    "statusClosed": "Closed",
+    "statusOpen": "No close report received",
+    "statusClosed": "Close recorded",
+    "closeReportMissing": "No close report received",
+    "closeRecorded": "Close recorded",
     "actionNew": "New",
     "typeUnspecified": "Unspecified",
-    "typeValue": "Type {type}",
+    "typeValue": "Unknown type ({type})",
+    "unknownTypeCode": "Unknown type ({type})",
     "emptyDiagnostic": "No connection logs yet. Confirm the client can report devices first; if the device list is also empty, check the client API Server, login state, and server Key.",
-    "emptyFilter": "No connection logs match the current filters. Adjust the filters or click Reset."
+    "emptyFilter": "No connection logs match the current filters. Adjust the filters or click Reset.",
+    "typeRemoteControl": "Remote control",
+    "typeFileTransfer": "File transfer",
+    "typePortForward": "Port forwarding",
+    "typeCamera": "Camera",
+    "typeTerminal": "Terminal"
   },
   "adminAuditFile": {
     "title": "File Audit",
@@ -541,7 +549,11 @@
     "typeUpload": "Upload",
     "typeDownload": "Download",
     "typeUnspecified": "Unspecified",
-    "typeValue": "Type {type}"
+    "typeValue": "Unknown type ({type})",
+    "unknownTypeCode": "Unknown type ({type})",
+    "typeRemoteSend": "Controlled device sends (controller download)",
+    "typeRemoteReceive": "Controlled device receives (controller upload)",
+    "operationNotice": "Operation records do not prove transfer completion; completion/cancellation status is not recorded."
   },
   "adminShareRecord": {
     "title": "Share Record",

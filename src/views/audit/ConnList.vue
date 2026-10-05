@@ -58,12 +58,12 @@ const columns = computed<DataTableColumns<AuditConn>>(() => [
       h(
         NTag,
         {
-          type: row.close_time > 0 ? 'default' : 'success',
+          type: 'default',
           bordered: false,
           size: 'small',
         },
         {
-          default: () => row.close_time > 0 ? t('adminAuditConn.statusClosed') : t('adminAuditConn.statusOpen'),
+          default: () => row.close_time > 0 ? t('adminAuditConn.closeRecorded') : t('adminAuditConn.closeReportMissing'),
         },
       ),
   },
@@ -80,7 +80,19 @@ const columns = computed<DataTableColumns<AuditConn>>(() => [
   {
     title: t('adminAuditConn.type'),
     key: 'type',
-    render: (row) => row.type === 0 ? t('adminAuditConn.typeUnspecified') : t('adminAuditConn.typeValue', { type: row.type }),
+    render: (row) => {
+      // Connection types and file directions are separate client enums.
+      const keys: Record<number, string> = {
+        0: 'adminAuditConn.typeRemoteControl',
+        1: 'adminAuditConn.typeFileTransfer',
+        2: 'adminAuditConn.typePortForward',
+        3: 'adminAuditConn.typeCamera',
+        4: 'adminAuditConn.typeTerminal',
+      }
+      return Object.prototype.hasOwnProperty.call(keys, row.type)
+        ? t(keys[row.type])
+        : t('adminAuditConn.unknownTypeCode', { type: row.type })
+    },
   },
   {
     title: t('adminAuditConn.createdAt'),

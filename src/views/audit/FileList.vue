@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n'
 import {
   NButton,
   NCard,
+  NAlert,
   NDataTable,
   NInput,
   NSpace,
@@ -52,11 +53,14 @@ const columns = computed<DataTableColumns<AuditFile>>(() => [
     title: t('adminAuditFile.type'),
     key: 'type',
     render: (row) => {
-      const map: Record<number, string> = {
-        1: t('adminAuditFile.typeUpload'),
-        2: t('adminAuditFile.typeDownload'),
+      // File directions use the controlled device's perspective, not connection types.
+      const keys: Record<number, string> = {
+        0: 'adminAuditFile.typeRemoteSend',
+        1: 'adminAuditFile.typeRemoteReceive',
       }
-      return map[row.type] || (row.type === 0 ? t('adminAuditFile.typeUnspecified') : t('adminAuditFile.typeValue', { type: row.type }))
+      return Object.prototype.hasOwnProperty.call(keys, row.type)
+        ? t(keys[row.type])
+        : t('adminAuditFile.unknownTypeCode', { type: row.type })
     },
   },
   {
@@ -214,6 +218,9 @@ onActivated(() => {
         </NButton>
       </NSpace>
     </template>
+    <NAlert type="info" :show-icon="true" style="margin-bottom: 16px">
+      {{ $t('adminAuditFile.operationNotice') }}
+    </NAlert>
     <NDataTable
       v-model:checked-row-keys="checkedRowKeys"
       remote

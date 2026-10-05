@@ -509,13 +509,21 @@
     "typeConnect": "连接",
     "typeDisconnect": "断开",
     "status": "状态",
-    "statusOpen": "进行中",
-    "statusClosed": "已关闭",
+    "statusOpen": "未收到关闭上报",
+    "statusClosed": "已记录关闭",
+    "closeReportMissing": "未收到关闭上报",
+    "closeRecorded": "已记录关闭",
     "actionNew": "新建",
     "typeUnspecified": "未指定",
-    "typeValue": "类型 {type}",
+    "typeValue": "未知类型（{type}）",
+    "unknownTypeCode": "未知类型（{type}）",
     "emptyDiagnostic": "暂无连接日志。请先确认客户端能上报设备；如果设备列表也为空，优先检查客户端 API Server、登录状态和服务器 Key。",
-    "emptyFilter": "当前筛选条件没有匹配连接日志。请调整筛选条件或点击重置。"
+    "emptyFilter": "当前筛选条件没有匹配连接日志。请调整筛选条件或点击重置。",
+    "typeRemoteControl": "远程控制",
+    "typeFileTransfer": "文件传输",
+    "typePortForward": "端口转发",
+    "typeCamera": "摄像头",
+    "typeTerminal": "终端"
   },
   "adminAuditFile": {
     "title": "文件审计",
@@ -541,7 +549,11 @@
     "typeUpload": "上传",
     "typeDownload": "下载",
     "typeUnspecified": "未指定",
-    "typeValue": "类型 {type}"
+    "typeValue": "未知类型（{type}）",
+    "unknownTypeCode": "未知类型（{type}）",
+    "typeRemoteSend": "被控端发送（控制端下载）",
+    "typeRemoteReceive": "被控端接收（控制端上传）",
+    "operationNotice": "操作记录不代表传输完成，未记录完成/取消状态。"
   },
   "adminShareRecord": {
     "title": "分享记录",
